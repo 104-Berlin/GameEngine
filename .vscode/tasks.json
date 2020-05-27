@@ -11,7 +11,10 @@
                 "${workspaceFolder}\\main.exe",
                 "/I",
                 "${workspaceFolder}\\include",
-                "${workspaceFolder}\\*.cpp"
+                "/I",
+                "${workspaceFolder}\\..\\glfw\\include",
+                "${workspaceFolder}\\*.cpp",
+                "${workspaceFolder}\\..\\glfw\\build\\src\\Debug\\glfw3.lib"
             ],
             "problemMatcher": [
                 "$msCompile"
