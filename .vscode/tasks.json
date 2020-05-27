@@ -16,7 +16,11 @@
                 "/I",
                 "${workspaceFolder}\\..\\glfw\\include",
                 "${workspaceFolder}\\**.cpp",
-                "${workspaceFolder}\\..\\glfw\\build\\src\\Debug\\glfw3.lib"
+                "${workspaceFolder}\\..\\glfw\\build\\src\\Debug\\glfw3.lib",
+                "user32.lib",
+                "gdi32.lib",
+                "shell32.lib",
+                "opengl32.lib"
             ],
             "problemMatcher": [
                 "$msCompile"
