@@ -4,7 +4,7 @@
             "name": "x64",
             "includePath": [
                 "${workspaceFolder}/include/**",
-                "${workspaceFolder}/../glfw/include/**"
+                "${workspaceFolder}/../glfw/include/GLFW/**"
             ],
             "defines": [
                 "_DEBUG",

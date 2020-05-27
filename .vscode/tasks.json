@@ -13,7 +13,7 @@
                 "${workspaceFolder}\\include",
                 "/I",
                 "${workspaceFolder}\\..\\glfw\\include",
-                "${workspaceFolder}\\*.cpp",
+                "${workspaceFolder}\\**.cpp",
                 "${workspaceFolder}\\..\\glfw\\build\\src\\Debug\\glfw3.lib"
             ],
             "problemMatcher": [
