@@ -1,0 +1,23 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "shell: cl.exe build main file",
+            "command": "cl.exe",
+            "args": [
+                "/Zi",
+                "/EHsc",
+                "/Fe:",
+                "${workspaceFolder}\\main.exe",
+                "/I",
+                "${workspaceFolder}\\include",
+                "${workspaceFolder}\\*.cpp"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": "build"
+        }
+    ],
+    "version": "2.0.0"
+}
