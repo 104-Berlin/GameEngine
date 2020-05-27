@@ -14,7 +14,20 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            "preLaunchTask": "shell: cl.exe build main file"
+            "preLaunchTask": "shell: cl.exe build main file",
+            "osx": {
+                "name": "(lldb) Starten",
+                "type": "cppdbg",
+                "request": "launch",
+                "program": "${workspaceFolder}/main",
+                "args": [],
+                "stopAtEntry": false,
+                "cwd": "${workspaceFolder}",
+                "environment": [],
+                "externalConsole": false,
+                "MIMode": "lldb"
+            },
+            
         }
     ]
 }

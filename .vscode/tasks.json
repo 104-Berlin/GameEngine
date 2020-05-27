@@ -25,7 +25,27 @@
             "problemMatcher": [
                 "$msCompile"
             ],
-            "group": "build"
+            "group": "build",
+            "osx":{
+                "command": "clang++", 
+                "args": [
+                    "-I",
+                    "${workspaceFolder}/include",
+                    "-I",
+                    "${workspaceFolder}/../glfw/include",
+                    "-g",
+                    "-o",
+                    "main",
+                    "${workspaceFolder}/**.cpp",
+                    "${workspaceFolder}/../glfw/build/src/libglfw3.a",
+                    "-framework",
+                    "Cocoa",
+                    "-framework",
+                    "OpenGL",
+                    "-framework",
+                    "IOKit"
+                ]
+            }
         }
     ],
     "version": "2.0.0"
