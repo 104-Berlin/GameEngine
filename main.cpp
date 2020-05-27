@@ -17,6 +17,8 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
+    std::cout << glGetString(GL_VERSION) << std::endl;
+
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
 
