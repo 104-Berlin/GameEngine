@@ -36,7 +36,7 @@
                     "-g",
                     "-o",
                     "main",
-                    "${workspaceFolder}/**.cpp",
+                    "${workspaceFolder}/**/**.cpp",
                     "${workspaceFolder}/../glfw/build/src/libglfw3.a",
                     "-framework",
                     "Cocoa",
