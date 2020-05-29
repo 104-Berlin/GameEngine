@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
          0.5f, -0.5f
     };
 
-    int indicies[] = {
+    u32 indicies[] = {
         0, 1, 2
     };
 
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
         
 
         window.Update();
