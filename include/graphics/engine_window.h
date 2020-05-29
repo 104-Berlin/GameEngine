@@ -1,25 +1,43 @@
 #pragma once
 
+struct GLFWwindow;
+
 namespace Engine {
 
-    class EWindow
-    {
-    public:
-        EWindow(const EString& title, u32 widht, u32 height);
-        ~EWindow();
+	struct EWindowProp
+	{
+		EWindowProp(const EString& title, uint width, uint height)
+			: title(title), width(width), height(height)
+		{}
+		EString title;
+		uint width;
+		uint height;
+	};
 
-        void Show();
+	class EWindow
+	{
+	public:
+		EWindow(const EWindowProp&  prop);
+		~EWindow();
 
-        void Clear(float r = 0.0f, float g = 0.0f, float b = 0.0f);
-        void Update();
+		inline GLFWwindow* GetNativeWindow() const { return fWindow; }
 
-        bool IsOpen() const;
-    private:
-        u32 fWidth;
-        u32 fHeight;
-        EString fTitle;
+		void Update() const;
+		bool IsClosed() const;
 
-        GLFWwindow* fGlfwWindow;
-    };
+		inline const uint GetWidth() const { return fData.width; }
+		inline const uint GetHeight() const { return fData.height; }
+	private:
+		GLFWwindow* fWindow;
+
+		struct EWindowData
+		{
+			EString title;
+			uint width;
+			uint height;
+			// EVENT CALLBACK FUCNITON
+		};
+		EWindowData fData;
+	};
 
 }

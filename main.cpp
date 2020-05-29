@@ -36,8 +36,7 @@ using namespace Engine;
 
 int main(int argc, char const *argv[])
 {   
-    EWindow window("Test Window", 1270, 720);
-    window.Show();
+    EWindow window(EWindowProp("Hello World", 1270, 720));
 
 
     GLuint vertex_buffer, vertex_shader, fragment_shader, program;
@@ -74,9 +73,9 @@ int main(int argc, char const *argv[])
 
 
     /* Loop until the user closes the window */
-    while (window.IsOpen())
+    while (!window.IsClosed())
     {
-        window.Clear();
+        glClear(GL_COLOR_BUFFER_BIT);
 
         glUseProgram(program);
         

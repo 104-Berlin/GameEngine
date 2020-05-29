@@ -1,9 +1,10 @@
-
-
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <math.h>
 
 typedef int_fast16_t i16;
@@ -26,7 +27,44 @@ using EVector = std::vector<T>;
 #include <glad/glad.h>
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
+#include <glm.hpp>
 
 
+// ------------------------------------------------------------------
+ ///// TEMP
+class Resource
+{
+protected:
+EString fName;
+EString fFilePath;
+public:
+Resource(const EString& name, const EString& filepath)
+    : fName(name), fFilePath(filepath)
+    {}
+
+    void SetName(const EString& name) { fName = name; }
+    const EString& GetName() const { return fName; }
+
+    const EString& GetFilePath() const { return fFilePath; }
+};
+
+// ------------------------------------------------------------------ 
 
 #include "graphics/engine_window.h"
+#include "graphics/engine_light.h"
+#include "graphics/engine_camera.h"
+#include "graphics/engine_render_context.h"
+#include "graphics/engine_render_command_queue.h"
+#include "graphics/engine_renderer.h"
+#include "graphics/engine_buffer.h"
+#include "graphics/engine_shader_uniforms.h"
+#include "graphics/engine_shader.h"
+#include "graphics/engine_vertex_array.h"
+#include "graphics/engine_frame_buffer.h"
+#include "graphics/engine_texture.h"
+
+
+
+#include "platform/opengl/engine_opengl_render_context.h"
+#include "platform/opengl/engine_opengl_texture.h"
+#include "platform/opengl/engine_opengl_shader.h"

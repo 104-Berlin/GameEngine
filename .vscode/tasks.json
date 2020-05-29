@@ -16,6 +16,8 @@
                 "/I",
                 "${workspaceFolder}\\..\\glfw\\include",
                 "/I",
+                "${workspaceFolder}\\..\\glm\\glm",
+                "/I",
                 "${workspaceFolder}\\glad\\include",
                 "${workspaceFolder}\\**\\**.cpp",
                 "${workspaceFolder}\\**\\**.c",
@@ -37,19 +39,22 @@
                     "-I",
                     "${workspaceFolder}/../glfw/include",
                     "-I",
+                    "${workspaceFolder}/../glm/glm",
+                    "-I",
                     "${workspaceFolder}/glad/include",
                     "-g",
                     "-o",
                     "main",
                     "${workspaceFolder}/**/**.cpp",
-                    "${workspaceFolder}/**/**.c",
+                    "${workspaceFolder}/glad/src/glad.c",
                     "${workspaceFolder}/../glfw/build/src/libglfw3.a",
                     "-framework",
                     "Cocoa",
                     "-framework",
                     "OpenGL",
                     "-framework",
-                    "IOKit"
+                    "IOKit",
+                    "-std=c++14"
                 ]
             }
         }
