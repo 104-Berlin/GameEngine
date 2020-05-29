@@ -24,6 +24,13 @@ int main(int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
     glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW);
+
+
+    glGenBuffers(1, &ibo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(u32), indicies, GL_STATIC_DRAW);
+
     std::cout << glGetString(GL_VERSION) << std::endl;
 
     /* Loop until the user closes the window */

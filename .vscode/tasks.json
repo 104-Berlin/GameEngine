@@ -15,7 +15,7 @@
                 "${workspaceFolder}\\include",
                 "/I",
                 "${workspaceFolder}\\..\\glfw\\include",
-                "${workspaceFolder}\\**.cpp",
+                "${workspaceFolder}\\**\\**.cpp",
                 "${workspaceFolder}\\..\\glfw\\build\\src\\Debug\\glfw3.lib",
                 "user32.lib",
                 "gdi32.lib",
