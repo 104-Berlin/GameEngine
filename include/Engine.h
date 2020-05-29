@@ -66,5 +66,6 @@ Resource(const EString& name, const EString& filepath)
 
 
 #include "platform/opengl/engine_opengl_render_context.h"
-#include "platform/opengl/engine_opengl_texture.h"
+#include "platform/opengl/engine_opengl_buffer.h"
 #include "platform/opengl/engine_opengl_shader.h"
+#include "platform/opengl/engine_opengl_texture.h"

@@ -13,18 +13,18 @@ static const struct
 };
  
 static const char* vertex_shader_text =
-"#version 110\n"
+"#version 330\n"
 "attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
+"layout (location = 0) in vec2 position\n"
+"layout (location = 1) in vec3 color;\n"
 "void main()\n"
 "{\n"
-"    gl_Position = vec4(vPos, 0.0, 1.0);\n"
-"    color = vCol;\n"
+"    gl_Position = vec4(position, 0.0, 1.0);\n"
+"    color = color;\n"
 "}\n";
  
 static const char* fragment_shader_text =
-"#version 110\n"
+"#version 330\n"
 "varying vec3 color;\n"
 "void main()\n"
 "{\n"
@@ -39,7 +39,7 @@ int main(int argc, char const *argv[])
     EWindow window(EWindowProp("Hello World", 1270, 720));
 
 
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
+    GLuint vertex_buffer;
     GLint mvp_location, vpos_location, vcol_location;
 
 
@@ -47,28 +47,14 @@ int main(int argc, char const *argv[])
     glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
  
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
+    EShader* shader = EShader::Create(vertex_shader_text, fragment_shader_text);
  
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
- 
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
- 
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
- 
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
+    
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
                           sizeof(vertices[0]), (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
     sizeof(vertices[0]), (void*) (sizeof(float) * 2));
 
 
@@ -77,7 +63,7 @@ int main(int argc, char const *argv[])
     {
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(program);
+        shader->Bind();
         
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -85,6 +71,8 @@ int main(int argc, char const *argv[])
 
         window.Update();
     }
+
+    delete shader;
 
     glfwTerminate();
     std::cout << "Hello World!" << std::endl; 

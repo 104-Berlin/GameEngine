@@ -55,7 +55,7 @@ namespace Engine {
 	{
 		fFilePath = filePath;
 		int width, height, channels;
-		std::cout << "Loading texture {0}", fFilePath << std::endl;
+		std::cout << "Loading texture " << fFilePath << std::endl;
 		//stbi_set_flip_vertically_on_load(false);
 		//fImageData = stbi_load(fFilePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
@@ -199,7 +199,7 @@ namespace Engine {
 
 	EOpenGLTextureCube::~EOpenGLTextureCube()
 	{
-		std::cout << "OpenGLTextureCube detroyed!" std::endl;
+		std::cout << "OpenGLTextureCube detroyed!" << std::endl;
 		IN_RENDER_S({
 				glDeleteTextures(1, &self->fRendererID);
 			})
