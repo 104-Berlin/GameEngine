@@ -3,8 +3,8 @@
         {
             "name": "x64",
             "includePath": [
-                "${workspaceFolder}/include/**",
-                "${workspaceFolder}/../glfw/include/**"
+                "${workspaceFolder}/include/",
+                "${workspaceFolder}/../glfw/include/"
             ],
             "defines": [
                 "_DEBUG",
