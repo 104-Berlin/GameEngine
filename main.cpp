@@ -1,6 +1,37 @@
 #include "Engine.h"
 
 
+static const struct
+{
+    float x, y;
+    float r, g, b;
+} vertices[3] =
+{
+    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
+    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
+    {   0.f,  0.6f, 0.f, 0.f, 1.f }
+};
+ 
+static const char* vertex_shader_text =
+"#version 110\n"
+"attribute vec3 vCol;\n"
+"attribute vec2 vPos;\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = vec4(vPos, 0.0, 1.0);\n"
+"    color = vCol;\n"
+"}\n";
+ 
+static const char* fragment_shader_text =
+"#version 110\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_FragColor = vec4(color, 1.0);\n"
+"}\n";
+
+
 using namespace Engine;
 
 int main(int argc, char const *argv[])
@@ -8,40 +39,49 @@ int main(int argc, char const *argv[])
     EWindow window("Test Window", 1270, 720);
     window.Show();
 
-    float position[] = {
-        -0.5f, -0.5f, 
-         0.0f,  0.5f,
-         0.5f, -0.5f
-    };
 
-    u32 indicies[] = {
-        0, 1, 2
-    };
+    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
+    GLint mvp_location, vpos_location, vcol_location;
 
 
-    unsigned int vbo, ibo;
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glGenBuffers(1, &vertex_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+ 
+    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
+    glCompileShader(vertex_shader);
+ 
+    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
+    glCompileShader(fragment_shader);
+ 
+    program = glCreateProgram();
+    glAttachShader(program, vertex_shader);
+    glAttachShader(program, fragment_shader);
+    glLinkProgram(program);
+ 
+    mvp_location = glGetUniformLocation(program, "MVP");
+    vpos_location = glGetAttribLocation(program, "vPos");
+    vcol_location = glGetAttribLocation(program, "vCol");
+ 
+    glEnableVertexAttribArray(vpos_location);
+    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
+                          sizeof(vertices[0]), (void*) 0);
+    glEnableVertexAttribArray(vcol_location);
+    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
+    sizeof(vertices[0]), (void*) (sizeof(float) * 2));
 
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), position, GL_STATIC_DRAW);
-
-
-    glGenBuffers(1, &ibo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(u32), indicies, GL_STATIC_DRAW);
-
-    std::cout << glGetString(GL_VERSION) << std::endl;
 
     /* Loop until the user closes the window */
     while (window.IsOpen())
     {
         window.Clear();
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+        glUseProgram(program);
+        
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
         
 
         window.Update();

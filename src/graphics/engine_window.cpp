@@ -32,6 +32,7 @@ void EWindow::Show()
     }
 
     glfwMakeContextCurrent(fGlfwWindow);
+    gladLoadGL();
 }
 
 void EWindow::Update()

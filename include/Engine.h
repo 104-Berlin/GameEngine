@@ -23,8 +23,9 @@ using EVector = std::vector<T>;
 //------------------------------------------------------------------
 // Extern Dependencies
 
+#include "../glad/include/glad/glad.h"
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
-
 
 
 
