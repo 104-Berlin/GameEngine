@@ -384,7 +384,10 @@ void main()
 */
 	void ERenderer::WaitAndRender()
 	{
-		fCommandQueue.Execute();
+		if (s_Instance)
+		{
+			s_Instance->fCommandQueue.Execute();
+		}
 	}
 
 }

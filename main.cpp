@@ -37,16 +37,13 @@ using namespace Engine;
 int main(int argc, char const *argv[])
 {   
     EWindow window(EWindowProp("Hello World", 1270, 720));
+    ERenderer::Init();
 
 
-    GLuint vertex_buffer;
     GLint mvp_location, vpos_location, vcol_location;
 
 
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
- 
+    EVertexBuffer* vb = EVertexBuffer::Create(vertices, sizeof(vertices));
     EShader* shader = EShader::Create(vertex_shader_text, fragment_shader_text);
  
     
@@ -61,13 +58,18 @@ int main(int argc, char const *argv[])
     /* Loop until the user closes the window */
     while (!window.IsClosed())
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        IN_RENDER({
+            glClear(GL_COLOR_BUFFER_BIT);
+        })
 
+        vb->Bind();
         shader->Bind();
         
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        IN_RENDER({
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+        })
 
-        
+        ERenderer::WaitAndRender();
 
         window.Update();
     }

@@ -14,7 +14,7 @@ namespace Engine {
 
 		static ERenderer* Get() { return s_Instance; }
 
-		void WaitAndRender();
+		static void WaitAndRender();
 	private:
 		static ERenderer* s_Instance;
 

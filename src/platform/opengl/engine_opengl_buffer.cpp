@@ -1,8 +1,8 @@
-#include "inpch.h"
+#include "Engine.h"
 
-namespace Infinit {
+namespace Engine {
 	
-	OpenGLVertexBuffer::OpenGLVertexBuffer(const void* data, uint size)
+	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, uint size)
 	{
 		IN_RENDER_S2(data, size, {
 				glGenBuffers(1, &self->m_RendererID);
@@ -11,22 +11,22 @@ namespace Infinit {
 			})
 	}
 
-	OpenGLVertexBuffer::~OpenGLVertexBuffer()
+	EOpenGLVertexBuffer::~EOpenGLVertexBuffer()
 	{
-		IN_CORE_INFO("OpenGLVertexBuffer {0} Deleted!", m_RendererID);
+		std::cout  << "OpenGLVertexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
 				glDeleteBuffers(1, &self->m_RendererID);
 			})
 	}
 
-	void OpenGLVertexBuffer::Bind() const
+	void EOpenGLVertexBuffer::Bind() const
 	{
 		IN_RENDER_S({
 				glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID);
 			})
 	}
 
-	void OpenGLVertexBuffer::Unbind() const
+	void EOpenGLVertexBuffer::Unbind() const
 	{
 #ifdef IN_DEBUG
 		IN_RENDER({
@@ -35,7 +35,7 @@ namespace Infinit {
 #endif
 	}
 
-	OpenGLIndexBuffer::OpenGLIndexBuffer(const uint* data, uint count)
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const uint* data, uint count)
 		: m_Count(count)
 	{
 		IN_RENDER_S2(data, count, {
@@ -45,22 +45,22 @@ namespace Infinit {
 			})
 	}
 
-	OpenGLIndexBuffer::~OpenGLIndexBuffer()
+	EOpenGLIndexBuffer::~EOpenGLIndexBuffer()
 	{
-		IN_CORE_INFO("OpenGLIndexBuffer {0} Deleted!", m_RendererID);
+		std::cout  << "OpenGLIndexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
 				glDeleteBuffers(1, &self->m_RendererID);
 			})
 	}
 
-	void OpenGLIndexBuffer::Bind() const
+	void EOpenGLIndexBuffer::Bind() const
 	{
 		IN_RENDER_S({
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID);
 			})
 	}
 
-	void OpenGLIndexBuffer::Unbind() const
+	void EOpenGLIndexBuffer::Unbind() const
 	{
 #ifdef IN_DEBUG
 		IN_RENDER({
