@@ -6,20 +6,16 @@ set(CMAKE_CXX_FLAGS -std=c++14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SYSTEM_VERSION 10.0)
-if(MSVC)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W3 /EHsc")
-else()
-  # Update if necessary
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -Wextra -pedantic -fobjc-arc")
-endif()
 
 
 
-include_directories(Infinit/src     ../glfw/include
+include_directories(Infinit/src     deps/glfw/include
                                     glad/include
-                                    ../glm/glm
+                                    deps/glm/glm
                                     ./include )
 
+
+add_subdirectory(deps/glfw)
 find_package(OpenGL)
 
 
@@ -64,7 +60,7 @@ add_executable(Engine
                         main.cpp )
 
 target_link_libraries(Engine ${EXTRA_LIBS})
-target_link_libraries(Engine ${CMAKE_SOURCE_DIR}/../glfw/build/src/libglfw3.a)
+target_link_libraries(Engine glfw)
 
 if (WIN32)
 
