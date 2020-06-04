@@ -28,6 +28,8 @@ using EVector = std::vector<T>;
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <gtx/quaternion.hpp>
 
 
 // ------------------------------------------------------------------

@@ -7,6 +7,11 @@ namespace Engine {
 		fData.title = prop.title;
 		fData.width = prop.width;
 		fData.height = prop.height;
+		fData.altPressed = false;
+		fData.leftPress = false;
+		fData.rightPress = false;
+		fData.middlePress = false;
+		fData.mousePosition = glm::vec2();
 
 		glfwInit();
 
@@ -14,7 +19,7 @@ namespace Engine {
 		if (!fWindow)
 		{
 			glfwTerminate();
-			std::cout << "Could not create EWindow" << std::endl;
+			std::cout << "Could not create Window" << std::endl;
 			return;
 		}
 		ERenderContext::Create(*this);
@@ -30,6 +35,7 @@ namespace Engine {
 		glfwSetWindowCloseCallback(fWindow, [](GLFWwindow* EWindow)
 		{
 			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
+			
 		});
 
 		glfwSetKeyCallback(fWindow, [](GLFWwindow* window, int keycode, int scancode, int action, int mods)
@@ -40,6 +46,7 @@ namespace Engine {
 			{
 				case GLFW_PRESS:
 				{
+					data.altPressed = true;
 					break;
 				}
 				case GLFW_REPEAT: 
@@ -48,6 +55,7 @@ namespace Engine {
 				}
 				case GLFW_RELEASE:
 				{
+					data.altPressed = false;
 					break;
 				}
 			}
@@ -56,6 +64,7 @@ namespace Engine {
 		glfwSetCursorPosCallback(fWindow, [](GLFWwindow* window, double xPos, double yPos)
 		{
 			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
+			data.mousePosition = glm::vec2((float)xPos, (float)yPos);
 		});
 
 		glfwSetMouseButtonCallback(fWindow, [](GLFWwindow* window, int button, int action, int mods)
@@ -66,10 +75,16 @@ namespace Engine {
 			{
 				case GLFW_PRESS:
 				{
+					if (button == 0) {data.leftPress = true;}
+					if (button == 1) {data.rightPress = true;}
+					if (button == 2) {data.middlePress = true;}
 					break;
 				}
 				case GLFW_RELEASE:
 				{
+					if (button == 0) {data.leftPress = false;}
+					if (button == 1) {data.rightPress = false;}
+					if (button == 2) {data.middlePress = false;}
 					break;
 				}
 			}

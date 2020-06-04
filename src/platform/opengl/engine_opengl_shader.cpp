@@ -369,7 +369,7 @@ namespace Engine {
 	{
 		if (fUniformCache.find(name) != fUniformCache.end())
 			return fUniformCache[name];
-
+		
 		int result = glGetUniformLocation(fRendererID, name.c_str());
 		if (result == -1)
 			std::cout << "Could not find Uniform " << name << std::endl;
@@ -437,7 +437,9 @@ namespace Engine {
 
 	void EOpenGLShader::SetUniformMat4(const EString& name, const glm::mat4& value)
 	{
-		glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+		IN_RENDER_S2(name, value, {
+				glUniformMatrix4fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+			})
 	}
 
 	int EOpenGLShader::GetResourceSlot(const EString& name) const

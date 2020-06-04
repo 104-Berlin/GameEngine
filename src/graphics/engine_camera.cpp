@@ -1,7 +1,5 @@
 #include "Engine.h"
 
-#define GLM_ENABLE_EXPERIMENTAL
-#include <gtx/quaternion.hpp>
 
 
 #define M_PI 3.14159f
@@ -16,21 +14,40 @@ namespace Engine {
 		fRotationSpeed = 0.002f;
 		fZoomSpeed = 0.2f;
 
-		fPosition = { -100, 100, 100 };
-		fRotation = glm::vec3(90.0f, 0.0f, 0.0f);
+		fPosition = { 0,0, 0 };
+		fRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		fFocalPoint = glm::vec3(0.0f);
 		fDistance = glm::distance(fPosition, fFocalPoint);
+
 
 		fYaw = 3.0f * (float)M_PI / 4.0f;
 		fPitch = M_PI / 4.0f;
 	}
 
-	void ECamera::Update()
+	void ECamera::Update(EWindow* window)
 	{
-	fPosition = CalculatePosition();
 
-		glm::quat orientation = GetOrientation();
+		if (window->IsAltPressed())
+		{
+			const glm::vec2& mouse{ window->GetMouseX(), window->GetMouseY() };
+			glm::vec2 delta = mouse - fInitialMousePosition;
+			fInitialMousePosition = mouse;
+
+			if (window->IsMiddlePressed())
+				MousePan(delta);
+			else if (window->IsLeftPressed())
+				MouseRotate(delta);
+			else if (window->IsRightPressed())
+				MouseZoom(delta.y);
+		}
+
+
+		fPosition = CalculatePosition();
+	
+
+
+ 		glm::quat orientation = GetOrientation();
 		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
 		fViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
 	}
