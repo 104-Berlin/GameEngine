@@ -45,7 +45,7 @@ Resource(const EString& name, const EString& filepath)
     void SetName(const EString& name) { fName = name; }
     const EString& GetName() const { return fName; }
 
-    const EString& GetFilePath() const { return fFilePath; }
+    const EString& GetFilePath() const { return fFilePath; }
 };
 
 // ------------------------------------------------------------------ 

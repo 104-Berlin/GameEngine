@@ -62,6 +62,6 @@ namespace Engine {
 	EString GetStatement(const char* str, const char** outPosition = nullptr);
 
 	EString GetBlock(const char* str, const char** outPosition = nullptr);
-	EString GetBlock(const EString& string, uint offset = 0);
+	EString GetBlock(const EString& string, u32 offset = 0);
 
 }

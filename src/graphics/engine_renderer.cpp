@@ -376,7 +376,7 @@ void main()
 		material->Bind();
 
 		mesh->GetVertexArray()->Bind();
-		uint vertexCount = mesh->GetVertexCount();
+		u32 vertexCount = mesh->GetVertexCount();
 		IN_RENDER1(vertexCount, {
 				RendererAPI::s_Instance->DrawIndexed(vertexCount);
 			})

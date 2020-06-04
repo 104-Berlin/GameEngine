@@ -13,7 +13,7 @@ namespace Engine {
 		return nullptr;
 	}
 
-	ETexture2D* ETexture2D::Create(ETextureFormat format, uint width, uint height)
+	ETexture2D* ETexture2D::Create(ETextureFormat format, u32 width, u32 height)
 	{
 		//TODO: ADD SERRT
 		//IN_CORE_ASSERT((bool)ERenderContext, "No Renderer selected!");

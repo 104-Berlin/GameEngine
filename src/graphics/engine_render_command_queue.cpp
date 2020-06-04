@@ -17,13 +17,13 @@ namespace Engine {
 		delete[] fCommandBuffer;
 	}
 
-	void* ERenderCommandQueue::Allocate(ERenderCommandFn fn, uint size)
+	void* ERenderCommandQueue::Allocate(ERenderCommandFn fn, u32 size)
 	{
 		*(ERenderCommandFn*)fCommandBufferPtr = fn;
 		fCommandBufferPtr += sizeof(ERenderCommandFn);
 
-		*(uint*)fCommandBufferPtr = size;
-		fCommandBufferPtr += sizeof(uint);
+		*(u32*)fCommandBufferPtr = size;
+		fCommandBufferPtr += sizeof(u32);
 
 		void* memory = fCommandBufferPtr;
 		fCommandBufferPtr += size;
@@ -36,13 +36,13 @@ namespace Engine {
 	{
 		byte* buffer = fCommandBuffer;
 
-		for (uint i = 0; i < fCommandCount; i++)
+		for (u32 i = 0; i < fCommandCount; i++)
 		{
 			ERenderCommandFn function = *(ERenderCommandFn*)buffer;
 			buffer += sizeof(ERenderCommandFn);
 
-			uint size = *(uint*)buffer;
-			buffer += sizeof(uint);
+			u32 size = *(u32*)buffer;
+			buffer += sizeof(u32);
 			function(buffer);
 			buffer += size;
 		}

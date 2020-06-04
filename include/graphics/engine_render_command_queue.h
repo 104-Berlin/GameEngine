@@ -9,13 +9,13 @@ namespace Engine {
 		ERenderCommandQueue();
 		~ERenderCommandQueue();
 
-		void* Allocate(ERenderCommandFn func, uint size);
+		void* Allocate(ERenderCommandFn func, u32 size);
 
 		void Execute();
 	private:
 		byte* fCommandBuffer;
 		byte* fCommandBufferPtr;
-		uint fCommandCount = 0;
+		u32 fCommandCount = 0;
 	};
 
 }

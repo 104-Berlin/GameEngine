@@ -2,7 +2,7 @@
 
 namespace Engine {
 	
-	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, uint size)
+	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, u32 size)
 	{
 		IN_RENDER_S2(data, size, {
 				glGenBuffers(1, &self->m_RendererID);
@@ -35,13 +35,13 @@ namespace Engine {
 #endif
 	}
 
-	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const uint* data, uint count)
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const u32* data, u32 count)
 		: m_Count(count)
 	{
 		IN_RENDER_S2(data, count, {
 				glGenBuffers(1, &self->m_RendererID);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(uint), data, GL_STATIC_DRAW);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GL_STATIC_DRAW);
 			})
 	}
 

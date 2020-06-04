@@ -15,12 +15,12 @@ namespace Engine {
 		ETexture(const EString& filePath, const EString& name = "Unknown") : Resource(name, filePath) {}
 		virtual ~ETexture() {  }
 
-		virtual void Bind(uint slot) const = 0;
+		virtual void Bind(u32 slot) const = 0;
 		
 		virtual ETextureFormat GetFormat() const = 0;
-		virtual uint GetWidth() const = 0;
-		virtual uint GetHeight() const = 0;
-		virtual uint GetRendererID() const = 0;
+		virtual u32 GetWidth() const = 0;
+		virtual u32 GetHeight() const = 0;
+		virtual u32 GetRendererID() const = 0;
 		
 
 		virtual bool Reload(const EString& filePath) = 0;
@@ -34,7 +34,7 @@ namespace Engine {
 		ETexture2D(const EString& filePath, const EString& name = "Unknown") : ETexture(filePath, name) {}
 
 		static ETexture2D* Create(const EString& path, bool srgb = false);
-		static ETexture2D* Create(ETextureFormat format, uint width, uint height);
+		static ETexture2D* Create(ETextureFormat format, u32 width, u32 height);
 	};
 
 	class ETextureCube : public ETexture

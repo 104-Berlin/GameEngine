@@ -6,12 +6,12 @@ namespace Engine {
 
 	struct EWindowProp
 	{
-		EWindowProp(const EString& title, uint width, uint height)
+		EWindowProp(const EString& title, u32 width, u32 height)
 			: title(title), width(width), height(height)
 		{}
 		EString title;
-		uint width;
-		uint height;
+		u32 width;
+		u32 height;
 	};
 
 	class EWindow
@@ -25,16 +25,16 @@ namespace Engine {
 		void Update() const;
 		bool IsClosed() const;
 
-		inline const uint GetWidth() const { return fData.width; }
-		inline const uint GetHeight() const { return fData.height; }
+		inline const u32 GetWidth() const { return fData.width; }
+		inline const u32 GetHeight() const { return fData.height; }
 	private:
 		GLFWwindow* fWindow;
 
 		struct EWindowData
 		{
 			EString title;
-			uint width;
-			uint height;
+			u32 width;
+			u32 height;
 			// EVENT CALLBACK FUCNITON
 		};
 		EWindowData fData;

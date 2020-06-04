@@ -210,7 +210,7 @@ namespace Engine {
 			else if (uni.Name.find(".") != EString::npos)
 			{
 				EString ss;
-				for (uint i = 0; i < uni.Name.size(); i++)
+				for (u32 i = 0; i < uni.Name.size(); i++)
 				{
 					if (uni.Name[i] == '.') break;
 					ss += uni.Name[i];
@@ -258,7 +258,7 @@ namespace Engine {
 
 
 		EShaderDataType type = ShaderDataTypeFromString(typeEString);
-		uint size = ShaderDataTypeSize(type);
+		u32 size = ShaderDataTypeSize(type);
 
 		if (type == EShaderDataType::Texture2D || type == EShaderDataType::TextureCube)
 			fResources.push_back(name);
@@ -304,7 +304,7 @@ namespace Engine {
 	{
 		std::vector<EString> tokens = Tokenize(block);
 		std::vector<EStructMember> members;
-		uint structSize = 0;
+		u32 structSize = 0;
 		unsigned int index = 0;
 		index++; // "struct"
 		EString name = tokens[index++];
@@ -331,7 +331,7 @@ namespace Engine {
 				count = atoi(c.c_str());
 			}
 			EShaderDataType type = ShaderDataTypeFromString(typeEString);
-			uint size = ShaderDataTypeSize(type);
+			u32 size = ShaderDataTypeSize(type);
 
 			structSize += count * size;
 			members.push_back({type, memberName});
@@ -355,7 +355,7 @@ namespace Engine {
 #endif
 	}
 
-	uint EOpenGLShader::ShaderTypeFromEString(const EString& type)
+	u32 EOpenGLShader::ShaderTypeFromEString(const EString& type)
 	{
 		if (type == "vertex")
 			return 0;
@@ -543,7 +543,7 @@ namespace Engine {
 
 		if (outPosition)
 			*outPosition = end;
-		uint length = end - str + 1;
+		u32 length = end - str + 1;
 		return EString(str, length);
 	}
 
@@ -555,11 +555,11 @@ namespace Engine {
 
 		if (outPosition)
 			*outPosition = end;
-		uint length = end - str + 1;
+		u32 length = end - str + 1;
 		return EString(str, length);
 	}
 
-	EString GetBlock(const EString& string, uint offset)
+	EString GetBlock(const EString& string, u32 offset)
 	{
 		const char* str = string.c_str() + offset;
 		return GetBlock(str);
