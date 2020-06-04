@@ -1,21 +1,11 @@
 #include "Engine.h"
-
-
-static const struct
-{
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-{
-    { -0.6f, -0.4f, 1.f, 0.f, 0.f },
-    {  0.6f, -0.4f, 0.f, 1.f, 0.f },
-    {   0.f,  0.6f, 0.f, 0.f, 1.f }
-};
  
 static const char* vertex_shader_text =
-"#version 110\n"
-"attribute vec3 vCol;\n"
+"#version 120\n"
 "attribute vec2 vPos;\n"
+"attribute vec3 vCol;\n"
+
+
 "varying vec3 color;\n"
 "void main()\n"
 "{\n"
@@ -24,7 +14,7 @@ static const char* vertex_shader_text =
 "}\n";
  
 static const char* fragment_shader_text =
-"#version 110\n"
+"#version 120\n"
 "varying vec3 color;\n"
 "void main()\n"
 "{\n"
@@ -34,58 +24,65 @@ static const char* fragment_shader_text =
 
 using namespace Engine;
 
+#define GL_ERR(fn) fn;\
+GLenum err = glGetError();\
+if (err != GL_NO_ERROR){\
+std::cout << "GL_ERR: " << glGetString(err) << std::endl;\
+}
+
 int main(int argc, char const *argv[])
 {   
-    EWindow window("Test Window", 1270, 720);
-    window.Show();
+    EWindow window(EWindowProp("Hello World", 1270, 720));
+    ERenderer::Init();
 
 
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
+    std::vector<float> vertices = { -0.6f, -0.4f, 1.f, 0.f, 0.f ,
+                                    0.6f, -0.4f, 0.f, 1.f, 0.f ,
+                                    0.f,  0.6f, 0.f, 0.f, 1.f };
+    
+    std::vector<u32> indices = {0, 1, 2};
+    
 
-
-    glGenBuffers(1, &vertex_buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    EVertexBuffer* vb = EVertexBuffer::Create(&vertices[0], vertices.size() * sizeof(float));
+    EIndexBuffer* ib = EIndexBuffer::Create(&indices[0], indices.size());
+    EShader* shader = EShader::Create(vertex_shader_text, fragment_shader_text);
  
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
- 
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
- 
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
- 
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
- 
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(vertices[0]), (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-    sizeof(vertices[0]), (void*) (sizeof(float) * 2));
-
+    IN_RENDER({
+        
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE,
+                              5 * sizeof(float), (void*) 0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
+        5 * sizeof(float), (void*) (sizeof(float) * 2));
+    })
 
     /* Loop until the user closes the window */
-    while (window.IsOpen())
+    while (!window.IsClosed())
     {
-        window.Clear();
-
-        glUseProgram(program);
+        IN_RENDER({
+            glClearColor(1.0, 1.0, 1.0, 1.0);
+            glClear(GL_COLOR_BUFFER_BIT);
+        })
         
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-
+        shader->Bind();
+        vb->Bind();
+        ib->Bind();
         
+        
+        IN_RENDER({
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, NULL);
+        })
 
+        ERenderer::WaitAndRender();
+        
+        
         window.Update();
     }
+    
+    delete ib;
+    delete vb;
+    delete shader;
 
     glfwTerminate();
     std::cout << "Hello World!" << std::endl; 

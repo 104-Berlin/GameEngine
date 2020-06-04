@@ -1,53 +1,102 @@
 #include "Engine.h"
 
-using namespace Engine;
+namespace Engine {
 
-EWindow::EWindow(const EString& title, u32 width, u32 height)
-    : fTitle(title), fWidth(width), fHeight(height)
-{
+	EWindow::EWindow(const EWindowProp& prop)
+	{
+		fData.title = prop.title;
+		fData.width = prop.width;
+		fData.height = prop.height;
 
-}
+		glfwInit();
 
-EWindow::~EWindow()
-{
-    glfwDestroyWindow(fGlfwWindow);
-    glfwTerminate();
-}
+		fWindow = glfwCreateWindow(fData.width, fData.height, fData.title.c_str(), NULL, NULL);
+		if (!fWindow)
+		{
+			glfwTerminate();
+			std::cout << "Could not create EWindow" << std::endl;
+			return;
+		}
+		ERenderContext::Create(*this);
+		glfwSetWindowUserPointer(fWindow, &fData);
 
-void EWindow::Show()
-{
-    if (!glfwInit())
-    {
-        std::cout << "Could not init glfw" << std::endl;
-        return;
-    }
+		glfwSetWindowSizeCallback(fWindow, [](GLFWwindow* EWindow, int width, int height)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
+			data.width = width;
+			data.height = height;
+		});
 
+		glfwSetWindowCloseCallback(fWindow, [](GLFWwindow* EWindow)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
+		});
 
-    fGlfwWindow = glfwCreateWindow(fWidth, fHeight, fTitle.c_str(), nullptr, nullptr);
-    if (!fGlfwWindow)
-    {
-        std::cout << "Could not init Glfw Window!" << std::endl;
-        glfwTerminate();
-        return;
-    }
+		glfwSetKeyCallback(fWindow, [](GLFWwindow* window, int keycode, int scancode, int action, int mods)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
 
-    glfwMakeContextCurrent(fGlfwWindow);
-    gladLoadGL();
-}
+			switch (action)
+			{
+				case GLFW_PRESS:
+				{
+					break;
+				}
+				case GLFW_REPEAT: 
+				{
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					break;
+				}
+			}
+		});
 
-void EWindow::Update()
-{
-    glfwSwapBuffers(fGlfwWindow);
-    glfwPollEvents();
-}
+		glfwSetCursorPosCallback(fWindow, [](GLFWwindow* window, double xPos, double yPos)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
+		});
 
-void EWindow::Clear(float r, float g, float b)
-{
-    glClearColor(r, g, b, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-}
+		glfwSetMouseButtonCallback(fWindow, [](GLFWwindow* window, int button, int action, int mods)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
 
-bool EWindow::IsOpen() const
-{
-    return !((bool) glfwWindowShouldClose(fGlfwWindow));
+			switch (action)
+			{
+				case GLFW_PRESS:
+				{
+					break;
+				}
+				case GLFW_RELEASE:
+				{
+					break;
+				}
+			}
+		});
+
+		glfwSetScrollCallback(fWindow, [](GLFWwindow* EWindow, double xOffset, double yOffset)
+		{
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
+		});
+
+		
+	}
+
+	EWindow::~EWindow()
+	{
+		glfwTerminate();
+	}
+
+	void EWindow::Update() const
+	{
+		glfwSwapBuffers(fWindow);
+		glfwPollEvents();
+	}
+
+	bool EWindow::IsClosed() const
+	{
+		return (bool)glfwWindowShouldClose(fWindow);
+	}
+
 }
