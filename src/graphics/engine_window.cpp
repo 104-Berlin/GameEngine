@@ -15,6 +15,8 @@ namespace Engine {
 
 		glfwInit();
 
+
+		glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);	
 		fWindow = glfwCreateWindow(fData.width, fData.height, fData.title.c_str(), NULL, NULL);
 		if (!fWindow)
 		{
@@ -90,9 +92,13 @@ namespace Engine {
 			}
 		});
 
-		glfwSetScrollCallback(fWindow, [](GLFWwindow* EWindow, double xOffset, double yOffset)
+		glfwSetScrollCallback(fWindow, [](GLFWwindow* window, double xOffset, double yOffset)
 		{
-			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
+			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
+
+			std::cout << "Mouse Scroll: " << xOffset << ", " << yOffset << std::endl;
+
+			data.mouseScroll = yOffset;
 		});
 
 		
@@ -112,6 +118,13 @@ namespace Engine {
 	bool EWindow::IsClosed() const
 	{
 		return (bool)glfwWindowShouldClose(fWindow);
+	}
+
+	float EWindow::GetScroll()
+	{
+		float result = fData.mouseScroll;
+		fData.mouseScroll = 0; 
+		return result; 
 	}
 
 }

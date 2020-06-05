@@ -38,7 +38,7 @@ int main(int argc, char const *argv[])
     EWindow window(EWindowProp("Hello World", 1270, 720));
     ERenderer::Init();
 
-    ECamera cam(glm::perspectiveFov(60.0f, 1270.0f, 720.0f, 0.0001f, 100000.0f));
+    ECamera cam(glm::perspectiveFovLH_NO(60.0f, 1270.0f, 720.0f, 0.0001f, 100000.0f));
 
     std::vector<float> vertices = {    -1,  1, 1.f,         1.0f, 0.0f, 0.0f,
                                        -1, -1, 1.f,         1.0f, 0.0f, 0.0f,

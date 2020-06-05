@@ -32,6 +32,7 @@ namespace Engine {
 		/// TEMP ////
 		float GetMouseX() { return fData.mousePosition.x; }
 		float GetMouseY() { return fData.mousePosition.y; }
+		float GetScroll();
 		bool IsLeftPressed() { return fData.leftPress; }
 		bool IsRightPressed() { return fData.rightPress; }
 		bool IsMiddlePressed() { return fData.middlePress; }
@@ -52,6 +53,7 @@ namespace Engine {
 			/////TEMP JUST FOR THE CAMERA AT FIRST///////
 			bool altPressed;
 			glm::vec2 mousePosition;
+			float mouseScroll;
 			bool leftPress;
 			bool rightPress;
 			bool middlePress;

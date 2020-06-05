@@ -14,33 +14,31 @@ namespace Engine {
 		fRotationSpeed = 0.002f;
 		fZoomSpeed = 0.2f;
 
-		fPosition = { 0,0, 0 };
+		fPosition = { 0, 0, -10 };
 		fRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		fFocalPoint = glm::vec3(0.0f);
 		fDistance = glm::distance(fPosition, fFocalPoint);
 
-
-		fYaw = 3.0f * (float)M_PI / 4.0f;
-		fPitch = M_PI / 4.0f;
+		fYaw = 0;
+		fPitch = 0;
+		//fYaw = 3.0f * (float)M_PI / 4.0f;
+		//fPitch = M_PI / 4.0f;
 	}
 
 	void ECamera::Update(EWindow* window)
 	{
+		const glm::vec2& mouse{ window->GetMouseX(), window->GetMouseY() };
+		float speed = window->GetScroll();
+		glm::vec2 delta = mouse - fInitialMousePosition;
+		fInitialMousePosition = mouse;
 
-		if (window->IsAltPressed())
-		{
-			const glm::vec2& mouse{ window->GetMouseX(), window->GetMouseY() };
-			glm::vec2 delta = mouse - fInitialMousePosition;
-			fInitialMousePosition = mouse;
+		if (window->IsRightPressed())
+			MousePan(delta);
+		else if (window->IsLeftPressed())
+			MouseRotate(delta);
+			MouseZoom(speed);
 
-			if (window->IsMiddlePressed())
-				MousePan(delta);
-			else if (window->IsLeftPressed())
-				MouseRotate(delta);
-			else if (window->IsRightPressed())
-				MouseZoom(delta.y);
-		}
 
 
 		fPosition = CalculatePosition();
@@ -49,7 +47,7 @@ namespace Engine {
 
  		glm::quat orientation = GetOrientation();
 		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
-		fViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
+		fViewMatrix = /*glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * */glm::translate(glm::mat4(1.0f), -fPosition);
 	}
 
 	void ECamera::MousePan(const glm::vec2& delta)
