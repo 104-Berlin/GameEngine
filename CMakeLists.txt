@@ -42,7 +42,7 @@ endif(APPLE)
 
 add_executable(Engine  
                         MACOSX_BUNDLE
-                        ../glad/src/glad.c
+                        glad/src/glad.c
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
                         src/platform/opengl/engine_opengl_shader.cpp

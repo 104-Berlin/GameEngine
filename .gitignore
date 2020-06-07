@@ -5,3 +5,7 @@
 *.dSYM
 main
 build/
+**.vcxproj
+**.filters
+**.log
+CMakeFiles/**
