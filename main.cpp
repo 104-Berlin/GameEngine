@@ -5,13 +5,14 @@ static const char* vertex_shader_text =
 "attribute vec3 vPos;\n"
 "attribute vec3 color;\n"
 
-"uniform mat4 vp_matrix = mat4(1.0);\n"
+"uniform mat4 v_matrix = mat4(1.0);\n"
+"uniform mat4 p_matrix = mat4(1.0);\n"
 
 "varying vec3 oColor;\n"
 
 "void main()\n"
 "{\n"
-"    gl_Position = vp_matrix * vec4(vPos, 1.0);\n"
+"    gl_Position = p_matrix * v_matrix * vec4(vPos + vec3(3, 3, 2), 1.0);\n"
 "   oColor = color;\n"
 "}\n";
  
@@ -110,7 +111,8 @@ int main(int argc, char const *argv[])
                              6 * sizeof(float), (void*) (3*sizeof(float)));
 
     })
-    glm::mat4 vp_mat = glm::mat4(1.0f);
+    glm::mat4 v_mat = glm::mat4(1.0f);
+    glm::mat4 p_mat = glm::mat4(1.0f);
     /* Loop until the user closes the window */
     while (!window.IsClosed())
     {
@@ -119,9 +121,11 @@ int main(int argc, char const *argv[])
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         })
         cam.Update(&window);
-        vp_mat = cam.GetProjectionMatrix() * cam.GetViewMatrix();
+        v_mat = cam.GetViewMatrix();
+        p_mat = cam.GetProjectionMatrix();
         shader->Bind();
-        shader->SetUniformMat4("vp_matrix", vp_mat);
+        shader->SetUniformMat4("p_matrix", p_mat);
+        shader->SetUniformMat4("v_matrix", v_mat);
         
         vb->Bind();
         ib->Bind();

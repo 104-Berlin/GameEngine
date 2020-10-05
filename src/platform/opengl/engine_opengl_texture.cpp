@@ -12,6 +12,7 @@ namespace Engine {
 		{
 		case ETextureFormat::RGB:     return GL_RGB;
 		case ETextureFormat::RGBA:    return GL_RGBA;
+		case ETextureFormat::None:	  break;
 		}
 		return 0;
 	}

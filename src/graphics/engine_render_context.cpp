@@ -10,7 +10,8 @@ namespace Engine {
         // TODO: ASSERT
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL: s_Instance = new EOpenGLRenderContext(window);
+		case ERenderingType::OpenGL:    s_Instance = new EOpenGLRenderContext(window);
+        case ERenderingType::None:		break;
 		}
     }
 

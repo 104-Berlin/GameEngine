@@ -11,7 +11,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:return new EOpenGLShader(filePath);
+		case ERenderingType::OpenGL:	return new EOpenGLShader(filePath);
+		case ERenderingType::None:		break;
 		}
 
 		return nullptr;
@@ -23,7 +24,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:return new EOpenGLShader(vertexSource, fragmentSource);
+		case ERenderingType::OpenGL:	return new EOpenGLShader(vertexSource, fragmentSource);
+		case ERenderingType::None:		break;
 		}
 
 		return nullptr;

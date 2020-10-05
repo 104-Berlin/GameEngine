@@ -41,7 +41,6 @@ endif(APPLE)
 
 
 add_executable(Engine  
-                        MACOSX_BUNDLE
                         glad/src/glad.c
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
@@ -63,7 +62,6 @@ target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
 
 if (WIN32)
-
 target_link_libraries(Engine opengl32)
 target_link_libraries(Engine gdi32)
 endif(WIN32)

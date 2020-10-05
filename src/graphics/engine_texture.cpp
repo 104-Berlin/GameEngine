@@ -8,7 +8,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No Renderer selected!");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL: return new EOpenGLTexture2D(path, srgb);
+		case ERenderingType::OpenGL: 	return new EOpenGLTexture2D(path, srgb);
+		case ERenderingType::None:		break;
 		}
 		return nullptr;
 	}
@@ -19,7 +20,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No Renderer selected!");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL: return new EOpenGLTexture2D(format, width, height);
+		case ERenderingType::OpenGL: 	return new EOpenGLTexture2D(format, width, height);
+		case ERenderingType::None:		break;
 		}
 		return nullptr;
 	}
@@ -30,7 +32,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No Renderer selected!");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL: return new EOpenGLTextureCube(path, srgb);
+		case ERenderingType::OpenGL: 	return new EOpenGLTextureCube(path, srgb);
+		case ERenderingType::None:		break;
 		}
 		return nullptr;
 	}

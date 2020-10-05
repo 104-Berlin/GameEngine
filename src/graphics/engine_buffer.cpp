@@ -8,7 +8,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:return new EOpenGLVertexBuffer(data, size);
+		case ERenderingType::OpenGL:	return new EOpenGLVertexBuffer(data, size);
+		case ERenderingType::None:		break;
 		}
 		
 		return nullptr;
@@ -20,7 +21,8 @@ namespace Engine {
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:return new EOpenGLIndexBuffer(data, count);
+		case ERenderingType::OpenGL:	return new EOpenGLIndexBuffer(data, count);
+		case ERenderingType::None:		break;
 		}
 		return nullptr;
 	}

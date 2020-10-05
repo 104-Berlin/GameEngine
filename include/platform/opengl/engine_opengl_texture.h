@@ -10,14 +10,14 @@ namespace Engine {
 
 		virtual ~EOpenGLTexture2D();
 
-		virtual u32 GetRendererID() const { return fRendererID; }
+		virtual u32 GetRendererID() const override { return fRendererID; }
 		virtual void Bind(u32 slot) const override;
 
 		virtual ETextureFormat GetFormat() const override { return fFormat; }
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
 
-		virtual bool Reload(const EString& filepath);
+		virtual bool Reload(const EString& filepath) override;
 
 		virtual const EString& GetPath() const override { return fFilePath; }
 	private:
@@ -36,14 +36,14 @@ namespace Engine {
 
 		virtual ~EOpenGLTextureCube();
 
-		virtual u32 GetRendererID() const { return fRendererID; }
+		virtual u32 GetRendererID() const override { return fRendererID; }
 		virtual void Bind(u32 slot) const override;
 
 		virtual ETextureFormat GetFormat() const override { return fFormat; }
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
 
-		virtual bool Reload(const EString& filePath);
+		virtual bool Reload(const EString& filePath) override;
 
 		virtual const EString& GetPath() const override { return fFilePath; }
 	private:

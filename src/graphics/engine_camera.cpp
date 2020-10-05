@@ -1,6 +1,9 @@
 #include "Engine.h"
 
 
+#ifdef M_PI
+#undef M_PI
+#endif
 
 #define M_PI 3.14159f
 
@@ -14,7 +17,7 @@ namespace Engine {
 		fRotationSpeed = 0.002f;
 		fZoomSpeed = 0.2f;
 
-		fPosition = { 0, 0, -10 };
+		fPosition = { 0, 0, 0 };
 		fRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		fFocalPoint = glm::vec3(0.0f);
@@ -47,7 +50,7 @@ namespace Engine {
 
  		glm::quat orientation = GetOrientation();
 		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
-		fViewMatrix = /*glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * */glm::translate(glm::mat4(1.0f), -fPosition);
+		fViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
 	}
 
 	void ECamera::MousePan(const glm::vec2& delta)

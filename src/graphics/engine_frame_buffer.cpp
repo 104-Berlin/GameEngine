@@ -7,7 +7,8 @@ namespace Engine {
 		// TODO: ASSERT
 		switch (ERenderContext::Renderer)
 		{
-		//case ERenderingType::OpenGL: return new OpenGLFrameBuffer(width, height, format);
+		case ERenderingType::OpenGL: return nullptr;//new OpenGLFrameBuffer(width, height, format);
+		case ERenderingType::None:	 break;
 		}
 		return nullptr;
 	}

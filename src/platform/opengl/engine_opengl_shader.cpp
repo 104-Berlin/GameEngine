@@ -189,11 +189,11 @@ namespace Engine {
 		const char* token;
 		const char* source = fShaderSource.c_str();
 
-		while (token = FindToken(source, "struct"))
+		while ((token = FindToken(source, "struct")))
 			ParseUniformStruct(GetBlock(token, &source));
 
 		source = fShaderSource.c_str();
-		while (token = FindToken(source, "uniform"))
+		while ((token = FindToken(source, "uniform")))
 			ParseUniform(GetStatement(token, &source));
 
 		fUniformBuffer = (byte*) malloc(fUniformBufferSize);
@@ -519,7 +519,7 @@ namespace Engine {
 	const char* FindToken(const char* str, const EString& token)
 	{
 		const char* t = str;
-		while (t = strstr(t, token.c_str()))
+		while ((t = strstr(t, token.c_str())))
 		{
 			bool left = str == t || isspace(t[-1]);
 			bool right = !t[token.size()] || isspace(t[token.size()]);

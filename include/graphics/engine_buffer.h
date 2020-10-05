@@ -27,6 +27,7 @@ namespace Engine {
 		case EShaderDataType::UInt:				return 4;
 		case EShaderDataType::Byte4:			return 4;
 		case EShaderDataType::Bool:				return 1;
+		case EShaderDataType::None:				break;
 		}
 
 		std::cout << "Unknown EShaderDataType" << std::endl;
@@ -71,19 +72,22 @@ namespace Engine {
 		{
 			switch (Type)
 			{
-			case EShaderDataType::Float:	return 1;
-			case EShaderDataType::Float2:	return 2;
-			case EShaderDataType::Float3:	return 3;
-			case EShaderDataType::Float4:	return 4;
-			case EShaderDataType::Matrix3:	return 3 * 3;
-			case EShaderDataType::Matrix4:	return 4 * 4;
-			case EShaderDataType::Int:		return 1;
-			case EShaderDataType::Int2:		return 2;
-			case EShaderDataType::Int3:		return 3;
-			case EShaderDataType::Int4:		return 4;
-			case EShaderDataType::UInt:		return 1;
-			case EShaderDataType::Byte4:	return 4;
-			case EShaderDataType::Bool:		return 1;
+			case EShaderDataType::Float:		return 1;
+			case EShaderDataType::Float2:		return 2;
+			case EShaderDataType::Float3:		return 3;
+			case EShaderDataType::Float4:		return 4;
+			case EShaderDataType::Matrix3:		return 3 * 3;
+			case EShaderDataType::Matrix4:		return 4 * 4;
+			case EShaderDataType::Int:			return 1;
+			case EShaderDataType::Int2:			return 2;
+			case EShaderDataType::Int3:			return 3;
+			case EShaderDataType::Int4:			return 4;
+			case EShaderDataType::UInt:			return 1;
+			case EShaderDataType::Byte4:		return 4;
+			case EShaderDataType::Bool:			return 1;
+			case EShaderDataType::Texture2D: 	return 1;
+			case EShaderDataType::TextureCube:	return 1;
+			case EShaderDataType::None:			break;
 			}
 
 			//TODO: Add ASSERT
