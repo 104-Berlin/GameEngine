@@ -10,9 +10,17 @@ namespace Engine {
 
     class ERenderContext
     {
+    protected:
+    ERenderContext() = default;
     public:
+    ERenderContext(const ERenderContext& other) = delete;
+    virtual ~ERenderContext() = default;
+
     static void Create(EWindow& window);
     static void Destroy();
+
+    virtual void SetClearColor(const EColor& color) = 0;
+    virtual void Clear() = 0;
     public:
     static ERenderingType Renderer;
     static ERenderContext* s_Instance;

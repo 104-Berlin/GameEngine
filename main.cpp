@@ -38,6 +38,7 @@ int main(int argc, char const *argv[])
 {   
     EWindow window(EWindowProp("Hello World", 1270, 720));
     ERenderer::Init();
+    ERenderContext::Create(window);
 
     ECamera cam(glm::perspectiveFovLH_NO(30.0f, 1270.0f, 720.0f, 0.0001f, 100000.0f));
 
@@ -116,6 +117,8 @@ int main(int argc, char const *argv[])
     /* Loop until the user closes the window */
     while (!window.IsClosed())
     {
+        ERenderContext::s_Instance->Clear();
+
         IN_RENDER({
             glClearColor(1.0, 1.0, 1.0, 1.0);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

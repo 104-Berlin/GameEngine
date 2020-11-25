@@ -6,12 +6,14 @@
                 "${workspaceFolder}/include/",
                 "${workspaceFolder}/../glfw/include/",
                 "${workspaceFolder}/glad/include/",
-                "${workspaceFolder}/deps/glm/glm"
+                "${workspaceFolder}/deps/glm/glm",
+                "${workspaceFolder}/deps/json/single_include"
             ],
             "defines": [
                 "_DEBUG",
                 "UNICODE",
-                "_UNICODE"
+                "_UNICODE",
+                "EMAC"
             ],
             "windowsSdkVersion": "10.0.18362.0",
             "cStandard": "c11",

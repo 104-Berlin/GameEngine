@@ -7,6 +7,11 @@ namespace Engine {
     public:
         EOpenGLRenderContext(EWindow& window);
         ~EOpenGLRenderContext();
+
+        virtual void SetClearColor(const EColor& color);
+        virtual void Clear();
+    private:
+        EColor fClearColor;
     };
 
 } 

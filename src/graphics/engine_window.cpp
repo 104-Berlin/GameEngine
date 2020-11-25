@@ -11,7 +11,7 @@ namespace Engine {
 		fData.leftPress = false;
 		fData.rightPress = false;
 		fData.middlePress = false;
-		fData.mousePosition = glm::vec2();
+		fData.mousePosition = EVec2();
 
 		glfwInit();
 
@@ -66,7 +66,7 @@ namespace Engine {
 		glfwSetCursorPosCallback(fWindow, [](GLFWwindow* window, double xPos, double yPos)
 		{
 			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
-			data.mousePosition = glm::vec2((float)xPos, (float)yPos);
+			data.mousePosition = EVec2((float)xPos, (float)yPos);
 		});
 
 		glfwSetMouseButtonCallback(fWindow, [](GLFWwindow* window, int button, int action, int mods)
@@ -95,8 +95,6 @@ namespace Engine {
 		glfwSetScrollCallback(fWindow, [](GLFWwindow* window, double xOffset, double yOffset)
 		{
 			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(window);
-
-			std::cout << "Mouse Scroll: " << xOffset << ", " << yOffset << std::endl;
 
 			data.mouseScroll = yOffset;
 		});

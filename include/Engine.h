@@ -10,6 +10,7 @@
 typedef int_fast16_t i16;
 typedef int_fast32_t i32;
 typedef int_fast64_t i64;
+typedef uint_fast8_t u8;
 typedef uint_fast16_t u16;
 typedef uint_fast32_t u32;
 typedef uint_fast64_t u64;
@@ -17,8 +18,12 @@ typedef uint_fast8_t byte;
 
 typedef std::string EString;
 
+
 template <typename T>
 using EVector = std::vector<T>;
+
+template <typename K, typename V>
+using EMap = std::map<K, V>;
 
 
 //------------------------------------------------------------------
@@ -32,9 +37,22 @@ using EVector = std::vector<T>;
 #define GLM_ENABLE_EXPERIMENTAL
 #include <gtx/quaternion.hpp>
 
+#include <nlohmann/json.hpp>
+
+
+
+typedef glm::vec2       EVec2;
+typedef glm::vec3       EVec3;
+typedef glm::vec4       EVec4;
+typedef glm::mat4       EMat4;
+
+typedef EVec4           EColor;
+typedef nlohmann::json  EJson;
+
+
 
 // ------------------------------------------------------------------
- ///// TEMP
+///// TEMP
 class Resource
 {
 protected:
@@ -52,6 +70,8 @@ Resource(const EString& name, const EString& filepath)
 };
 
 // ------------------------------------------------------------------ 
+
+#include "predefined_classes.h"
 
 #include "graphics/engine_window.h"
 #include "graphics/engine_light.h"
@@ -72,3 +92,14 @@ Resource(const EString& name, const EString& filepath)
 #include "platform/opengl/engine_opengl_buffer.h"
 #include "platform/opengl/engine_opengl_shader.h"
 #include "platform/opengl/engine_opengl_texture.h"
+
+#include "properties/engine_json_converter.h"
+#include "properties/engine_property.h"
+
+#include "scene/engine_uuid.h"
+#include "scene/object/engine_object.h"
+
+#include "ui/engine_widget.h"
+
+
+#include "graphics/engine_ui_renderer.h"

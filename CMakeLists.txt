@@ -12,17 +12,18 @@ set(CMAKE_SYSTEM_VERSION 10.0)
 include_directories(Infinit/src     deps/glfw/include
                                     glad/include
                                     deps/glm/glm
+                                    deps/json/single_include
                                     ./include )
 
 
 add_subdirectory(deps/glfw)
 find_package(OpenGL)
 
-
 if (WIN32)
-
-
-endif(WIN32)
+add_compile_definitions(EWIN)
+elseif(APPLE)
+add_compile_definitions(EMAC)
+endif()
 
 if (APPLE)
 INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
@@ -56,6 +57,11 @@ add_executable(Engine
                         src/graphics/engine_texture.cpp
                         src/graphics/engine_vertex_array.cpp
                         src/graphics/engine_window.cpp
+                        src/properties/engine_property.cpp
+                        src/properties/engine_json_converter.cpp
+                        src/scene/engine_uuid.cpp
+                        src/scene/object/engine_object.cpp
+                        src/ui/engine_widget.cpp
                         main.cpp )
 
 target_link_libraries(Engine ${EXTRA_LIBS})

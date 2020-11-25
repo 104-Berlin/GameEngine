@@ -370,7 +370,7 @@ void main()
 		shader.lock()->SetUniformBuffer("u_ViewProjectionMatrix", (byte*)&s_Instance->fViewProjectionMatrix[0][0], sizeof(float) * 4 * 4);
 		shader.lock()->SetUniformBuffer("u_ModelMatrix", (byte*)&modelMatrix[0][0], sizeof(float) * 4 * 4);
 		shader.lock()->SetUniformBuffer("lights", (byte*) &s_Instance->fLightMap[0], sizeof(Light));
-		shader.lock()->SetUniformBuffer("u_CameraPosition", (byte*)&s_Instance->fCameraPosition, sizeof(glm::vec3));
+		shader.lock()->SetUniformBuffer("u_CameraPosition", (byte*)&s_Instance->fCameraPosition, sizeof(EVec3));
 		
 		shader.lock()->SetUniform3f("lights.Direction", s_Instance->fLightMap[0].Direction * TO_RADIANS);
 		material->Bind();

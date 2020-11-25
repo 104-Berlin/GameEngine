@@ -21,7 +21,7 @@ namespace Engine {
 		ERenderCommandQueue fCommandQueue;
 		//TEMP
 		glm::mat4 fViewProjectionMatrix;
-		glm::vec3 fCameraPosition;
+		EVec3 fCameraPosition;
 		ELightMap fLightMap;
 	};
 

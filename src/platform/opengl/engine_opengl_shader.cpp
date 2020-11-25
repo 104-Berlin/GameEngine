@@ -389,9 +389,9 @@ namespace Engine {
 				case EShaderDataType::Matrix3: self->SetUniformMat3(uniform.Name, *((const glm::mat3*)buffer)); break;
 				case EShaderDataType::Matrix4: self->SetUniformMat4(uniform.Name, *((const glm::mat4*)buffer)); break;
 				case EShaderDataType::Float: self->SetUniform1f(uniform.Name, *((const float*)buffer)); break;
-				case EShaderDataType::Float2: self->SetUniform2f(uniform.Name, *((const glm::vec2*)buffer)); break;
-				case EShaderDataType::Float3: self->SetUniform3f(uniform.Name, *((const glm::vec3*)buffer)); break;
-				case EShaderDataType::Float4: self->SetUniform4f(uniform.Name, *((const glm::vec4*)buffer)); break;
+				case EShaderDataType::Float2: self->SetUniform2f(uniform.Name, *((const EVec2*)buffer)); break;
+				case EShaderDataType::Float3: self->SetUniform3f(uniform.Name, *((const EVec3*)buffer)); break;
+				case EShaderDataType::Float4: self->SetUniform4f(uniform.Name, *((const EVec4*)buffer)); break;
 				case EShaderDataType::Int: self->SetUniform1i(uniform.Name, *((const int*)buffer)); break;
 				case EShaderDataType::Bool: self->SetUniform1i(uniform.Name, *((const bool*)buffer)); break;
 				case EShaderDataType::Texture2D:
@@ -415,17 +415,17 @@ namespace Engine {
 		glUniform1f(GetUniformLocation(name), value);
 	}
 
-	void EOpenGLShader::SetUniform2f(const EString& name, const glm::vec2& value)
+	void EOpenGLShader::SetUniform2f(const EString& name, const EVec2& value)
 	{
 		glUniform2f(GetUniformLocation(name), value.x, value.y);
 	}
 
-	void EOpenGLShader::SetUniform3f(const EString& name, const glm::vec3& value)
+	void EOpenGLShader::SetUniform3f(const EString& name, const EVec3& value)
 	{
 		glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
 	}
 
-	void EOpenGLShader::SetUniform4f(const EString& name, const glm::vec4& value)
+	void EOpenGLShader::SetUniform4f(const EString& name, const EVec4& value)
 	{
 		glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
 	}

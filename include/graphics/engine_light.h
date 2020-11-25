@@ -4,8 +4,8 @@ namespace Engine {
 
 	struct ELight
 	{
-		glm::vec3 Direction;
-		glm::vec3 Radiance;
+		EVec3 Direction;
+		EVec3 Radiance;
 	};
 
 	typedef std::vector<ELight> ELightMap;

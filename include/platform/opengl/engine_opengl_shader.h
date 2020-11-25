@@ -18,9 +18,9 @@ namespace Engine {
 
 		virtual void SetUniform1i(const EString& name, const int& value) override;
 		virtual void SetUniform1f(const EString& name, const float& value) override;
-		virtual void SetUniform2f(const EString& name, const glm::vec2& value) override;
-		virtual void SetUniform3f(const EString& name, const glm::vec3& value) override;
-		virtual void SetUniform4f(const EString& name, const glm::vec4& value) override;
+		virtual void SetUniform2f(const EString& name, const EVec2& value) override;
+		virtual void SetUniform3f(const EString& name, const EVec3& value) override;
+		virtual void SetUniform4f(const EString& name, const EVec4& value) override;
 		virtual void SetUniformMat4(const EString& name, const glm::mat4& value) override;
 		void SetUniformMat3(const EString& name, const glm::mat3& value);
 

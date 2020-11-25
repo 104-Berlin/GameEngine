@@ -52,7 +52,7 @@ namespace Engine {
 			/////////////////////////////////////////////
 			/////TEMP JUST FOR THE CAMERA AT FIRST///////
 			bool altPressed;
-			glm::vec2 mousePosition;
+			EVec2 mousePosition;
 			float mouseScroll;
 			bool leftPress;
 			bool rightPress;

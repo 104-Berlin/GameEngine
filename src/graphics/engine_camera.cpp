@@ -18,9 +18,9 @@ namespace Engine {
 		fZoomSpeed = 0.2f;
 
 		fPosition = { 0, 0, 0 };
-		fRotation = glm::vec3(0.0f, 0.0f, 0.0f);
+		fRotation = EVec3(0.0f, 0.0f, 0.0f);
 
-		fFocalPoint = glm::vec3(0.0f);
+		fFocalPoint = EVec3(0.0f);
 		fDistance = glm::distance(fPosition, fFocalPoint);
 
 		fYaw = 0;
@@ -31,9 +31,9 @@ namespace Engine {
 
 	void ECamera::Update(EWindow* window)
 	{
-		const glm::vec2& mouse{ window->GetMouseX(), window->GetMouseY() };
+		const EVec2& mouse{ window->GetMouseX(), window->GetMouseY() };
 		float speed = window->GetScroll();
-		glm::vec2 delta = mouse - fInitialMousePosition;
+		EVec2 delta = mouse - fInitialMousePosition;
 		fInitialMousePosition = mouse;
 
 		if (window->IsRightPressed())
@@ -50,16 +50,16 @@ namespace Engine {
 
  		glm::quat orientation = GetOrientation();
 		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
-		fViewMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
+		fViewMatrix = glm::translate(glm::mat4(1.0f), EVec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
 	}
 
-	void ECamera::MousePan(const glm::vec2& delta)
+	void ECamera::MousePan(const EVec2& delta)
 	{
 		fFocalPoint += -GetRightDirection() * delta.x * fPanSpeed * fDistance;
 		fFocalPoint += GetUpDirection() * delta.y * fPanSpeed * fDistance;
 	}
 
-	void ECamera::MouseRotate(const glm::vec2& delta)
+	void ECamera::MouseRotate(const EVec2& delta)
 	{
 		float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
 		fYaw += yawSign * delta.x * fRotationSpeed;
@@ -76,29 +76,29 @@ namespace Engine {
 		}
 	}
 
-	glm::vec3 ECamera::GetUpDirection()
+	EVec3 ECamera::GetUpDirection()
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+		return glm::rotate(GetOrientation(), EVec3(0.0f, 1.0f, 0.0f));
 	}
 
-	glm::vec3 ECamera::GetRightDirection()
+	EVec3 ECamera::GetRightDirection()
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+		return glm::rotate(GetOrientation(), EVec3(1.0f, 0.0f, 0.0f));
 	}
 
-	glm::vec3 ECamera::GetForwardDirection()
+	EVec3 ECamera::GetForwardDirection()
 	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
+		return glm::rotate(GetOrientation(), EVec3(0.0f, 0.0f, -1.0f));
 	}
 
-	glm::vec3 ECamera::CalculatePosition()
+	EVec3 ECamera::CalculatePosition()
 	{
 		return fFocalPoint - GetForwardDirection() * fDistance;
 	}
 
 	glm::quat ECamera::GetOrientation()
 	{
-		return glm::quat(glm::vec3(-fPitch, -fYaw, 0.0f));
+		return glm::quat(EVec3(-fPitch, -fYaw, 0.0f));
 	}
 
 }
