@@ -80,4 +80,29 @@ namespace Engine {
 		EIndexBuffer* fIndexBuffer;
 	};
 
+
+
+	class EOpenGLFrameBuffer : public EFrameBuffer
+	{
+	public:
+		EOpenGLFrameBuffer(u32 width, u32 height, EFramebufferFormat format);
+		virtual ~EOpenGLFrameBuffer();
+
+		void Resize(u32 width, u32 height) override;
+
+		void Bind() const override;
+		void Unbind() const override;
+
+		void BindTexture(u32 slot = 0) const override;
+
+		u32 GetColorAttachment() const override { return m_ColorAttachment; }
+	private:
+		u32 m_RendererID;
+		u32 m_Width;
+		u32 m_Height;
+		EFramebufferFormat m_Format;
+		u32 m_ColorAttachment;
+		u32 m_DepthAttachment;
+	};
+
 }

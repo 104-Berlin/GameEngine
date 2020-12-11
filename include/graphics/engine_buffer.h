@@ -3,6 +3,7 @@
 
 namespace Engine {
 
+
 	enum class EShaderDataType
 	{
 		None = 0, Float, Float2, Float3, Float4, Matrix3, Matrix4, Int, Int2, Int3, Int4, UInt, Byte4, Bool, Texture2D, TextureCube
@@ -177,5 +178,37 @@ namespace Engine {
 
 		static EVertexArray* Create();
 	};
+
+
+
+
+
+	
+	enum class EFramebufferFormat
+	{
+		None = 0,
+		RGBA8 = 1,
+		RGBA16F = 2
+	};
+
+	class EFrameBuffer
+	{
+	public:
+		virtual ~EFrameBuffer() {}
+
+		virtual void Resize(u32 width, u32 height) = 0;
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+
+		virtual void BindTexture(u32 slot = 0) const = 0;
+
+		virtual u32 GetColorAttachment() const { return 0; }
+
+		static EFrameBuffer* Create(u32 width, u32 height, EFramebufferFormat format);
+	};
+
+
+
 
 }

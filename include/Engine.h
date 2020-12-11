@@ -85,7 +85,6 @@ Resource(const EString& name, const EString& filepath)
 #include "graphics/engine_buffer.h"
 #include "graphics/engine_shader_uniforms.h"
 #include "graphics/engine_shader.h"
-#include "graphics/engine_frame_buffer.h"
 #include "graphics/engine_texture.h"
 #include "graphics/engine_renderer.h"
 

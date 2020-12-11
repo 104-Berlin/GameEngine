@@ -58,7 +58,6 @@ add_executable(Engine
                         src/platform/opengl/engine_opengl_texture.cpp
                         src/graphics/engine_buffer.cpp
                         src/graphics/engine_camera.cpp
-                        src/graphics/engine_frame_buffer.cpp
                         src/graphics/engine_render_command_queue.cpp
                         src/graphics/engine_render_context.cpp
                         src/graphics/engine_renderer.cpp

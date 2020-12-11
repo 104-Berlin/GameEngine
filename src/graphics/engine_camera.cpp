@@ -53,6 +53,34 @@ namespace Engine {
 		fViewMatrix = glm::translate(glm::mat4(1.0f), EVec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
 	}
 
+	void ECamera::UpdateImGui()
+	{
+		EVec2 mouse = {ImGui::GetMousePos().x, ImGui::GetMousePos().y};
+		float speed = ImGui::GetScrollY();
+		
+		EVec2 delta = mouse - fInitialMousePosition;
+		fInitialMousePosition = mouse;
+
+		if (ImGui::IsItemHovered())
+		{
+			if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
+			{
+				MousePan(delta);
+			}
+			else if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+			{
+				MouseRotate(delta);
+			}
+			MouseZoom(speed);
+		}
+
+		fPosition = CalculatePosition();
+
+		glm::quat orientation = GetOrientation();
+		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
+		fViewMatrix = glm::translate(glm::mat4(1.0f), EVec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
+	}
+
 	void ECamera::MousePan(const EVec2& delta)
 	{
 		fFocalPoint += -GetRightDirection() * delta.x * fPanSpeed * fDistance;

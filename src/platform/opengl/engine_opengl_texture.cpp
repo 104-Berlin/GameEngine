@@ -1,8 +1,8 @@
 #include "Engine.h"
-/*
+
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
-*/
+#include "util/stb_image.h"
+
 
 namespace Engine {
 
@@ -57,8 +57,8 @@ namespace Engine {
 		fFilePath = filePath;
 		int width, height, channels;
 		std::cout << "Loading texture " << fFilePath << std::endl;
-		//stbi_set_flip_vertically_on_load(false);
-		//fImageData = stbi_load(fFilePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
+		stbi_set_flip_vertically_on_load(false);
+		fImageData = stbi_load(fFilePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
 		fWidth = width;
 		fHeight = height;
@@ -79,7 +79,7 @@ namespace Engine {
 
 				glBindTexture(GL_TEXTURE_2D, 0);
 
-				//stbi_image_free(self->fImageData);
+				stbi_image_free(self->fImageData);
 			})
 		return true;
 	}
@@ -111,8 +111,8 @@ namespace Engine {
 	bool EOpenGLTextureCube::Reload(const EString& filePath)
 	{
 		int width, height, channels;
-		//stbi_set_flip_vertically_on_load(false);
-		//fImageData = stbi_load(filePath.c_str(), &width, &height, &channels, STBI_rgb);
+		stbi_set_flip_vertically_on_load(false);
+		fImageData = stbi_load(filePath.c_str(), &width, &height, &channels, STBI_rgb);
 
 		fWidth = width;
 		fHeight = height;
@@ -192,7 +192,7 @@ namespace Engine {
 			for (size_t i = 0; i < 6; i++)
 				delete[] faces[i];
 
-			//stbi_image_free(self->fImageData);
+			stbi_image_free(self->fImageData);
 		})
 
 		return true;

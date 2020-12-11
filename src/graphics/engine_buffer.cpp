@@ -38,4 +38,15 @@ namespace Engine {
 		return nullptr;
 	}
 
+
+	EFrameBuffer* EFrameBuffer::Create(u32 width, u32 height, EFramebufferFormat format)
+	{
+		switch (ERenderContext::Renderer)
+		{
+		case ERenderingType::OpenGL: return new EOpenGLFrameBuffer(width, height, format);
+		case ERenderingType::None:	break;
+		}
+		return nullptr;
+	}
+
 }
