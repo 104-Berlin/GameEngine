@@ -322,6 +322,7 @@ void main()
 	void ERenderer::Init()
 	{
 		s_Instance = new ERenderer();
+
 		CreateDefaults();
 	}
 
@@ -340,6 +341,16 @@ void main()
 		//Make that better
 		s_Instance->fLightMap.clear();
 		s_Instance->fLightMap = lightMap;
+	}
+
+	void ERenderer::Draw(EVertexBuffer* vertexBuffer, EIndexBuffer* indexBuffer)
+	{
+		vertexBuffer->Bind();
+		indexBuffer->Bind();
+
+		IN_RENDER1(indexBuffer, {
+			glDrawElements(GL_TRIANGLES, indexBuffer->GetCount(), GL_UNSIGNED_INT, NULL);
+		})
 	}
 
 	void ERenderer::End()

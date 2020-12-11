@@ -22,8 +22,39 @@ namespace Engine {
 	void EOpenGLVertexBuffer::Bind() const
 	{
 		IN_RENDER_S({
-				glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID);
+				self->PrivBind();
 			})
+	}
+
+	void* EOpenGLVertexBuffer::Map()
+	{
+		return glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+	}
+
+	void EOpenGLVertexBuffer::Unmap()
+	{
+		glUnmapBuffer(GL_ARRAY_BUFFER);
+	}
+
+
+
+	void EOpenGLVertexBuffer::PrivBind() const 
+	{
+		const auto & layout = GetLayout();
+		size_t index = 0;
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(index);
+			glVertexAttribPointer(index,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(), (const void*)element.Offset);
+			index++;
+		}
+
+
+		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 
 	void EOpenGLVertexBuffer::Unbind() const

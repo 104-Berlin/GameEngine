@@ -6,6 +6,7 @@
 #include <map>
 #include <unordered_map>
 #include <math.h>
+#include <chrono>
 
 typedef int_fast16_t i16;
 typedef int_fast32_t i32;
@@ -73,18 +74,20 @@ Resource(const EString& name, const EString& filepath)
 
 #include "predefined_classes.h"
 
+#include "util/engine_timer.h"
+
 #include "graphics/engine_window.h"
 #include "graphics/engine_light.h"
 #include "graphics/engine_camera.h"
 #include "graphics/engine_render_context.h"
 #include "graphics/engine_render_command_queue.h"
-#include "graphics/engine_renderer.h"
 #include "graphics/engine_buffer.h"
 #include "graphics/engine_shader_uniforms.h"
 #include "graphics/engine_shader.h"
 #include "graphics/engine_vertex_array.h"
 #include "graphics/engine_frame_buffer.h"
 #include "graphics/engine_texture.h"
+#include "graphics/engine_renderer.h"
 
 
 
@@ -99,7 +102,3 @@ Resource(const EString& name, const EString& filepath)
 #include "scene/engine_uuid.h"
 #include "scene/object/engine_object.h"
 
-#include "ui/engine_widget.h"
-
-
-#include "graphics/engine_ui_renderer.h"

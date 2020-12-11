@@ -37,8 +37,6 @@ std::cout << "GL_ERR: " << glGetString(err) << std::endl;\
 int main(int argc, char const *argv[])
 {   
     EWindow window(EWindowProp("Hello World", 1270, 720));
-    ERenderer::Init();
-    ERenderContext::Create(window);
 
     ECamera cam(glm::perspectiveFovLH_NO(30.0f, 1270.0f, 720.0f, 0.0001f, 100000.0f));
 
@@ -95,23 +93,15 @@ int main(int argc, char const *argv[])
                                 22, 23, 20};
     
 
+
     EVertexBuffer* vb = EVertexBuffer::Create(&vertices[0], vertices.size() * sizeof(float));
     EIndexBuffer* ib = EIndexBuffer::Create(&indices[0], indices.size());
+    EBufferLayout layout{   EBufferElement(EShaderDataType::Float3, "Position", false),
+                            EBufferElement(EShaderDataType::Float3, "Color", false)};
+    vb->SetLayout(layout);
+
     EShader* shader = EShader::Create(vertex_shader_text, fragment_shader_text);
  
-
-    IN_RENDER({
-        glEnable(GL_DEPTH_TEST);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-                             6 * sizeof(float), (void*) 0);
-
-        glEnableVertexAttribArray(1);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
-                             6 * sizeof(float), (void*) (3*sizeof(float)));
-
-    })
     glm::mat4 v_mat = glm::mat4(1.0f);
     glm::mat4 p_mat = glm::mat4(1.0f);
     /* Loop until the user closes the window */

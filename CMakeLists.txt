@@ -43,6 +43,7 @@ endif(APPLE)
 
 add_executable(Engine  
                         glad/src/glad.c
+                        src/util/engine_timer.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
                         src/platform/opengl/engine_opengl_shader.cpp
@@ -61,7 +62,7 @@ add_executable(Engine
                         src/properties/engine_json_converter.cpp
                         src/scene/engine_uuid.cpp
                         src/scene/object/engine_object.cpp
-                        src/ui/engine_widget.cpp
+                        src/ui/engine_input_field.cpp
                         main.cpp )
 
 target_link_libraries(Engine ${EXTRA_LIBS})

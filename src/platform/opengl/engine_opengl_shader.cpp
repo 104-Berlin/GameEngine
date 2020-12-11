@@ -407,32 +407,44 @@ namespace Engine {
 
 	void EOpenGLShader::SetUniform1i(const EString& name, const int& value)
 	{
-		glUniform1i(GetUniformLocation(name), value);
+		IN_RENDER_S2(name, value, {
+			glUniform1i(self->GetUniformLocation(name), value);
+		})
 	}
 
 	void EOpenGLShader::SetUniform1f(const EString& name, const float& value)
 	{
-		glUniform1f(GetUniformLocation(name), value);
+		IN_RENDER_S2(name, value, {
+			glUniform1f(self->GetUniformLocation(name), value);
+		})
 	}
 
 	void EOpenGLShader::SetUniform2f(const EString& name, const EVec2& value)
 	{
-		glUniform2f(GetUniformLocation(name), value.x, value.y);
+		IN_RENDER_S2(name, value, {
+			glUniform2f(self->GetUniformLocation(name), value.x, value.y);
+		})
 	}
 
 	void EOpenGLShader::SetUniform3f(const EString& name, const EVec3& value)
 	{
-		glUniform3f(GetUniformLocation(name), value.x, value.y, value.z);
+		IN_RENDER_S2(name, value, {
+			glUniform3f(self->GetUniformLocation(name), value.x, value.y, value.z);
+		})
 	}
 
 	void EOpenGLShader::SetUniform4f(const EString& name, const EVec4& value)
 	{
-		glUniform4f(GetUniformLocation(name), value.x, value.y, value.z, value.w);
+		IN_RENDER_S2(name, value, {
+					glUniform4f(self->GetUniformLocation(name), value.x, value.y, value.z, value.w);
+		})
 	}
 
 	void EOpenGLShader::SetUniformMat3(const EString& name, const glm::mat3& value)
 	{
-		glUniformMatrix3fv(GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+		IN_RENDER_S2(name, value, {
+			glUniformMatrix3fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+		})
 	}
 
 	void EOpenGLShader::SetUniformMat4(const EString& name, const glm::mat4& value)

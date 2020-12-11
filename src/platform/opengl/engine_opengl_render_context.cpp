@@ -9,6 +9,15 @@ namespace Engine {
         //TODO: Add ASSERT
 		//IN_CORE_ASSERT(gladStatus, "Failed to initialize glad!");
         std::cout << glGetString(GL_VERSION) << std::endl;
+
+        SetGLDefaults();
+    }
+
+    void EOpenGLRenderContext::SetGLDefaults()
+    {
+        IN_RENDER({
+            glEnable(GL_DEPTH_TEST);
+        })
     }
 
     EOpenGLRenderContext::~EOpenGLRenderContext()

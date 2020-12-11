@@ -58,8 +58,8 @@ namespace Engine {
 	{
 		EShaderDataType Type;
 		EString Name;
-		u32 Size;
-		u32 Offset;
+		size_t Size;
+		size_t Offset;
 		bool Normalized;
 
 		EBufferElement() {}
@@ -141,6 +141,11 @@ namespace Engine {
 
 		virtual const EBufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const EBufferLayout& layout) = 0;
+
+		// Call this in a IN_RENDER({})
+		virtual void* Map() = 0;
+		// DO NOT Call this in a IN_RENDER({})
+		virtual void Unmap() = 0;
 
 		static EVertexBuffer* Create(const void* data, u32 size);
 	};

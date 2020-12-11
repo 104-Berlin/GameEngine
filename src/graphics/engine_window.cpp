@@ -24,7 +24,10 @@ namespace Engine {
 			std::cout << "Could not create Window" << std::endl;
 			return;
 		}
+
+		ERenderer::Init();
 		ERenderContext::Create(*this);
+		
 		glfwSetWindowUserPointer(fWindow, &fData);
 
 		glfwSetWindowSizeCallback(fWindow, [](GLFWwindow* EWindow, int width, int height)
