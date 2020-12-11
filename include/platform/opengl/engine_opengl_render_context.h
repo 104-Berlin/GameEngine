@@ -11,7 +11,7 @@ namespace Engine {
         virtual void SetClearColor(const EColor& color);
         virtual void Clear();
     private:
-        void SetGLDefaults();
+        void SetGLDefaults(EWindow& window);
     private:
         EColor fClearColor;
     };

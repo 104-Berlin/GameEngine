@@ -27,4 +27,15 @@ namespace Engine {
 		return nullptr;
 	}
 
+
+	EVertexArray* EVertexArray::Create()
+	{
+		switch (ERenderContext::Renderer)
+		{
+		case ERenderingType::OpenGL: return new EOpenGLVertexArray();
+		case ERenderingType::None:	break;
+		}
+		return nullptr;
+	}
+
 }

@@ -10,12 +10,13 @@ namespace Engine {
 		//IN_CORE_ASSERT(gladStatus, "Failed to initialize glad!");
         std::cout << glGetString(GL_VERSION) << std::endl;
 
-        SetGLDefaults();
+        SetGLDefaults(window);
     }
 
-    void EOpenGLRenderContext::SetGLDefaults()
+    void EOpenGLRenderContext::SetGLDefaults(EWindow& window)
     {
-        IN_RENDER({
+        GLFWwindow* win = window.GetNativeWindow();
+        IN_RENDER1(win, {
             glEnable(GL_DEPTH_TEST);
         })
     }

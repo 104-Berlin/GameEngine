@@ -40,20 +40,6 @@ namespace Engine {
 
 	void EOpenGLVertexBuffer::PrivBind() const 
 	{
-		const auto & layout = GetLayout();
-		size_t index = 0;
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index,
-						element.GetComponentCount(),
-						ShaderDataTypeToOpenGLType(element.Type),
-						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(), (const void*)element.Offset);
-			index++;
-		}
-
-
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 
@@ -99,5 +85,81 @@ namespace Engine {
 			})
 #endif
 	}
+
+EOpenGLVertexArray::EOpenGLVertexArray()
+{
+	IN_RENDER_S({
+		glGenVertexArrays(1, &self->fRendererID);
+		glBindVertexArray(self->fRendererID); 
+	})
+}
+
+EOpenGLVertexArray::~EOpenGLVertexArray()
+{		
+	std::cout << "OpenGL VertexArray "<< fRendererID << " destroyed!" << std::endl;
+
+	IN_RENDER_S({
+		glDeleteVertexArrays(1, &self->fRendererID);
+	})
+}
+
+void EOpenGLVertexArray::Bind() const
+{
+	IN_RENDER_S({
+		glBindVertexArray(self->fRendererID);
+	});
+}
+
+void EOpenGLVertexArray::Unbind() const
+{
+	IN_RENDER({
+		glBindVertexArray(0);
+	});
+}
+
+
+void EOpenGLVertexArray::AddVertexBuffer(EVertexBuffer* vertexBuffer)
+{
+	if (vertexBuffer->GetLayout().GetElements().size() == 0)
+	{	
+		std::cout << "No Vertex Layout set for the buffer" << std::endl;
+		return;
+	}
+
+	fVertexBuffers.push_back(vertexBuffer);
+	Bind();
+	vertexBuffer->Bind();
+
+	IN_RENDER_S1(vertexBuffer, {
+
+		const auto & layout = vertexBuffer->GetLayout();
+		for (const auto& element : layout)
+		{
+			glEnableVertexAttribArray(self->fVertexBufferIndex);
+			glVertexAttribPointer(self->fVertexBufferIndex,
+						element.GetComponentCount(),
+						ShaderDataTypeToOpenGLType(element.Type),
+						element.Normalized ? GL_TRUE : GL_FALSE,
+						layout.GetStride(), (const void*)element.Offset);
+			self->fVertexBufferIndex++;
+		}
+	});
+}
+
+EIndexBuffer* EOpenGLVertexArray::GetIndexBuffer() const
+{
+	return fIndexBuffer;
+}
+
+void EOpenGLVertexArray::SetIndexBuffer(EIndexBuffer* indexBuffer)
+{
+	fIndexBuffer = indexBuffer;
+
+	IN_RENDER_S({
+		glBindVertexArray(self->fRendererID);
+		self->fIndexBuffer->Bind();
+	});
+}
+
 
 }

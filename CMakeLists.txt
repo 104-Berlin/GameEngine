@@ -49,7 +49,7 @@ add_executable(Engine
                         deps/imgui/imgui_draw.cpp
                         deps/imgui/imgui_widgets.cpp
                         deps/imgui/examples/imgui_impl_glfw.cpp
-                        deps/imgui/examples/imgui_impl_opengl2.cpp
+                        deps/imgui/examples/imgui_impl_opengl3.cpp
                         src/util/engine_timer.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
@@ -63,12 +63,12 @@ add_executable(Engine
                         src/graphics/engine_renderer.cpp
                         src/graphics/engine_shader.cpp
                         src/graphics/engine_texture.cpp
-                        src/graphics/engine_vertex_array.cpp
                         src/graphics/engine_window.cpp
                         src/properties/engine_property.cpp
                         src/properties/engine_json_converter.cpp
                         src/scene/engine_uuid.cpp
                         src/scene/object/engine_object.cpp
+                        src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
                         main.cpp )
 

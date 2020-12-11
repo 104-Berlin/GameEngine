@@ -61,4 +61,23 @@ namespace Engine {
 		u32 m_Count;
 	};
 
+	class EOpenGLVertexArray : public EVertexArray
+	{
+	public:
+		EOpenGLVertexArray();
+		~EOpenGLVertexArray();
+
+		virtual void Bind() const override;
+		virtual void Unbind() const override;
+
+		virtual void AddVertexBuffer(EVertexBuffer* vertexBuffer) override;
+		virtual EIndexBuffer* GetIndexBuffer() const override;
+		virtual void SetIndexBuffer(EIndexBuffer* indexBuffer) override;
+	private:
+		u32 fVertexBufferIndex = 0;
+		u32 fRendererID = 0;
+		EVector<const EVertexBuffer*> fVertexBuffers;
+		EIndexBuffer* fIndexBuffer;
+	};
+
 }

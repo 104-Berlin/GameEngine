@@ -1,14 +1,14 @@
 #include "Engine.h"
  
 static const char* vertex_shader_text =
-"#version 120\n"
-"attribute vec3 vPos;\n"
-"attribute vec3 color;\n"
+"#version 330 core\n"
+"layout(location = 0) in vec3 vPos;\n"
+"layout(location = 1) in vec3 color;\n"
 
 "uniform mat4 v_matrix = mat4(1.0);\n"
 "uniform mat4 p_matrix = mat4(1.0);\n"
 
-"varying vec3 oColor;\n"
+"out vec3 oColor;\n"
 
 "void main()\n"
 "{\n"
@@ -17,12 +17,15 @@ static const char* vertex_shader_text =
 "}\n";
  
 static const char* fragment_shader_text =
-"#version 120\n"
+"#version 330 core\n"
 
-"varying vec3 oColor;\n"
+"in vec3 oColor;\n"
+
+"out vec4 FinalColor;\n"
+
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(oColor, 1.0);\n"
+"    FinalColor = vec4(oColor, 1.0);\n"
 "}\n";
 
 
@@ -37,6 +40,7 @@ std::cout << "GL_ERR: " << glGetString(err) << std::endl;\
 int main(int argc, char const *argv[])
 {   
     EWindow window(EWindowProp("Hello World", 1270, 720));
+    GLFWwindow* win = window.GetNativeWindow();
 
     ECamera cam(glm::perspectiveFovLH_NO(30.0f, 1270.0f, 720.0f, 0.0001f, 100000.0f));
 
@@ -94,11 +98,16 @@ int main(int argc, char const *argv[])
     
 
 
+
+    EVertexArray* va = EVertexArray::Create();
     EVertexBuffer* vb = EVertexBuffer::Create(&vertices[0], vertices.size() * sizeof(float));
     EIndexBuffer* ib = EIndexBuffer::Create(&indices[0], indices.size());
     EBufferLayout layout{   EBufferElement(EShaderDataType::Float3, "Position", false),
                             EBufferElement(EShaderDataType::Float3, "Color", false)};
     vb->SetLayout(layout);
+
+    va->AddVertexBuffer(vb);
+    va->SetIndexBuffer(ib);
 
     EShader* shader = EShader::Create(vertex_shader_text, fragment_shader_text);
  
@@ -109,7 +118,13 @@ int main(int argc, char const *argv[])
     {
         ERenderContext::s_Instance->Clear();
 
-        IN_RENDER({
+        IN_RENDER1(win, {
+            int width;
+            int height;
+
+            glfwGetFramebufferSize(win, &width, &height);
+            glViewport(0, 0, width, height);
+
             glClearColor(1.0, 1.0, 1.0, 1.0);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         })
@@ -120,6 +135,7 @@ int main(int argc, char const *argv[])
         shader->SetUniformMat4("p_matrix", p_mat);
         shader->SetUniformMat4("v_matrix", v_mat);
         
+        va->Bind();
         vb->Bind();
         ib->Bind();
         
@@ -128,8 +144,19 @@ int main(int argc, char const *argv[])
             glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
         })
 
+        UI::NewFrame();
+
+        IN_RENDER({
+            ImGui::Begin("Hello World");
+            ImGui::Text("Text");
+            ImGui::End();
+        })
+
+        UI::Render();
+
+
         ERenderer::WaitAndRender();
-        
+
         
         window.Update();
     }

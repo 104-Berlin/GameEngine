@@ -163,4 +163,19 @@ namespace Engine {
 		static EIndexBuffer* Create(const u32* indices, u32 count);
 	};
 
+	class EVertexArray
+	{
+	public:
+		virtual ~EVertexArray() {}
+
+		virtual void Bind() const = 0;
+		virtual void Unbind() const = 0;
+		
+		virtual void AddVertexBuffer(EVertexBuffer* vertexBuffer) = 0;
+		virtual EIndexBuffer* GetIndexBuffer() const = 0;
+		virtual void SetIndexBuffer(EIndexBuffer* indexBuffer) = 0;
+
+		static EVertexArray* Create();
+	};
+
 }

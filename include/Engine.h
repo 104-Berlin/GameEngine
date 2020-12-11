@@ -85,7 +85,6 @@ Resource(const EString& name, const EString& filepath)
 #include "graphics/engine_buffer.h"
 #include "graphics/engine_shader_uniforms.h"
 #include "graphics/engine_shader.h"
-#include "graphics/engine_vertex_array.h"
 #include "graphics/engine_frame_buffer.h"
 #include "graphics/engine_texture.h"
 #include "graphics/engine_renderer.h"
@@ -103,3 +102,5 @@ Resource(const EString& name, const EString& filepath)
 #include "scene/engine_uuid.h"
 #include "scene/object/engine_object.h"
 
+#include "ui/engine_ui.h"
+#include "ui/engine_input_field.h"
