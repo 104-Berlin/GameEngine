@@ -40,6 +40,7 @@ using EMap = std::map<K, V>;
 
 #include <nlohmann/json.hpp>
 
+#include <imgui.h>
 
 
 typedef glm::vec2       EVec2;

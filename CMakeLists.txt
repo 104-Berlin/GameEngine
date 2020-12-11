@@ -13,6 +13,7 @@ include_directories(Infinit/src     deps/glfw/include
                                     glad/include
                                     deps/glm/glm
                                     deps/json/single_include
+                                    deps/imgui
                                     ./include )
 
 
@@ -43,6 +44,12 @@ endif(APPLE)
 
 add_executable(Engine  
                         glad/src/glad.c
+                        deps/imgui/imgui.cpp
+                        deps/imgui/imgui_demo.cpp
+                        deps/imgui/imgui_draw.cpp
+                        deps/imgui/imgui_widgets.cpp
+                        deps/imgui/examples/imgui_impl_glfw.cpp
+                        deps/imgui/examples/imgui_impl_opengl2.cpp
                         src/util/engine_timer.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
