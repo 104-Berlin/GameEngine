@@ -2,6 +2,13 @@
 
 using namespace Engine;
 
+EApplication& EApplication::gApp()
+{
+    static EApplication app;
+    return app;
+}
+
+
 EApplication::EApplication()
     : fCamera(glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f))
 {
@@ -25,6 +32,9 @@ void EApplication::Start(EScene* scene)
     if (!fActiveScene)
     {
         fActiveScene = new EScene("Scene 1");
+    }
+    if (!fActiveScene->GetActiveCamera())
+    {
         fActiveScene->SetActiveCamera(&fCamera);
     }
 
@@ -109,4 +119,9 @@ void EApplication::RenderImGui()
     })
 
     UI::Render();
+}
+
+EScene* EApplication::GetActiveScene()
+{
+    return fActiveScene;
 }

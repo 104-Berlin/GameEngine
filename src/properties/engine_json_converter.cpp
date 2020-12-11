@@ -64,6 +64,17 @@ namespace Engine { namespace JSHelper {
         return result;
     }
 
+    EJson ConvertValue(EObject* object)
+    {
+        if (object)
+        {
+            return ConvertValue(object->GetUuid());
+        }
+        else
+        {
+            return ConvertValue(EUUID());
+        }
+    }
 
     void ConvertObject(const EJson& ref, i32* value)
     {
@@ -147,5 +158,17 @@ namespace Engine { namespace JSHelper {
         value->y = y;
         value->z = z;
         value->w = w;
+    }
+
+    void ConvertObject(const EJson& ref, ESceneObject** sceneObject)
+    {
+        if (ref.is_string())
+        {
+            EUUID uuid;
+            if (uuid.FromString(ref.get<EString>()))
+            {
+                *sceneObject = EApplication::gApp().GetActiveScene()->GetByUuid(uuid);
+            }
+        }
     }
 } }

@@ -7,7 +7,7 @@ EObject::EObject(const EString& name, const EUUID& uuid)
         fUuid(uuid),
         fName(this, "Name")
 {
-
+    fName.SetValue(name);
 }
 
 void EObject::FromJsObject(const EJson& ref)
@@ -50,6 +50,11 @@ const EBaseProperty* EObject::GetPropertyByName(const EString& name) const
         return it->second;
     }
     return nullptr;
+}
+
+void EObject::SetName(const EString& name)
+{
+    fName.SetValue(name);
 }
 
 const EString& EObject::GetName() const

@@ -147,6 +147,8 @@ namespace Engine {
         EJson ConvertValue(const EVec3& value);
         EJson ConvertValue(const EVec4& value);
 
+        EJson ConvertValue(EObject* object);
+
         template <typename T>
         auto ConvertValue(const T& value)
         -> decltype(T::_reflect_arg_count, EJson::object())
@@ -183,6 +185,8 @@ namespace Engine {
         void ConvertObject(const EJson& ref, EVec2* value);
         void ConvertObject(const EJson& ref, EVec3* value);
         void ConvertObject(const EJson& ref, EVec4* value);
+
+        void ConvertObject(const EJson& ref, ESceneObject** sceneObject);
 
         template <typename T>
         auto ConvertObject(const EJson& json_object, T* value)

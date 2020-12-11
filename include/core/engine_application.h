@@ -20,8 +20,12 @@ namespace Engine {
         void Update(float delta);
         void Render();
         void RenderImGui();
+
+        EScene* GetActiveScene();
     private:
         void Run();
+    public:
+        static EApplication& gApp();
     };
 
 }

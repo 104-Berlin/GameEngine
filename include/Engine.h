@@ -95,6 +95,7 @@ Resource(const EString& name, const EString& filepath)
 #include "platform/opengl/engine_opengl_shader.h"
 #include "platform/opengl/engine_opengl_texture.h"
 
+
 #include "scene/engine_uuid.h"
 #include "properties/engine_json_converter.h"
 #include "properties/engine_property.h"

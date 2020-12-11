@@ -24,6 +24,7 @@ namespace Engine {
         EBaseProperty* GetPropertyByName(const EString& name);
         const EBaseProperty* GetPropertyByName(const EString& name) const;
 
+        void SetName(const EString& name);
         const EString& GetName() const;
         const EUUID& GetUuid() const;
 

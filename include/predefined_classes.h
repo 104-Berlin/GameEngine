@@ -2,4 +2,5 @@
 
 namespace Engine {
     class EObject;
+    class ESceneObject;
 }
