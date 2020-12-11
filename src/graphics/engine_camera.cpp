@@ -56,7 +56,8 @@ namespace Engine {
 	void ECamera::UpdateImGui()
 	{
 		EVec2 mouse = {ImGui::GetMousePos().x, ImGui::GetMousePos().y};
-		float speed = ImGui::GetScrollY();
+		ImGuiIO& io = ImGui::GetIO();
+		float speed = io.MouseWheel;
 		
 		EVec2 delta = mouse - fInitialMousePosition;
 		fInitialMousePosition = mouse;

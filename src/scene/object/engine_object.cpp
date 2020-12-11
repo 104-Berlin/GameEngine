@@ -3,7 +3,8 @@
 using namespace Engine;
 
 EObject::EObject(const EString& name, const EUUID& uuid)
-    :   fUuid(uuid),
+    :   fAllProperties(),
+        fUuid(uuid),
         fName(this, "Name")
 {
 
@@ -16,6 +17,7 @@ void EObject::FromJsObject(const EJson& ref)
 
 void EObject::SetJsObject(EJson& ref) const
 {
+    ref["UUID"] = JSHelper::ConvertValue(fUuid);
     OnSetJsObject(ref);
 }
 
@@ -26,12 +28,13 @@ void EObject::OnFromJsObject(const EJson& ref)
 
 void EObject::OnSetJsObject(EJson& ref) const
 {
-
+    ref["UUID"] = JSHelper::ConvertValue(fUuid);
 }
 
 void EObject::AddProperty(EBaseProperty* prop)
 {
-    fAllProperties[prop->GetPropertyName()] = prop;
+    EString propName = prop->GetPropertyName();
+    fAllProperties[propName] = prop;
 }
 
 EBaseProperty* EObject::GetPropertyByName(const EString& name)
@@ -47,4 +50,42 @@ const EBaseProperty* EObject::GetPropertyByName(const EString& name) const
         return it->second;
     }
     return nullptr;
+}
+
+const EString& EObject::GetName() const
+{
+    return fName.GetValue();
+}
+
+const EUUID& EObject::GetUuid() const
+{
+    return fUuid;
+}
+
+void EObject::Render()
+{
+    OnRender();
+}
+
+void EObject::OnRender()
+{
+}
+
+void EObject::Update(float delta)
+{
+    OnUpdate(delta);
+}
+
+void EObject::OnUpdate(float delta)
+{
+}
+
+void EObject::RenderUI()
+{
+    OnRenderUI();
+}
+
+void EObject::OnRenderUI()
+{
+
 }

@@ -32,6 +32,11 @@ namespace Engine { namespace JSHelper {
         return value;
     }
 
+    EJson ConvertValue(const EUUID& value)
+    {
+        return ConvertValue(value.ToString());
+    }
+
     EJson ConvertValue(const EVec2& value)
     {
         EJson result = EJson::object();
@@ -90,6 +95,19 @@ namespace Engine { namespace JSHelper {
         {
             *value = ref.get<EString>();
         }
+    }
+
+    void ConvertObject(const EJson& ref, EUUID* value)
+    {
+        if (ref.is_string())
+        {
+            EString stringVal = ref.get<EString>();
+            EUUID uuid;
+            if (uuid.FromString(stringVal))
+            {
+                *value = uuid;
+            }
+        }        
     }
 
     void ConvertObject(const EJson& ref, EVec2* value)

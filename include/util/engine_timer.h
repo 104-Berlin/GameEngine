@@ -1,10 +1,10 @@
 #pragma once
 
 namespace Engine {
-    class Timer
+    class ETimer
     {
     public:
-        Timer();
+        ETimer();
         float Reset();
     private:
         std::chrono::steady_clock::time_point last;

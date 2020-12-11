@@ -5,10 +5,12 @@ namespace Engine {
     class EObject
     {
     private:
+        EMap<EString, EBaseProperty*> fAllProperties; 
+
+
+
         EUUID fUuid;
         EProperty<EString>  fName;
-
-        EMap<EString, EBaseProperty*> fAllProperties; 
     public:
         EObject(const EString& name, const EUUID& uuid = EUUID().CreateNew());
 
@@ -21,6 +23,17 @@ namespace Engine {
         void AddProperty(EBaseProperty* prop);
         EBaseProperty* GetPropertyByName(const EString& name);
         const EBaseProperty* GetPropertyByName(const EString& name) const;
+
+        const EString& GetName() const;
+        const EUUID& GetUuid() const;
+
+        void Render();
+        virtual void OnRender();
+        void Update(float delta);
+        virtual void OnUpdate(float delta);
+        void RenderUI();
+        virtual void OnRenderUI();
+
     };
 
 }

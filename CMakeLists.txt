@@ -68,8 +68,11 @@ add_executable(Engine
                         src/properties/engine_json_converter.cpp
                         src/scene/engine_uuid.cpp
                         src/scene/object/engine_object.cpp
+                        src/scene/object/engine_scene_object.cpp
+                        src/scene/engine_scene.cpp
                         src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
+                        src/core/engine_application.cpp
                         main.cpp )
 
 target_link_libraries(Engine ${EXTRA_LIBS})

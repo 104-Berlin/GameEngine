@@ -4,12 +4,12 @@ using namespace Engine;
 
 using namespace std::chrono;
 
-Timer::Timer()
+ETimer::ETimer()
 {
 	last = steady_clock::now();
 }
 
-float Timer::Reset()
+float ETimer::Reset()
 {
 	const auto old = last;
 	last = steady_clock::now();

@@ -142,6 +142,7 @@ namespace Engine {
         EJson ConvertValue(const float value);
         EJson ConvertValue(const double value);
         EJson ConvertValue(const EString& value);
+        EJson ConvertValue(const EUUID& value);
         EJson ConvertValue(const EVec2& value);
         EJson ConvertValue(const EVec3& value);
         EJson ConvertValue(const EVec4& value);
@@ -177,6 +178,7 @@ namespace Engine {
         void ConvertObject(const EJson& ref, float* value);
         void ConvertObject(const EJson& ref, double* value);
         void ConvertObject(const EJson& ref, bool* value);
+        void ConvertObject(const EJson& ref, EString* value);
         void ConvertObject(const EJson& ref, EString* value);
         void ConvertObject(const EJson& ref, EVec2* value);
         void ConvertObject(const EJson& ref, EVec3* value);

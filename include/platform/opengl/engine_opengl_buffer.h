@@ -90,6 +90,9 @@ namespace Engine {
 
 		void Resize(u32 width, u32 height) override;
 
+		virtual u32 GetWidth() const override { return m_Width; }
+		virtual u32 GetHeight() const override { return m_Height; }
+
 		void Bind() const override;
 		void Unbind() const override;
 

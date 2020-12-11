@@ -95,11 +95,16 @@ Resource(const EString& name, const EString& filepath)
 #include "platform/opengl/engine_opengl_shader.h"
 #include "platform/opengl/engine_opengl_texture.h"
 
+#include "scene/engine_uuid.h"
 #include "properties/engine_json_converter.h"
 #include "properties/engine_property.h"
 
-#include "scene/engine_uuid.h"
 #include "scene/object/engine_object.h"
+#include "scene/object/engine_scene_object.h"
+#include "scene/engine_scene.h"
+
 
 #include "ui/engine_ui.h"
 #include "ui/engine_input_field.h"
+
+#include "core/engine_application.h"
