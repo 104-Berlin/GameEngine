@@ -150,6 +150,10 @@ int main(int argc, char const *argv[])
             ImGui::Begin("Hello World");
             ImGui::Text("Text");
             ImGui::End();
+
+            ImGui::Begin("Hello World 2");
+            ImGui::Text("Text");
+            ImGui::End();
         })
 
         UI::Render();

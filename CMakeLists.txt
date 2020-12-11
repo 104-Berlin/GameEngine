@@ -48,8 +48,9 @@ add_executable(Engine
                         deps/imgui/imgui_demo.cpp
                         deps/imgui/imgui_draw.cpp
                         deps/imgui/imgui_widgets.cpp
-                        deps/imgui/examples/imgui_impl_glfw.cpp
-                        deps/imgui/examples/imgui_impl_opengl3.cpp
+                        deps/imgui/imgui_tables.cpp
+                        deps/imgui/backends/imgui_impl_glfw.cpp
+                        deps/imgui/backends/imgui_impl_opengl3.cpp
                         src/util/engine_timer.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
