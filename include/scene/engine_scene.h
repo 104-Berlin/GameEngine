@@ -15,6 +15,8 @@ namespace Engine {
         char*                               fNameField;
 
         EMap<EUUID, ESceneObject*>          fAllObjects;
+        EMap<EUUID, EResource*>             fLoadedReources;
+
 
         // Component Handler
         EComponentHandler                   fComponentHandler;
@@ -26,6 +28,9 @@ namespace Engine {
         ESceneObject* CreateNewObject(const EString& name = "");
         void DeleteObject(const EUUID& uuid);
         ESceneObject* GetByUuid(const EUUID& uuid);
+
+        EResource* GetResource(const EUUID& uuid);
+        bool LoadResource(EResource* resource);
 
         void SetActiveCamera(ECamera* camera);
         ECamera* GetActiveCamera() const;

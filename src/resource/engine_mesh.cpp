@@ -7,3 +7,13 @@ EMesh::EMesh(const EString& name, const EString& path)
 {
 
 }
+
+EMesh::~EMesh()
+{
+
+}
+
+bool EMesh::OnLoad()
+{
+    return false;
+}

@@ -88,6 +88,7 @@ namespace Engine {
 
 EOpenGLVertexArray::EOpenGLVertexArray()
 {
+	fIndexBuffer = nullptr;
 	IN_RENDER_S({
 		glGenVertexArrays(1, &self->fRendererID);
 		glBindVertexArray(self->fRendererID); 
@@ -108,6 +109,15 @@ void EOpenGLVertexArray::Bind() const
 	IN_RENDER_S({
 		glBindVertexArray(self->fRendererID);
 	});
+
+	for (const EVertexBuffer* vb : fVertexBuffers)
+	{
+		//vb->Bind();
+	}
+    if (fIndexBuffer)
+    {
+        //fIndexBuffer->Bind();
+    }
 }
 
 void EOpenGLVertexArray::Unbind() const

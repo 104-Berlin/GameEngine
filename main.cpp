@@ -9,26 +9,21 @@ int main(int argc, char const *argv[])
     EApplication::gApp();
 
     EScene startScene("Start Scene");
-    
-    
-    EFile file(Path::Join("res", "Textures", "HelloWorld.er"));
-    std::cout << "FilePath: " << file.GetFilePath() << std::endl;
-    std::cout << "FileName: " << file.GetFileName() << std::endl;
-    std::cout << "FileExtension: " << file.GetFileExtension() << std::endl;
 
+    ESprite* sprite = new ESprite("Test Sprite","TILE.png");
+    if (!startScene.LoadResource(sprite))
+    {
+        std::cout << "Cant load sprite" << std::endl;
+    }
 
-    startScene.CreateComponent<EComponent>(startScene.CreateNewObject("Test object 1"));
+    ESceneObject* object = startScene.CreateNewObject("Test object 1");
+
+    ESpriteComponent* spriteComponent = startScene.CreateComponent<ESpriteComponent>(object);
+    spriteComponent->SetSprite(sprite);
     
-    startScene.CreateNewObject("Test object 2");
-    startScene.CreateNewObject("Test object 3");
-    startScene.CreateNewObject("Test object 4");
-    startScene.CreateNewObject("Test object 5");
-    startScene.CreateNewObject("Test object 6");
-    startScene.CreateNewObject("Test object 7");
-    startScene.CreateNewObject("Test object 8");
-    startScene.CreateNewObject("Test object 9");
-
     EApplication::gApp().Start(&startScene);
 
+    
+    delete sprite;
     return 0;
 }

@@ -179,4 +179,26 @@ namespace Engine { namespace JSHelper {
             }
         }
     }
+
+    void ConvertObject(const EJson& ref, EResource** sceneObject)
+    {
+        if (ref.is_string())
+        {
+            EUUID uuid;
+            if (uuid.FromString(ref.get<EString>()))
+            {
+                *sceneObject = EApplication::gApp().GetActiveScene()->GetResource(uuid);
+            }
+        }
+    }
+
+    void ConvertObject(const EJson& ref, EShader** sceneObject)
+    {
+        ConvertObject(ref, (EResource**) sceneObject);
+    }
+
+    void ConvertObject(const EJson& ref, ESprite** sceneObject)
+    {
+        ConvertObject(ref, (EResource**) sceneObject);    
+    }
 } }

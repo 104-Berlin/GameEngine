@@ -30,7 +30,18 @@ void EScene::OnRender()
     EObject::OnRender();
     if (!fActiveCamera) { std::cout << "No active camera set to scene!" << std::endl; return; }
 
-    //fSceneFrameBuffer->Bind();
+    if (!fSceneFrameBuffer)
+    {
+        fSceneFrameBuffer = EFrameBuffer::Create(1270, 720, EFramebufferFormat::RGBA8);
+    }
+
+    fSceneFrameBuffer->Bind();
+    ERenderContext::s_Instance->SetClearColor({1.0f, 0.0f, 0.0f, 1.0f});
+    ERenderContext::s_Instance->Clear();
+
+    fComponentHandler.Render();
+
+    fSceneFrameBuffer->Unbind();
 }
 
 void EScene::OnRenderUI()
@@ -65,7 +76,16 @@ void EScene::OnRenderUI()
     }
     ImGui::End();
 
-    ImGui::ShowDemoWindow();
+    ImGui::Begin("Viewport##RenderView");
+
+    auto viewportSize = ImGui::GetContentRegionAvail();
+    fSceneFrameBuffer->Resize(viewportSize.x, viewportSize.y);
+    
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
+    ImGui::Image((void*) fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+    ImGui::End();
 }
 
 void EScene::RenderUITreeNode(ESceneObject* object)
@@ -205,6 +225,31 @@ void EScene::DeleteObject(const EUUID& uuid)
 ESceneObject* EScene::GetByUuid(const EUUID& uuid)
 {
     return fAllObjects[uuid];
+}
+
+EResource* EScene::GetResource(const EUUID& uuid)
+{
+    return fLoadedReources[uuid];
+}
+
+bool EScene::LoadResource(EResource* resource)
+{
+    EFile tempFile(resource->GetFilePath());
+    
+    if (!tempFile.Exist()) { std::cout << "Cant load resource! Wrong path: " << resource->GetFilePath() << std::endl; return false; }
+
+    bool result = false;
+
+    if (resource->GetFilePath().empty() ||tempFile.GetFileExtension().compare("er"))
+    {
+        result = resource->Load();
+    }
+    else
+    {
+        result = resource->Import();
+    }
+    fLoadedReources[resource->GetUuid()] = resource;
+    return result;
 }
 
 void EScene::SetActiveCamera(ECamera* camera)

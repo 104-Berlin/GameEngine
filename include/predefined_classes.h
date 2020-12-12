@@ -5,4 +5,6 @@ namespace Engine {
     class ESceneObject;
     class EScene;
     class EResource;
+    class EShader;
+    class ESprite;
 }

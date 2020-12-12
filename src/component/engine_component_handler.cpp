@@ -2,23 +2,6 @@
 
 using namespace Engine;
 
-EComponentHandler::EComponentStorageEntry::EComponentStorageEntry()
-{
-    Buffer      = nullptr;
-    ByteOffset  = 0;
-    CurrentSize = 0;
-}
-
-EComponentHandler::EComponentStorageEntry::~EComponentStorageEntry()
-{
-    if (Buffer)
-    {
-        delete Buffer;
-        Buffer = nullptr;
-    }
-}
-
-
 EComponentHandler::EComponentHandler(size_t initialSize)
     : fInitialSize(initialSize)
 {
@@ -29,9 +12,9 @@ EComponentHandler::~EComponentHandler()
 {
     for (auto& entry : fComponentStorage)
     {
-        if (entry.second)
+        for (EComponent* component : entry.second)
         {
-            delete entry.second;
+            delete component;
         }
     }
     fComponentStorage.clear();
@@ -40,73 +23,66 @@ EComponentHandler::~EComponentHandler()
 
 void* EComponentHandler::CreateComponentIntern(const std::type_info& type, size_t singleMemorySize, EObject* object)
 {
-    void* resultPtr = nullptr;
-    EMap<size_t, EComponentStorageEntry*>::iterator it = fComponentStorage.find(type.hash_code());
+    EMap<size_t, EVector<EComponent*>>::iterator it = fComponentStorage.find(type.hash_code());
+
+    void* newMemory = malloc(singleMemorySize);
+
     if (it != fComponentStorage.end())
     {
-        // We have a registry for this componen type
-        EComponentStorageEntry* storage = it->second;
-        if (!(storage->ByteOffset + singleMemorySize < storage->CurrentSize))
-        {
-            // Need to resize for adding Component
-
-            size_t newSize  = storage->CurrentSize + (50 * singleMemorySize);
-
-            void* newBuffer = malloc(newSize);
-            memset(newBuffer, 0, newSize);
-            memcpy(newBuffer, storage->Buffer, storage->CurrentSize);
-
-
-            delete storage->Buffer;
-            storage->Buffer = (u8*) newBuffer;
-
-            storage->CurrentSize = newSize;
-        }
-
-
-        resultPtr = &(storage->Buffer[storage->ByteOffset]);
-
-        // Pointing to empty memory again
-        storage->ByteOffset += singleMemorySize;
+        it->second.push_back((EComponent*)newMemory);
     }
     else
     {
-        // No Components of type exist. Create new registry with fInitialSize element
-
-        size_t bufferSize = fInitialSize * singleMemorySize;
-
-        EComponentStorageEntry* entry = new EComponentStorageEntry();
-        entry->Buffer = (u8*)malloc(bufferSize);
-        memset(entry->Buffer, 0, bufferSize);
-
-        entry->ByteOffset = singleMemorySize;
-        entry->CurrentSize = bufferSize;
-
-        fComponentStorage[type.hash_code()] = entry;
-        
-        resultPtr = entry->Buffer;
+        fComponent_Object_Storage[object] = {(EComponent*)newMemory};
+        fComponentStorage[type.hash_code()] = {(EComponent*)newMemory};
     }
 
-    if (fComponent_Object_Storage.find(object) != fComponent_Object_Storage.end())
-    {
-        fComponent_Object_Storage[object].push_back((EComponent*)resultPtr);
-    }
-    else
-    {
-        fComponent_Object_Storage[object] = {(EComponent*)resultPtr};
-    }
 
-    return resultPtr;
+    return newMemory;
 }
 
-EComponentHandler::EComponentStorageEntry* EComponentHandler::GetComponentStorage(const std::type_info& type)
+void EComponentHandler::Render()
 {
-    EMap<size_t, EComponentStorageEntry*>::iterator it = fComponentStorage.find(type.hash_code());
+    for (auto& entry : fComponent_Object_Storage)
+    {
+        for (EComponent* comp : entry.second)
+        {
+            comp->Render();
+        }
+    }
+}
+
+void EComponentHandler::Update(float delta)
+{
+    for (auto& entry : fComponent_Object_Storage)
+    {
+        for (EComponent* comp : entry.second)
+        {
+            comp->Update(delta);
+        }
+    }
+}
+
+void EComponentHandler::RenderUI()
+{
+    for (auto& entry : fComponent_Object_Storage)
+    {
+        for (EComponent* comp : entry.second)
+        {
+            comp->RenderUI();
+        }
+    }
+}
+
+
+EVector<EComponent*> EComponentHandler::GetComponentStorage(const std::type_info& type)
+{
+    EMap<size_t, EVector<EComponent*>>::iterator it = fComponentStorage.find(type.hash_code());
     if (it !=  fComponentStorage.end())
     {
         return it->second;
     }
-    return nullptr;
+    return {};
 }
 
 EVector<EComponent*> EComponentHandler::GetComponentStorage(EObject* object)

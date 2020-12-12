@@ -107,6 +107,7 @@ Resource(const EString& name, const EString& filepath)
 
 
 
+
 #include "graphics/engine_window.h"
 #include "graphics/engine_light.h"
 #include "graphics/engine_camera.h"
@@ -126,11 +127,13 @@ Resource(const EString& name, const EString& filepath)
 #include "platform/opengl/engine_opengl_texture.h"
 
 #include "resource/engine_mesh.h"
+#include "resource/engine_sprite.h"
 
 
 #include "component/engine_component.h"
 #include "component/engine_component_handler.h"
 #include "component/engine_mesh_component.h"
+#include "component/engine_sprite_component.h"
 #include "scene/engine_scene.h"
 
 

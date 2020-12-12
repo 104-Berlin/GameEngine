@@ -10,7 +10,7 @@ namespace Engine {
             std::vector<const char*> strings = {args...};
             for (size_t i = 0; i < strings.size() - 1; i++)
             {
-                result += strings[i] + kPathSeparator;
+                result += EString(strings[i]) + kPathSeparator;
             }
             result += strings[strings.size() - 1];
             return result;

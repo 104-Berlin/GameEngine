@@ -11,6 +11,8 @@ namespace Engine {
         EResource(const EString& name, const EString& path);
         ~EResource();
 
+        const EString& GetFilePath() const;
+
         bool Import();
         virtual bool OnImport();
         bool Export(const EString& filePath);

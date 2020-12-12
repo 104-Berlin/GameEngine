@@ -8,6 +8,7 @@ namespace Engine {
         EObject*    AttachedObject;
     public:
         EComponent();
+        virtual ~EComponent() = default;
     };
 
 }

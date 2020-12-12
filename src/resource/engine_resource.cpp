@@ -9,9 +9,13 @@ EResource::EResource(const EString& name, const EString& path)
 {
     fFilePath.SetValue(path);
     EFile file(path);
-    if (file.GetFileExtension().compare("er"))
+    if (path.empty() || file.GetFileExtension().compare("er"))
     {
-        
+        this->Load();
+    }
+    else
+    {
+        this->Import();
     }
 }
 
@@ -20,9 +24,14 @@ EResource::~EResource()
 
 }
 
+const EString& EResource::GetFilePath() const
+{
+    return fFilePath.GetValue();
+}
+
 bool EResource::Import()
 {
-    return OnImport();    
+    return this->OnImport();    
 }
 
 bool EResource::OnImport()
@@ -32,7 +41,7 @@ bool EResource::OnImport()
 
 bool EResource::Export(const EString& filePath)
 {
-    return OnExport(filePath);
+    return this->OnExport(filePath);
 }
 
 bool EResource::OnExport(const EString& filePath)
@@ -42,7 +51,7 @@ bool EResource::OnExport(const EString& filePath)
 
 bool EResource::Save()
 {
-    fIsSaved.SetValue(OnSave());
+    fIsSaved.SetValue(this->OnSave());
     return fIsSaved.GetValue();
 }
 
@@ -53,7 +62,8 @@ bool EResource::OnSave()
 
 bool EResource::Load()
 {
-    return OnLoad();
+    bool result = this->OnLoad();
+    return result;
 }
 
 bool EResource::OnLoad()

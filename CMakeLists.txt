@@ -75,8 +75,10 @@ add_executable(Engine
                         src/component/engine_component_handler.cpp
                         src/component/engine_component.cpp
                         src/component/engine_mesh_component.cpp
+                        src/component/engine_sprite_component.cpp
                         src/resource/engine_resource.cpp
                         src/resource/engine_mesh.cpp
+                        src/resource/engine_sprite.cpp
                         src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
                         src/core/engine_application.cpp

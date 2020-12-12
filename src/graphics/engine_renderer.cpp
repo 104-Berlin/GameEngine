@@ -343,13 +343,13 @@ void main()
 		s_Instance->fLightMap = lightMap;
 	}
 
-	void ERenderer::Draw(EVertexBuffer* vertexBuffer, EIndexBuffer* indexBuffer)
+	void ERenderer::Draw(EVertexArray* vertexArray)
 	{
-		vertexBuffer->Bind();
-		indexBuffer->Bind();
+		vertexArray->Bind();
 
-		IN_RENDER1(indexBuffer, {
-			glDrawElements(GL_TRIANGLES, indexBuffer->GetCount(), GL_UNSIGNED_INT, NULL);
+		u32 indexCount = vertexArray->GetIndexBuffer()->GetCount();
+		IN_RENDER1(indexCount, {
+			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL);
 		})
 	}
 

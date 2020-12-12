@@ -13,6 +13,7 @@ namespace Engine {
         EProperty<EString>  fName;
     public:
         EObject(const EString& name, const EUUID& uuid = EUUID().CreateNew());
+        virtual ~EObject() = default;
 
         void FromJsObject(const EJson& ref);
         void SetJsObject(EJson& ref) const;  

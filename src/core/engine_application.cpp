@@ -95,18 +95,7 @@ void EApplication::RenderImGui()
 
     IN_RENDER_S({
 
-        /*ImGui::Begin("Viewport##RenderView");
-
-        auto viewportSize = ImGui::GetContentRegionAvail();
-        frameBuffer->Resize(viewportSize.x, viewportSize.y);
         
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, frameBuffer->GetColorAttachment());
-        ImGui::Image((void*) frameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
-        camPtr->UpdateImGui();
-        ImGui::End();
-        */
         if (self->fActiveScene)
         {
             self->fActiveScene->RenderUI();

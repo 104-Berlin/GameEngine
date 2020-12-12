@@ -13,7 +13,6 @@ EFile::EFile(const EString& path)
 
 void EFile::CreatePathStrings()
 {
-    std::cout << "Full path: " << fFilePath << std::endl;
     size_t dot_index = fFilePath.find_last_of(".");
     size_t last_slash_index = fFilePath.find_last_of(kPathSeparator);
     if (last_slash_index == EString::npos)
@@ -23,8 +22,8 @@ void EFile::CreatePathStrings()
 
     if (dot_index != EString::npos)
     {
-        fFileName = fFilePath.substr(last_slash_index, dot_index - last_slash_index);
-        fFileExtension = fFilePath.substr(dot_index);
+        fFileName = fFilePath.substr(last_slash_index + 1, dot_index - last_slash_index - 1);
+        fFileExtension = fFilePath.substr(dot_index + 1);
     }
 }
 
