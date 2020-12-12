@@ -70,6 +70,8 @@ add_executable(Engine
                         src/scene/object/engine_object.cpp
                         src/scene/object/engine_scene_object.cpp
                         src/scene/engine_scene.cpp
+                        src/component/engine_component_handler.cpp
+                        src/component/engine_component.cpp
                         src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
                         src/core/engine_application.cpp

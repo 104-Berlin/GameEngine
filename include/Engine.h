@@ -100,8 +100,11 @@ Resource(const EString& name, const EString& filepath)
 #include "properties/engine_json_converter.h"
 #include "properties/engine_property.h"
 
+
 #include "scene/object/engine_object.h"
 #include "scene/object/engine_scene_object.h"
+#include "component/engine_component.h"
+#include "component/engine_component_handler.h"
 #include "scene/engine_scene.h"
 
 

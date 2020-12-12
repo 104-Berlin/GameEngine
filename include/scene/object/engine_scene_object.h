@@ -9,18 +9,35 @@ namespace Engine {
         EObjectProperty<ESceneObject>       fChildObject;
         EObjectProperty<ESceneObject>       fParentObject;
         EObjectProperty<ESceneObject>       fPreviousObject;
+
+        
+
+        EScene*                             fScene;
     public:
         ESceneObject(const EString& name);
         ~ESceneObject();
 
+        void SetScene(EScene* scene);
+
+        void            SetNewNext(ESceneObject* nextObject);
         void            SetNext(ESceneObject* nextObject);
         ESceneObject*   GetNext() const;
-        void            SetPrev(ESceneObject* nextObject);
+        void            SetNewPrev(ESceneObject* prevObject);
+        void            SetPrev(ESceneObject* prevObject);
         ESceneObject*   GetPrev() const;
-        void            SetChild(ESceneObject* nextObject);
+        void            SetNewChild(ESceneObject* childObject);
+        void            SetChild(ESceneObject* childObject);
         ESceneObject*   GetChild() const;
-        void            SetParent(ESceneObject* nextObject);
+        void            SetNewParent(ESceneObject* parentObject);
+        void            SetParent(ESceneObject* parentObject);
         ESceneObject*   GetParent() const;
+
+        // Removes the object from the hierarchical tree
+        void            UnlinkObject();
+
+
+
+
     };
 
 }

@@ -5,7 +5,8 @@ using namespace Engine;
 EScene::EScene(const EString& name)
     : EObject(name), fActiveCamera(nullptr), fSceneFrameBuffer(nullptr), 
         fEntryObject(this, "SceneEntry"),
-        fSelectedObject(this, "SelectedObject")
+        fSelectedObject(this, "SelectedObject"),
+        fComponentHandler(50)
 {
     fNameField = new char[256];
 }
@@ -16,6 +17,12 @@ EScene::~EScene()
     {
         delete fSceneFrameBuffer;
     }
+
+    for (auto& mapEntry : fAllObjects)
+    {
+        delete mapEntry.second;
+    }
+    fAllObjects.clear();
 }
 
 void EScene::OnRender()
@@ -24,8 +31,6 @@ void EScene::OnRender()
     if (!fActiveCamera) { std::cout << "No active camera set to scene!" << std::endl; return; }
 
     //fSceneFrameBuffer->Bind();
-
-    
 }
 
 void EScene::OnRenderUI()
@@ -59,6 +64,8 @@ void EScene::OnRenderUI()
         RenderUIOIP(fSelectedObject.GetValue());
     }
     ImGui::End();
+
+    ImGui::ShowDemoWindow();
 }
 
 void EScene::RenderUITreeNode(ESceneObject* object)
@@ -66,21 +73,46 @@ void EScene::RenderUITreeNode(ESceneObject* object)
     if (!object) { return; }
 
     bool showNode = false;
-    if (object->GetChild())
+     
+    showNode = ImGui::TreeNodeEx(object->GetName().c_str(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_NoAutoOpenOnLog);
+
+    ImGuiDragDropFlags src_flags = 0;
+    //src_flags |= ImGuiDragDropFlags_SourceNoDisableHover;     // Keep the source displayed as hovered
+    src_flags |= ImGuiDragDropFlags_SourceNoHoldToOpenOthers; // Because our dragging is local, we disable the feature of opening foreign treenodes/tabs while dragging
+    //src_flags |= ImGuiDragDropFlags_SourceNoPreviewTooltip; // Hide the tooltip
+    
+    if (ImGui::BeginDragDropSource(src_flags))
     {
-        showNode = ImGui::TreeNodeEx((object->GetName() + "##" + object->GetUuid().ToString()).c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+        if (!(src_flags & ImGuiDragDropFlags_SourceNoPreviewTooltip))
+            ImGui::Text("Moving \"%s\"", object->GetName().c_str());
+        ImGui::SetDragDropPayload("DND_DEMO_NAME", &object->GetUuid(), sizeof(EUUID));
+        ImGui::EndDragDropSource();
     }
-    else 
+
+    if (ImGui::BeginDragDropTarget())
     {
-        ImGui::Selectable(object->GetName().c_str());
+        ImGuiDragDropFlags target_flags = 0;
+        //target_flags |= ImGuiDragDropFlags_AcceptBeforeDelivery;    // Don't wait until the delivery (release mouse button on a target) to do something
+        //target_flags |= ImGuiDragDropFlags_AcceptNoDrawDefaultRect; // Don't display the yellow rectangle
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_DEMO_NAME", target_flags))
+        {
+            EUUID move_from = *(EUUID*)payload->Data;
+            ESceneObject* moveFromObject = GetByUuid(move_from);
+            if (moveFromObject)
+            {
+                object->SetNewChild(moveFromObject);
+            }
+        }
+        ImGui::EndDragDropTarget();
     }
+
 
     if (ImGui::IsItemClicked())
     {
         fSelectedObject.SetValue(object);
         strcpy(fNameField, object->GetName().c_str());
     }
-
+    
     if (showNode)
     {
         ESceneObject* temp = object->GetChild();
@@ -108,6 +140,15 @@ void EScene::RenderUIOIP(ESceneObject* sceneObject)
     {
         sceneObject->SetName(fNameField);
     }
+
+    EVector<EComponent*> components = GetObjectComponents(sceneObject);
+    for (EComponent* comp : components)
+    {
+        if (ImGui::CollapsingHeader(comp->GetName().c_str()))
+        {
+            ImGui::Button("Button");
+        }
+    }
 }
 
 void EScene::OnUpdate(float delta)
@@ -115,10 +156,19 @@ void EScene::OnUpdate(float delta)
     EObject::OnUpdate(delta);
 }
 
+void EScene::SetEntryObject(const EUUID& uuid)
+{
+    ESceneObject* object = GetByUuid(uuid);
+    if (object)
+    {
+        fEntryObject.SetValue(object);
+    }
+}
 
 ESceneObject* EScene::CreateNewObject(const EString& name)
 {
     ESceneObject* newObject = new ESceneObject(name.empty() ? "Scene Object" : name);
+    newObject->SetScene(this);
     fAllObjects[newObject->GetUuid()] = newObject;
 
     if (!fEntryObject.GetValue())

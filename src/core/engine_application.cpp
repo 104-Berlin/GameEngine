@@ -94,11 +94,6 @@ void EApplication::RenderImGui()
 
 
     IN_RENDER_S({
-        ImGui::Begin("Hello World");
-        ImGui::Text("Text");
-        ImGui::End();
-
-
 
         /*ImGui::Begin("Viewport##RenderView");
 
