@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <math.h>
 #include <chrono>
+#include <stdarg.h>
+
 
 typedef int_fast16_t i16;
 typedef int_fast32_t i32;
@@ -25,6 +27,14 @@ using EVector = std::vector<T>;
 
 template <typename K, typename V>
 using EMap = std::map<K, V>;
+
+
+const char kPathSeparator =
+#ifdef EWIN
+                            '\\';
+#else
+                            '/';
+#endif
 
 
 //------------------------------------------------------------------
@@ -77,6 +87,26 @@ Resource(const EString& name, const EString& filepath)
 
 #include "util/engine_timer.h"
 
+#include "file/engine_file.h"
+#include "file/engine_folder.h"
+
+
+
+
+#include "scene/engine_uuid.h"
+#include "properties/engine_json_converter.h"
+#include "properties/engine_property.h"
+
+
+#include "scene/object/engine_object.h"
+#include "scene/object/engine_scene_object.h"
+#include "resource/engine_resource.h"
+
+
+
+
+
+
 #include "graphics/engine_window.h"
 #include "graphics/engine_light.h"
 #include "graphics/engine_camera.h"
@@ -95,17 +125,14 @@ Resource(const EString& name, const EString& filepath)
 #include "platform/opengl/engine_opengl_shader.h"
 #include "platform/opengl/engine_opengl_texture.h"
 
-
-#include "scene/engine_uuid.h"
-#include "properties/engine_json_converter.h"
-#include "properties/engine_property.h"
+#include "resource/engine_mesh.h"
 
 
-#include "scene/object/engine_object.h"
-#include "scene/object/engine_scene_object.h"
 #include "component/engine_component.h"
 #include "component/engine_component_handler.h"
+#include "component/engine_mesh_component.h"
 #include "scene/engine_scene.h"
+
 
 
 #include "ui/engine_ui.h"

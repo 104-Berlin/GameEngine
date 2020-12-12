@@ -2,10 +2,10 @@
 
 namespace Engine {
 	
-	class EShader : public Resource
+	class EShader : public EResource
 	{
 	public:
-		EShader(const EString& filePath, const EString& name = "Unknown") : Resource(name,filePath) {}
+		EShader(const EString& filePath, const EString& name = "Unknown");
 
 		virtual ~EShader() {}
 

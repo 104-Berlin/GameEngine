@@ -76,6 +76,14 @@ namespace Engine { namespace JSHelper {
         }
     }
 
+    void ConvertObject(const EJson& ref, bool* value)
+    {
+        if (ref.is_boolean())
+        {
+            *value = ref.get<bool>();
+        }
+    }
+
     void ConvertObject(const EJson& ref, i32* value)
     {
         if (ref.is_number_integer())

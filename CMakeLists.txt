@@ -52,6 +52,8 @@ add_executable(Engine
                         deps/imgui/backends/imgui_impl_glfw.cpp
                         deps/imgui/backends/imgui_impl_opengl3.cpp
                         src/util/engine_timer.cpp
+                        src/file/engine_file.cpp
+                        src/file/engine_folder.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp
                         src/platform/opengl/engine_opengl_render_context.cpp
                         src/platform/opengl/engine_opengl_shader.cpp
@@ -72,6 +74,9 @@ add_executable(Engine
                         src/scene/engine_scene.cpp
                         src/component/engine_component_handler.cpp
                         src/component/engine_component.cpp
+                        src/component/engine_mesh_component.cpp
+                        src/resource/engine_resource.cpp
+                        src/resource/engine_mesh.cpp
                         src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
                         src/core/engine_application.cpp

@@ -176,10 +176,10 @@ namespace Engine {
         }
 
 
+        void ConvertObject(const EJson& ref, bool* value);
         void ConvertObject(const EJson& ref, i32* value);
         void ConvertObject(const EJson& ref, float* value);
         void ConvertObject(const EJson& ref, double* value);
-        void ConvertObject(const EJson& ref, bool* value);
         void ConvertObject(const EJson& ref, EString* value);
         void ConvertObject(const EJson& ref, EString* value);
         void ConvertObject(const EJson& ref, EVec2* value);

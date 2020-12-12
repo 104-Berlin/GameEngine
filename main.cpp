@@ -11,6 +11,11 @@ int main(int argc, char const *argv[])
     EScene startScene("Start Scene");
     
     
+    EFile file(Path::Join("res", "Textures", "HelloWorld.er"));
+    std::cout << "FilePath: " << file.GetFilePath() << std::endl;
+    std::cout << "FileName: " << file.GetFileName() << std::endl;
+    std::cout << "FileExtension: " << file.GetFileExtension() << std::endl;
+
 
     startScene.CreateComponent<EComponent>(startScene.CreateNewObject("Test object 1"));
     

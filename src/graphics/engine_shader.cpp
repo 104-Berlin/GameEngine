@@ -5,6 +5,12 @@ namespace Engine {
 
 	EShader* EShader::DefaultShader;
 
+	EShader::EShader(const EString& filePath, const EString& name) : EResource(name,filePath) 
+	{
+
+	}
+
+
 	EShader* EShader::Create(const EString& filePath)
 	{
 		//TODO: Add ASSERT
