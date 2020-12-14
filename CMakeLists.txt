@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(Engine)
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS -std=c++14) 
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SYSTEM_VERSION 10.0)
@@ -66,13 +65,10 @@ add_executable(Engine
                         src/graphics/engine_shader.cpp
                         src/graphics/engine_texture.cpp
                         src/graphics/engine_window.cpp
-                        src/properties/engine_property.cpp
                         src/properties/engine_json_converter.cpp
                         src/scene/engine_uuid.cpp
                         src/scene/object/engine_object.cpp
-                        src/scene/object/engine_scene_object.cpp
                         src/scene/engine_scene.cpp
-                        src/component/engine_component_handler.cpp
                         src/component/engine_component.cpp
                         src/component/engine_mesh_component.cpp
                         src/component/engine_sprite_component.cpp

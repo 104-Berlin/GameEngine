@@ -29,7 +29,7 @@ namespace Engine {
 
 		virtual int GetResourceSlot(const EString& name) const override;
 
-		virtual bool Reload(const EString& filePath) override;
+		virtual bool OnReload() override;
 	private:
 		int GetUniformLocation(const EString& name);
 		void LoadShaderFromFile(const EString& path);

@@ -23,9 +23,7 @@ namespace Engine {
 		virtual u32 GetRendererID() const = 0;
 		
 
-		virtual bool Reload(const EString& filePath) = 0;
-
-		virtual const EString& GetPath() const = 0;
+		virtual bool OnReload() = 0;
 	};
 
 	class ETexture2D : public ETexture

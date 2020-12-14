@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EMesh : public EResource
+    class EMesh : public Resource
     {
     public:
         struct EVertex
@@ -13,7 +13,7 @@ namespace Engine {
         EMesh(const EString& name, const EString& filePath = "");
         ~EMesh();
 
-        virtual bool OnLoad() override;
+        virtual bool OnReload() override;
     };
 
 }

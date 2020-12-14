@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class ESprite : public EResource
+    class ESprite : public Resource
     {
     public:
         struct EVertex
@@ -21,8 +21,7 @@ namespace Engine {
 
         void Draw();
 
-        virtual bool OnLoad() override;
-        virtual bool OnImport() override;
+        virtual bool OnReload() override;
     };
 
 }

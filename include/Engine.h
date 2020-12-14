@@ -71,9 +71,25 @@ protected:
 EString fName;
 EString fFilePath;
 public:
-Resource(const EString& name, const EString& filepath)
+Resource(const EString& name, const EString& filepath = "")
     : fName(name), fFilePath(filepath)
     {}
+
+    bool Reload(const EString& filepath = "")
+    {
+        if (!filepath.empty() && fFilePath.compare(filepath) != 0)
+        {
+            fFilePath = filepath;
+        }
+        if (!fFilePath.empty())
+        {
+            return OnReload();
+        }
+        return false;
+    }
+
+    virtual bool OnReload() = 0;
+
 
     void SetName(const EString& name) { fName = name; }
     const EString& GetName() const { return fName; }
@@ -95,16 +111,10 @@ Resource(const EString& name, const EString& filepath)
 
 #include "scene/engine_uuid.h"
 #include "properties/engine_json_converter.h"
-#include "properties/engine_property.h"
 
 
 #include "scene/object/engine_object.h"
-#include "scene/object/engine_scene_object.h"
 #include "resource/engine_resource.h"
-
-
-
-
 
 
 
@@ -131,11 +141,9 @@ Resource(const EString& name, const EString& filepath)
 
 
 #include "component/engine_component.h"
-#include "component/engine_component_handler.h"
 #include "component/engine_mesh_component.h"
 #include "component/engine_sprite_component.h"
 #include "scene/engine_scene.h"
-
 
 
 #include "ui/engine_ui.h"

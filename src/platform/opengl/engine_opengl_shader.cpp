@@ -24,11 +24,10 @@ namespace Engine {
 			})
 	}
 
-	bool EOpenGLShader::Reload(const EString& filepath)
+	bool EOpenGLShader::OnReload()
 	{
-		if (filepath != "") { fFilePath.SetValue(filepath); }
 		if (fRendererID) glDeleteProgram(fRendererID);
-		LoadShaderFromFile(filepath);
+		LoadShaderFromFile(fFilePath);
 
 		CompileShader();
 		return true;

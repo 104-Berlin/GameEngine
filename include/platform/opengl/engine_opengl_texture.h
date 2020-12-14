@@ -17,15 +17,12 @@ namespace Engine {
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
 
-		virtual bool Reload(const EString& filepath) override;
-
-		virtual const EString& GetPath() const override { return fFilePath; }
+		virtual bool OnReload() override;
 	private:
 		u32 fRendererID;
 		ETextureFormat fFormat;
 		u32 fWidth;
 		u32 fHeight;
-		EString fFilePath;
 		byte* fImageData;
 	};
 
@@ -43,15 +40,12 @@ namespace Engine {
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
 
-		virtual bool Reload(const EString& filePath) override;
-
-		virtual const EString& GetPath() const override { return fFilePath; }
+		virtual bool OnReload() override;
 	private:
 		u32 fRendererID;
 		ETextureFormat fFormat;
 		u32 fWidth;
 		u32 fHeight;
-		EString fFilePath;
 		byte* fImageData;
 	};
 

@@ -17,7 +17,7 @@ static EVector<u32> sprite_index_data = {
 
 
 ESprite::ESprite(const EString& name, const EString& path)
-    : EResource(name, path)
+    : Resource(name, path)
 {
     fTexture = nullptr;
 }
@@ -39,10 +39,8 @@ void ESprite::Draw()
     ERenderer::Draw(fVertexArray);
 }
 
-bool ESprite::OnLoad()
+bool ESprite::OnReload()
 {
-    EResource::OnLoad();
-
     fVertexArray = EVertexArray::Create();
     fVertexBuffer = EVertexBuffer::Create(sprite_vertex_data.data(), sprite_vertex_data.size() * sizeof(ESprite::EVertex));
     fIndexBuffer = EIndexBuffer::Create(sprite_index_data.data(), sprite_index_data.size());
@@ -56,12 +54,7 @@ bool ESprite::OnLoad()
     fVertexArray->AddVertexBuffer(fVertexBuffer);
     fVertexArray->SetIndexBuffer(fIndexBuffer);
 
-    fTexture = ETexture2D::Create(fFilePath.GetValue());
+    fTexture = ETexture2D::Create(fFilePath);
     
     return true;
-}
-
-bool ESprite::OnImport()
-{
-    return false;
 }
