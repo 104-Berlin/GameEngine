@@ -10,32 +10,27 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
-    : fCamera(glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f))
 {
-    fWindow = nullptr;
+    fCamera = EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f));
 
     EWindowProp windowInit("ENGINE", 1270, 720);
-    fWindow = new EWindow(windowInit);
+    fWindow = EMakeRef(EWindow, windowInit);
 }
 
 EApplication::~EApplication()
 {
-    if (fWindow)
-    {
-        delete fWindow;
-    }
 }
 
-void EApplication::Start(EScene* scene)
+void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
     if (!fActiveScene)
     {
-        fActiveScene = new EScene("Scene 1");
+        fActiveScene = EMakeRef(EScene, "Scene 1");
     }
     if (!fActiveScene->GetActiveCamera())
     {
-        fActiveScene->SetActiveCamera(&fCamera);
+        fActiveScene->SetActiveCamera(fCamera);
     }
 
     fRunning = true;
@@ -105,7 +100,7 @@ void EApplication::RenderImGui()
     UI::Render();
 }
 
-EScene* EApplication::GetActiveScene()
+const ERef<EScene>& EApplication::GetActiveScene() const
 {
     return fActiveScene;
 }

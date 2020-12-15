@@ -7,8 +7,8 @@ namespace Engine {
 	public:
 		static void Init();
 
-		static void Begin(ECamera* camera, const ELightMap& lights);
-		static void Draw(EVertexArray* vertexArray);
+		static void Begin(const ERef<ECamera>& camera, const ELightMap& lights);
+		static void Draw(const ERef<EVertexArray>& vertexArray);
 		//static void Draw(EMeshInstance* mesh, EMaterialInstance* material, const glm::mat4& modelMatrix = glm::mat4(1.0f));
 		static void* Submit(ERenderCommandFn fn, u32 size) { return s_Instance->fCommandQueue.Allocate(fn, size); }
 		static void End();

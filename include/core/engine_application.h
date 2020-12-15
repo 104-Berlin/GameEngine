@@ -5,23 +5,23 @@ namespace Engine {
     class EApplication
     {
     private:
-        EWindow*    fWindow;
-        EScene*     fActiveScene;
-        bool        fRunning;
+        ERef<EWindow>    fWindow;
+        ERef<EScene>     fActiveScene;
+        bool             fRunning;
 
         // TEMP
-        ECamera     fCamera;
+        ERef<ECamera>     fCamera;
     public:
         EApplication();
         ~EApplication();
 
-        void Start(EScene* scene = nullptr);
+        void Start(const ERef<EScene>& scene = nullptr);
 
         void Update(float delta);
         void Render();
         void RenderImGui();
 
-        EScene* GetActiveScene();
+        const ERef<EScene>& GetActiveScene() const;
     private:
         void Run();
     public:

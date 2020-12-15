@@ -28,10 +28,10 @@ namespace Engine {
 
 		virtual bool OnReload() = 0;
 
-		static EShader* Create(const EString& filePath);
-		static EShader* Create(const EString& vertexSource, const EString& fragmentSource);
+		static ERef<EShader> Create(const EString& filePath);
+		static ERef<EShader> Create(const EString& vertexSource, const EString& fragmentSource);
 	public:
-		static EShader* DefaultShader;
+		static ERef<EShader> DefaultShader;
 	};
 
 }

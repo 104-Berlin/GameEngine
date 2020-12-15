@@ -6,18 +6,18 @@ namespace Engine {
     {
     private:
         EString                             fName;
-        ECamera*                            fActiveCamera;
+        ERef<ECamera>                       fActiveCamera;
 
 
         // TEMP
-        EFrameBuffer*                       fSceneFrameBuffer;
+        ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
     public:
         EScene(const EString& name);
         ~EScene();
 
-        void SetActiveCamera(ECamera* camera);
-        ECamera* GetActiveCamera() const;
+        void SetActiveCamera(const ERef<ECamera>& camera);
+        const ERef<ECamera>& GetActiveCamera() const;
 
         void Render();
         void RenderUI();

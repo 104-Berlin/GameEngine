@@ -29,7 +29,7 @@ namespace Engine {
 		//fPitch = M_PI / 4.0f;
 	}
 
-	void ECamera::Update(EWindow* window)
+	void ECamera::Update(const ERef<EWindow>& window)
 	{
 		const EVec2& mouse{ window->GetMouseX(), window->GetMouseY() };
 		float speed = window->GetScroll();

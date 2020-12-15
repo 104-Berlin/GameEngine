@@ -11,10 +11,10 @@ namespace Engine {
             EVec2 TexCoord;
         };
     private:
-        EVertexArray*   fVertexArray;
-        EVertexBuffer*  fVertexBuffer;
-        EIndexBuffer*   fIndexBuffer;
-        ETexture2D*     fTexture;
+        ERef<EVertexArray>   fVertexArray;
+        ERef<EVertexBuffer>  fVertexBuffer;
+        ERef<EIndexBuffer>   fIndexBuffer;
+        ERef<ETexture2D>     fTexture;
     public:
         ESprite(const EString& name, const EString& path);
         ~ESprite();

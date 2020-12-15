@@ -148,7 +148,7 @@ namespace Engine {
 		// DO NOT Call this in a IN_RENDER({})
 		virtual void Unmap() = 0;
 
-		static EVertexBuffer* Create(const void* data, u32 size);
+		static ERef<EVertexBuffer> Create(const void* data, u32 size);
 	};
 
 	class EIndexBuffer
@@ -161,7 +161,7 @@ namespace Engine {
 
 		virtual u32 GetCount() const = 0;
 
-		static EIndexBuffer* Create(const u32* indices, u32 count);
+		static ERef<EIndexBuffer> Create(const u32* indices, u32 count);
 	};
 
 	class EVertexArray
@@ -172,11 +172,11 @@ namespace Engine {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 		
-		virtual void AddVertexBuffer(EVertexBuffer* vertexBuffer) = 0;
-		virtual EIndexBuffer* GetIndexBuffer() const = 0;
-		virtual void SetIndexBuffer(EIndexBuffer* indexBuffer) = 0;
+		virtual void AddVertexBuffer(const ERef<EVertexBuffer>& vertexBuffer) = 0;
+		virtual const ERef<EIndexBuffer>& GetIndexBuffer() const = 0;
+		virtual void SetIndexBuffer(const ERef<EIndexBuffer>& indexBuffer) = 0;
 
-		static EVertexArray* Create();
+		static ERef<EVertexArray> Create();
 	};
 
 
@@ -208,7 +208,7 @@ namespace Engine {
 
 		virtual u32 GetColorAttachment() const { return 0; }
 
-		static EFrameBuffer* Create(u32 width, u32 height, EFramebufferFormat format);
+		static ERef<EFrameBuffer> Create(u32 width, u32 height, EFramebufferFormat format);
 	};
 
 

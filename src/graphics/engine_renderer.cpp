@@ -326,7 +326,7 @@ void main()
 		CreateDefaults();
 	}
 
-	void ERenderer::Begin(ECamera* camera, const ELightMap& lightMap)
+	void ERenderer::Begin(const ERef<ECamera>& camera, const ELightMap& lightMap)
 	{
 		//TODO: Add ASSERT
 		//IN_CORE_ASSERT(camera, "Set a Camera to Render properly");
@@ -343,7 +343,7 @@ void main()
 		s_Instance->fLightMap = lightMap;
 	}
 
-	void ERenderer::Draw(EVertexArray* vertexArray)
+	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray)
 	{
 		vertexArray->Bind();
 

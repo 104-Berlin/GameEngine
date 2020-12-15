@@ -24,9 +24,6 @@ ESprite::ESprite(const EString& name, const EString& path)
 
 ESprite::~ESprite()
 {
-    if (fVertexArray) { delete fVertexArray; }
-    if (fVertexBuffer) { delete fVertexBuffer; }
-    if (fIndexBuffer) { delete fIndexBuffer; }
 }
 
 void ESprite::Draw()

@@ -8,6 +8,7 @@
 #include <math.h>
 #include <chrono>
 #include <stdarg.h>
+#include <memory>
 
 
 typedef int_fast16_t i16;
@@ -28,6 +29,15 @@ using EVector = std::vector<T>;
 template <typename K, typename V>
 using EMap = std::map<K, V>;
 
+
+template <typename T>
+using EScope = std::unique_ptr<T>;
+#define EMakeScope(Type, ...) std::make_unique<Type>(__VA_ARGS__)
+
+
+template <typename T>
+using ERef = std::shared_ptr<T>;
+#define EMakeRef(Type, ...) std::make_shared<Type>(__VA_ARGS__)
 
 const char kPathSeparator =
 #ifdef EWIN

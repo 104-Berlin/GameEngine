@@ -31,8 +31,8 @@ namespace Engine {
 	public:
 		ETexture2D(const EString& filePath, const EString& name = "Unknown") : ETexture(filePath, name) {}
 
-		static ETexture2D* Create(const EString& path, bool srgb = false);
-		static ETexture2D* Create(ETextureFormat format, u32 width, u32 height);
+		static ERef<ETexture2D> Create(const EString& path, bool srgb = false);
+		static ERef<ETexture2D> Create(ETextureFormat format, u32 width, u32 height);
 	};
 
 	class ETextureCube : public ETexture
@@ -40,7 +40,7 @@ namespace Engine {
 	public:
 		ETextureCube(const EString& filePath, const EString& name = "Unknown") : ETexture(filePath, name) {}
 
-		static ETextureCube* Create(const EString& path, bool srgb = false);
+		static ERef<ETextureCube> Create(const EString& path, bool srgb = false);
 	};
 
 }

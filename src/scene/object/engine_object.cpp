@@ -2,7 +2,7 @@
 
 using namespace Engine;
 
-EObject::EObject(const EUUID& uuid)
+EObject::EObject()
 {
 }
 

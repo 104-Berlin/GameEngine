@@ -110,7 +110,7 @@ void EOpenGLVertexArray::Bind() const
 		glBindVertexArray(self->fRendererID);
 	});
 
-	for (const EVertexBuffer* vb : fVertexBuffers)
+	for (const ERef<EVertexBuffer>& vb : fVertexBuffers)
 	{
 		//vb->Bind();
 	}
@@ -128,7 +128,7 @@ void EOpenGLVertexArray::Unbind() const
 }
 
 
-void EOpenGLVertexArray::AddVertexBuffer(EVertexBuffer* vertexBuffer)
+void EOpenGLVertexArray::AddVertexBuffer(const ERef<EVertexBuffer>& vertexBuffer)
 {
 	if (vertexBuffer->GetLayout().GetElements().size() == 0)
 	{	
@@ -156,12 +156,12 @@ void EOpenGLVertexArray::AddVertexBuffer(EVertexBuffer* vertexBuffer)
 	});
 }
 
-EIndexBuffer* EOpenGLVertexArray::GetIndexBuffer() const
+const ERef<EIndexBuffer>& EOpenGLVertexArray::GetIndexBuffer() const
 {
 	return fIndexBuffer;
 }
 
-void EOpenGLVertexArray::SetIndexBuffer(EIndexBuffer* indexBuffer)
+void EOpenGLVertexArray::SetIndexBuffer(const ERef<EIndexBuffer>& indexBuffer)
 {
 	fIndexBuffer = indexBuffer;
 

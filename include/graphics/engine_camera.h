@@ -7,7 +7,7 @@ namespace Engine {
 	public:
 		ECamera(const glm::mat4& projectionMatrix);
 
-		void Update(EWindow* window);
+		void Update(const ERef<EWindow>& window);
 		void UpdateImGui();
 
 		inline float GetDistance() const { return fDistance; }

@@ -10,10 +10,6 @@ EScene::EScene(const EString& name)
 
 EScene::~EScene()
 {
-    if (fSceneFrameBuffer)
-    {
-        delete fSceneFrameBuffer;
-    }
 }
 
 void EScene::Render()
@@ -61,12 +57,12 @@ void EScene::Update(float delta)
 {
 }
 
-void EScene::SetActiveCamera(ECamera* camera)
+void EScene::SetActiveCamera(const ERef<ECamera>& camera)
 {
     fActiveCamera = camera;
 }
 
-ECamera* EScene::GetActiveCamera() const
+const ERef<ECamera>& EScene::GetActiveCamera() const
 {
     return fActiveCamera;
 }

@@ -8,8 +8,8 @@ int main(int argc, char const *argv[])
 {   
     EApplication::gApp();
 
-    EScene startScene("Start Scene");
+    ERef<EScene> startScene = EMakeRef(EScene, "Start Scene");
 
-    EApplication::gApp().Start(&startScene);
+    EApplication::gApp().Start(startScene);
     return 0;
 }
