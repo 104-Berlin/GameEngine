@@ -4,8 +4,10 @@ namespace Engine {
 
     class EObject
     {
+    private:
+        
     public:
-        EObject(const EUUID& uuid = EUUID().CreateNew());
+        EObject();
         virtual ~EObject() = default;
 
         void FromJsObject(const EJson& ref);

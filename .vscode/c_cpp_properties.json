@@ -8,7 +8,8 @@
                 "${workspaceFolder}/glad/include/",
                 "${workspaceFolder}/deps/glm/glm",
                 "${workspaceFolder}/deps/json/single_include",
-                "${workspaceFolder}/deps/imgui"
+                "${workspaceFolder}/deps/imgui",
+                "${workspaceFolder}/deps/entt/single_include",
             ],
             "defines": [
                 "_DEBUG",

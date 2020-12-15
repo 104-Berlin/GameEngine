@@ -13,6 +13,7 @@ include_directories(Infinit/src     deps/glfw/include
                                     deps/glm/glm
                                     deps/json/single_include
                                     deps/imgui
+                                    deps/entt/single_include
                                     ./include )
 
 

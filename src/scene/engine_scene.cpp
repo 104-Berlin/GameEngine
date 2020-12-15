@@ -55,9 +55,6 @@ void EScene::RenderUI()
     glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
     ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
     ImGui::End();
-
-    
-    ImGui::ShowDemoWindow();
 }
 
 void EScene::Update(float delta)
