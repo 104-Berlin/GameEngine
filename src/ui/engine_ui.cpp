@@ -7,6 +7,7 @@ using namespace Engine;
 void UI::Init(EWindow& window)
 {
     GLFWwindow* win = window.GetNativeWindow();
+    
     IN_RENDER1(win, {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
@@ -21,6 +22,8 @@ void UI::Init(EWindow& window)
         ImGui::StyleColorsDark();
         //ImGui::StyleColorsClassic();
 
+        io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 18.0f);
+
 
         ImGuiStyle& style = ImGui::GetStyle();
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -28,6 +31,7 @@ void UI::Init(EWindow& window)
             style.WindowRounding = 0.0f;
             style.Colors[ImGuiCol_WindowBg].w = 1.0f;
         }
+        
 
         // Setup Platform/Renderer bindings
         ImGui_ImplGlfw_InitForOpenGL(win, true);

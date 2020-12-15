@@ -2,8 +2,10 @@
 
 using namespace Engine;
 
-EObject::EObject()
+EObject::EObject(EEntity handle, EScene* scene)
 {
+    fScene = scene;
+    fHandle = handle;
 }
 
 void EObject::FromJsObject(const EJson& ref)

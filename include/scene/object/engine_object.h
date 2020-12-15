@@ -5,10 +5,35 @@ namespace Engine {
     class EObject
     {
     private:
-        
+        EScene*    fScene;
+        EEntity             fHandle;
     public:
-        EObject();
+        EObject(EEntity handle, EScene* scene);
         virtual ~EObject() = default;
+
+        // Wrapper functions
+        template <typename T, typename... Args>
+        void AddComponent(Args&&... args)
+        {
+            fScene->fRegistry.emplace<T>(fHandle, std::forward<Args>(args)...);
+        }
+
+        template <typename T>
+        bool HasComponent()
+        {
+            return fScene->fRegistry.has<T>(fHandle);
+        }
+
+        template <typename T>
+        T& GetComponent()
+        {
+            return fScene->fRegistry.get<T>(fHandle);   
+        }
+
+        void Delete()
+        {
+            fScene->fRegistry.destroy(fHandle);
+        }       
 
         void FromJsObject(const EJson& ref);
         void SetJsObject(EJson& ref) const;  

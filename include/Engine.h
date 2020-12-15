@@ -39,6 +39,9 @@ template <typename T>
 using ERef = std::shared_ptr<T>;
 #define EMakeRef(Type, ...) std::make_shared<Type>(__VA_ARGS__)
 
+template <typename T>
+using EWeakRef = std::weak_ptr<T>;
+
 const char kPathSeparator =
 #ifdef EWIN
                             '\\';
@@ -63,6 +66,8 @@ const char kPathSeparator =
 #include <imgui.h>
 #include <entt/entt.hpp>
 
+// Entities are saved in a registry and can have components attached to
+typedef entt::entity    EEntity;
 
 typedef glm::vec2       EVec2;
 typedef glm::vec3       EVec3;
@@ -124,8 +129,6 @@ Resource(const EString& name, const EString& filepath = "")
 #include "properties/engine_json_converter.h"
 
 
-#include "scene/object/engine_object.h"
-#include "resource/engine_resource.h"
 
 
 
@@ -155,6 +158,10 @@ Resource(const EString& name, const EString& filepath = "")
 #include "component/engine_mesh_component.h"
 #include "component/engine_sprite_component.h"
 #include "scene/engine_scene.h"
+
+
+#include "scene/object/engine_object.h"
+#include "resource/engine_resource.h"
 
 
 #include "ui/engine_ui.h"

@@ -10,6 +10,9 @@ int main(int argc, char const *argv[])
 
     ERef<EScene> startScene = EMakeRef(EScene, "Start Scene");
 
+    EObject object1 = startScene->CreateObject();
+    object1.AddComponent<ENameComponent>("Object 1");
+
     EApplication::gApp().Start(startScene);
     return 0;
 }

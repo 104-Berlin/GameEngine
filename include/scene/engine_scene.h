@@ -12,6 +12,8 @@ namespace Engine {
         // TEMP
         ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
+        // Entities
+        entt::registry                      fRegistry;
     public:
         EScene(const EString& name);
         ~EScene();
@@ -19,11 +21,13 @@ namespace Engine {
         void SetActiveCamera(const ERef<ECamera>& camera);
         const ERef<ECamera>& GetActiveCamera() const;
 
+        EObject CreateObject();
+
         void Render();
         void RenderUI();
         void Update(float delta);
     public:
-
+        friend class EObject;
     };
 
 }

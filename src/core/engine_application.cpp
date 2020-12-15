@@ -80,6 +80,7 @@ void EApplication::RenderImGui()
     int height = 0;
 
     glfwGetFramebufferSize(fWindow->GetNativeWindow(), &width, &height);
+    std::cout << width << ", " << height << std::endl;
     IN_RENDER2(width, height, {
         glViewport(0, 0, width, height);
     })
