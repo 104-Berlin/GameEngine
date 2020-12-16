@@ -36,18 +36,18 @@ namespace Engine {
 		: ETexture2D(""), fFormat(format), fWidth(width), fHeight(height)
 	{
 		IN_RENDER_S({
-			glGenTextures(1, &self->fRendererID);
-			glBindTexture(GL_TEXTURE_2D, self->fRendererID);
+			glCall(glGenTextures(1, &self->fRendererID));
+			glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
 
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+			glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+			glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-			glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), self->fWidth, self->fHeight, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, NULL);
-			glGenerateMipmap(GL_TEXTURE_2D);
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), self->fWidth, self->fHeight, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, NULL));
+			glCall(glGenerateMipmap(GL_TEXTURE_2D));
 
-			glBindTexture(GL_TEXTURE_2D, 0);
+			glCall(glBindTexture(GL_TEXTURE_2D, 0));
 		})
 	}
 
@@ -64,18 +64,18 @@ namespace Engine {
 
 		IN_RENDER_S({
 
-				glGenTextures(1, &self->fRendererID);
-				glBindTexture(GL_TEXTURE_2D, self->fRendererID);
+				glCall(glGenTextures(1, &self->fRendererID));
+				glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
 
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+				glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+				glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+				glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-				glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), self->fWidth, self->fHeight, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, self->fImageData);
-				glGenerateMipmap(GL_TEXTURE_2D);
+				glCall(glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), self->fWidth, self->fHeight, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, self->fImageData));
+				glCall(glGenerateMipmap(GL_TEXTURE_2D));
 
-				glBindTexture(GL_TEXTURE_2D, 0);
+				glCall(glBindTexture(GL_TEXTURE_2D, 0));
 
 				stbi_image_free(self->fImageData);
 			})
@@ -86,15 +86,15 @@ namespace Engine {
 	{
 		std::cout << "OpenGL Texture detroyed!" << std::endl;
 		IN_RENDER_S({
-				glDeleteTextures(1, &self->fRendererID);
+				glCall(glDeleteTextures(1, &self->fRendererID));
 			})
 	}
 
 	void EOpenGLTexture2D::Bind(u32 slot) const
 	{
 		IN_RENDER_S1(slot, {
-				glActiveTexture(GL_TEXTURE0 + slot);
-				glBindTexture(GL_TEXTURE_2D, self->fRendererID);
+				glCall(glActiveTexture(GL_TEXTURE0 + slot));
+				glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
 			})
 
 	}
@@ -164,27 +164,27 @@ namespace Engine {
 
 		IN_RENDER_S3(faces, faceWidth, faceHeight, {
 
-			glGenTextures(1, &self->fRendererID);
-			glBindTexture(GL_TEXTURE_CUBE_MAP, self->fRendererID);
+			glCall(glGenTextures(1, &self->fRendererID));
+			glCall(glBindTexture(GL_TEXTURE_CUBE_MAP, self->fRendererID));
 
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+			glCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+			glCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+			glCall(glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
-			auto format = InfinitToOpenGLTextureFormat(self->fFormat);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[2]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[0]);
+			glCall(auto format = InfinitToOpenGLTextureFormat(self->fFormat));
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[2]));
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[0]));
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[4]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[5]);
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[4]));
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[5]));
 
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[1]);
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[3]);
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[1]));
+			glCall(glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, faceWidth, faceHeight, 0, format, GL_UNSIGNED_BYTE, faces[3]));
 
-			glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+			glCall(glGenerateMipmap(GL_TEXTURE_CUBE_MAP));
 
-			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+			glCall(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 
 			for (size_t i = 0; i < 6; i++)
 				delete[] faces[i];
@@ -199,15 +199,15 @@ namespace Engine {
 	{
 		std::cout << "OpenGLTextureCube detroyed!" << std::endl;
 		IN_RENDER_S({
-				glDeleteTextures(1, &self->fRendererID);
+				glCall(glDeleteTextures(1, &self->fRendererID));
 			})
 	}
 
 	void EOpenGLTextureCube::Bind(u32 slot) const
 	{
 		IN_RENDER_S1(slot, {
-				glActiveTexture(GL_TEXTURE0 + slot);
-				glBindTexture(GL_TEXTURE_CUBE_MAP, self->fRendererID);
+				glCall(glActiveTexture(GL_TEXTURE0 + slot));
+				glCall(glBindTexture(GL_TEXTURE_CUBE_MAP, self->fRendererID));
 			})
 	}
 

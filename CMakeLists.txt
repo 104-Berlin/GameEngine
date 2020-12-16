@@ -14,7 +14,7 @@ include_directories(Infinit/src     deps/glfw/include
                                     deps/json/single_include
                                     deps/imgui
                                     deps/entt/single_include
-                                    ./include )
+                                    ./src )
 
 
 add_subdirectory(deps/glfw)
@@ -71,8 +71,6 @@ add_executable(Engine
                         src/scene/object/engine_object.cpp
                         src/scene/engine_scene.cpp
                         src/component/engine_component.cpp
-                        src/component/engine_mesh_component.cpp
-                        src/component/engine_sprite_component.cpp
                         src/resource/engine_resource.cpp
                         src/resource/engine_mesh.cpp
                         src/resource/engine_sprite.cpp

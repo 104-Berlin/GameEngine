@@ -76,7 +76,7 @@ namespace Engine {
 	private:
 		u32 fVertexBufferIndex = 0;
 		u32 fRendererID = 0;
-		EVector<const ERef<EVertexBuffer>> fVertexBuffers;
+		EVector<ERef<EVertexBuffer>> fVertexBuffers;
 		ERef<EIndexBuffer> fIndexBuffer;
 	};
 

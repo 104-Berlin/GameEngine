@@ -44,7 +44,6 @@ void EApplication::Run()
     while (fRunning)
     {
         delta = timer.Reset();
-        ERenderContext::s_Instance->Clear();
         Update(delta);
 
         Render();
@@ -80,9 +79,9 @@ void EApplication::RenderImGui()
     int height = 0;
 
     glfwGetFramebufferSize(fWindow->GetNativeWindow(), &width, &height);
-    std::cout << width << ", " << height << std::endl;
+
     IN_RENDER2(width, height, {
-        glViewport(0, 0, width, height);
+        glCall(glViewport(0, 0, width, height));
     })
 
 

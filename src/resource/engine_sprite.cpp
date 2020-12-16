@@ -33,7 +33,7 @@ void ESprite::Draw()
         fTexture->Bind(0);
     }
 
-    ERenderer::Draw(fVertexArray);
+    //ERenderer::Draw(fVertexArray);
 }
 
 bool ESprite::OnReload()

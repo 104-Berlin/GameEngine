@@ -5,9 +5,9 @@ namespace Engine {
 	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, u32 size)
 	{
 		IN_RENDER_S2(data, size, {
-				glGenBuffers(1, &self->m_RendererID);
-				glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID);
-				glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+				glCall(glGenBuffers(1, &self->m_RendererID));
+				glCall(glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID));
+				glCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 			})
 	}
 
@@ -15,39 +15,39 @@ namespace Engine {
 	{
 		std::cout  << "OpenGLVertexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
-				glDeleteBuffers(1, &self->m_RendererID);
+				glCall(glDeleteBuffers(1, &self->m_RendererID));
 			})
 	}
 
 	void EOpenGLVertexBuffer::Bind() const
 	{
 		IN_RENDER_S({
-				self->PrivBind();
+				glCall(self->PrivBind());
 			})
 	}
 
 	void* EOpenGLVertexBuffer::Map()
 	{
-		return glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+		return glCall(glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY));
 	}
 
 	void EOpenGLVertexBuffer::Unmap()
 	{
-		glUnmapBuffer(GL_ARRAY_BUFFER);
+		glCall(glUnmapBuffer(GL_ARRAY_BUFFER));
 	}
 
 
 
 	void EOpenGLVertexBuffer::PrivBind() const 
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
+		glCall(glBindBuffer(GL_ARRAY_BUFFER, m_RendererID));
 	}
 
 	void EOpenGLVertexBuffer::Unbind() const
 	{
 #ifdef IN_DEBUG
 		IN_RENDER({
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 			})
 #endif
 	}
@@ -56,9 +56,9 @@ namespace Engine {
 		: m_Count(count)
 	{
 		IN_RENDER_S2(data, count, {
-				glGenBuffers(1, &self->m_RendererID);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GL_STATIC_DRAW);
+				glCall(glGenBuffers(1, &self->m_RendererID));
+				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID));
+				glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GL_STATIC_DRAW));
 			})
 	}
 
@@ -66,14 +66,14 @@ namespace Engine {
 	{
 		std::cout  << "OpenGLIndexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
-				glDeleteBuffers(1, &self->m_RendererID);
+				glCall(glDeleteBuffers(1, &self->m_RendererID));
 			})
 	}
 
 	void EOpenGLIndexBuffer::Bind() const
 	{
 		IN_RENDER_S({
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID);
+				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID));
 			})
 	}
 
@@ -81,7 +81,7 @@ namespace Engine {
 	{
 #ifdef IN_DEBUG
 		IN_RENDER({
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 			})
 #endif
 	}
@@ -90,40 +90,42 @@ EOpenGLVertexArray::EOpenGLVertexArray()
 {
 	fIndexBuffer = nullptr;
 	IN_RENDER_S({
-		glGenVertexArrays(1, &self->fRendererID);
-		glBindVertexArray(self->fRendererID); 
+		glCall(glGenVertexArrays(1, &self->fRendererID));
+		glCall(glBindVertexArray(self->fRendererID);) 
 	})
 }
 
 EOpenGLVertexArray::~EOpenGLVertexArray()
 {		
-	std::cout << "OpenGL VertexArray "<< fRendererID << " destroyed!" << std::endl;
+	std::cout << "OpenGLVertexArray "<< fRendererID << " destroyed!" << std::endl;
+
+	fVertexBuffers.clear();
 
 	IN_RENDER_S({
-		glDeleteVertexArrays(1, &self->fRendererID);
+		glCall(glDeleteVertexArrays(1, &self->fRendererID));
 	})
 }
 
 void EOpenGLVertexArray::Bind() const
 {
 	IN_RENDER_S({
-		glBindVertexArray(self->fRendererID);
+		glCall(glBindVertexArray(self->fRendererID));
 	});
 
 	for (const ERef<EVertexBuffer>& vb : fVertexBuffers)
 	{
-		//vb->Bind();
+		vb->Bind();
 	}
     if (fIndexBuffer)
     {
-        //fIndexBuffer->Bind();
+        fIndexBuffer->Bind();
     }
 }
 
 void EOpenGLVertexArray::Unbind() const
 {
 	IN_RENDER({
-		glBindVertexArray(0);
+		glCall(glBindVertexArray(0));
 	});
 }
 
@@ -140,20 +142,21 @@ void EOpenGLVertexArray::AddVertexBuffer(const ERef<EVertexBuffer>& vertexBuffer
 	Bind();
 	vertexBuffer->Bind();
 
-	IN_RENDER_S1(vertexBuffer, {
-
-		const auto & layout = vertexBuffer->GetLayout();
-		for (const auto& element : layout)
-		{
-			glEnableVertexAttribArray(self->fVertexBufferIndex);
-			glVertexAttribPointer(self->fVertexBufferIndex,
+	const auto layout = vertexBuffer->GetLayout();
+	u32 stride = layout.GetStride();
+	for (const auto& element : layout)
+	{
+		IN_RENDER_S2(element, stride, {
+			glCall(glEnableVertexAttribArray(self->fVertexBufferIndex));
+			glCall(glVertexAttribPointer(self->fVertexBufferIndex,
 						element.GetComponentCount(),
 						ShaderDataTypeToOpenGLType(element.Type),
 						element.Normalized ? GL_TRUE : GL_FALSE,
-						layout.GetStride(), (const void*)element.Offset);
+						stride, (const void*)element.Offset));
 			self->fVertexBufferIndex++;
-		}
-	});
+			
+		});
+	}
 }
 
 const ERef<EIndexBuffer>& EOpenGLVertexArray::GetIndexBuffer() const
@@ -174,7 +177,7 @@ void EOpenGLVertexArray::SetIndexBuffer(const ERef<EIndexBuffer>& indexBuffer)
 
 
 EOpenGLFrameBuffer::EOpenGLFrameBuffer(u32 width, u32 height, EFramebufferFormat format)
-	: m_Format(format), m_Width(0), m_Height(0), m_RendererID(0)
+	: m_Format(format), m_Width(0), m_Height(0), m_RendererID(0), m_DepthAttachment(0), m_ColorAttachment(0)
 {
 	Resize(width, height);
 }
@@ -191,69 +194,88 @@ void EOpenGLFrameBuffer::Resize(u32 width, u32 height)
 	m_Width = width;
 	m_Height = height;
 
-	if (m_RendererID)
-	{
-		IN_RENDER_S({
-				glDeleteFramebuffers(1, &self->m_RendererID);
-				glDeleteTextures(1, &self->m_ColorAttachment);
-				glDeleteTextures(1, &self->m_DepthAttachment);
-			})
-	}
 
 	IN_RENDER_S({
+		if (self->m_RendererID)
+		{
+			glCall(glDeleteFramebuffers(1, &self->m_RendererID));
+			self->m_RendererID = 0;
+		}
+		if (self->m_DepthAttachment)
+		{
+			glCall(glDeleteTextures(1, &self->m_DepthAttachment));
+			self->m_DepthAttachment = 0;
+		}
+		if (self->m_ColorAttachment)
+		{
+			glCall(glDeleteTextures(1, &self->m_ColorAttachment));
+			self->m_ColorAttachment = 0;
+		}
 
-		glGenFramebuffers(1, &self->m_RendererID);
-		glBindFramebuffer(GL_FRAMEBUFFER, self->m_RendererID);
+		glCall(glGenFramebuffers(1, &self->m_RendererID));
+		glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->m_RendererID));
 
-		glGenTextures(1, &self->m_ColorAttachment);
-		glBindTexture(GL_TEXTURE_2D, self->m_ColorAttachment);
+		glCall(glGenTextures(1, &self->m_ColorAttachment));
+		glCall(glBindTexture(GL_TEXTURE_2D, self->m_ColorAttachment));
 
 		if (self->m_Format == EFramebufferFormat::RGBA16F)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, self->m_Width, self->m_Height, 0, GL_RGBA, GL_FLOAT, nullptr);
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, self->m_Width, self->m_Height, 0, GL_RGBA, GL_FLOAT, nullptr));
 		}
 		else if (self->m_Format == EFramebufferFormat::RGBA8)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self->m_Width, self->m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, self->m_Width, self->m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr));
 		}
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->m_ColorAttachment, 0);
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+        glCall(glBindTexture(GL_TEXTURE_2D, 0));
+        
+        
+		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->m_ColorAttachment, 0));
+        GLenum err = glGetError();
+		if (err != GL_NO_ERROR)
+		{
+			std::cout << "GL_ERROR: " << err << std::endl;
+		}
 
-		glGenTextures(1, &self->m_DepthAttachment);
-		glBindTexture(GL_TEXTURE_2D, self->m_DepthAttachment);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, self->m_Width, self->m_Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+		glCall(glGenTextures(1, &self->m_DepthAttachment));
+		glCall(glBindTexture(GL_TEXTURE_2D, self->m_DepthAttachment));
+		glCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, self->m_Width, self->m_Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL));
 
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, self->m_DepthAttachment, 0);
+		glCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, self->m_DepthAttachment, 0));
 
-		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-			std::cout << "Framebuffer is incomplete!" << std::endl;
+        GLenum frameBufferResult = GL_FRAMEBUFFER_COMPLETE;
+		if ((frameBufferResult = glCheckFramebufferStatus(GL_FRAMEBUFFER)) != GL_FRAMEBUFFER_COMPLETE)
+		{
+			std::cout << "Depth Framebuffer is incomplete!" << frameBufferResult << std::endl;
+		}
+			
 
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	})
 }
 
 void EOpenGLFrameBuffer::Bind() const
 {
 	IN_RENDER_S({
-			glBindFramebuffer(GL_FRAMEBUFFER, self->m_RendererID);
-			glViewport(0, 0, self->m_Width, self->m_Height);
+			glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->m_RendererID));
+			glCall(glViewport(0, 0, self->m_Width, self->m_Height));
 		})
 }
 
 void EOpenGLFrameBuffer::Unbind() const
 {
 	IN_RENDER({
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	})
 }
 
 void EOpenGLFrameBuffer::BindTexture(u32 slot) const
 {
 	IN_RENDER_S1(slot, {
-			glActiveTexture(GL_TEXTURE0 + slot);
-			glBindTexture(GL_TEXTURE_2D, self->m_ColorAttachment);
+			glCall(glActiveTexture(GL_TEXTURE0 + slot));
+			glCall(glBindTexture(GL_TEXTURE_2D, self->m_ColorAttachment));
 		})
 }
 

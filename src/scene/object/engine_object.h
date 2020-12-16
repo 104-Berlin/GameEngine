@@ -13,9 +13,9 @@ namespace Engine {
 
         // Wrapper functions
         template <typename T, typename... Args>
-        void AddComponent(Args&&... args)
+        T& AddComponent(Args&&... args)
         {
-            fScene->fRegistry.emplace<T>(fHandle, std::forward<Args>(args)...);
+            return fScene->fRegistry.emplace<T>(fHandle, std::forward<Args>(args)...);
         }
 
         template <typename T>

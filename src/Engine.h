@@ -84,11 +84,11 @@ typedef nlohmann::json  EJson;
 class Resource
 {
 protected:
-EString fName;
-EString fFilePath;
+    EString fName;
+    EString fFilePath;
 public:
-Resource(const EString& name, const EString& filepath = "")
-    : fName(name), fFilePath(filepath)
+    Resource(const EString& name, const EString& filepath = "")
+        : fName(name), fFilePath(filepath)
     {}
 
     bool Reload(const EString& filepath = "")
@@ -155,8 +155,6 @@ Resource(const EString& name, const EString& filepath = "")
 
 
 #include "component/engine_component.h"
-#include "component/engine_mesh_component.h"
-#include "component/engine_sprite_component.h"
 #include "scene/engine_scene.h"
 
 

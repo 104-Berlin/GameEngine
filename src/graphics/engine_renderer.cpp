@@ -328,28 +328,32 @@ void main()
 
 	void ERenderer::Begin(const ERef<ECamera>& camera, const ELightMap& lightMap)
 	{
-		//TODO: Add ASSERT
-		//IN_CORE_ASSERT(camera, "Set a Camera to Render properly");
-		IN_RENDER({
-		//Engine::ERendererAPI::s_Instance->SetClearColor({ 0.0f, 0.0f, 0.0f, 1.0f });
-		//ERendererAPI::s_Instance->Clear();
-			})
+		ERenderContext::s_Instance->SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		ERenderContext::s_Instance->Clear();
 
-
-		s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix() * camera->GetViewMatrix();
+        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix();
 		s_Instance->fCameraPosition = camera->GetPosition();
 		//Make that better
 		s_Instance->fLightMap.clear();
 		s_Instance->fLightMap = lightMap;
 	}
 
-	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray)
+	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray, const ERef<EShader>& shader)
 	{
+        if (!s_Instance)
+		{
+			std::cout << "No render instance set. Cant draw anything" << std::endl;
+			return;
+		}
+
+
+		shader->Bind();
+		shader->SetUniformMat4("vp_matrix", s_Instance->fViewProjectionMatrix);
 		vertexArray->Bind();
 
 		u32 indexCount = vertexArray->GetIndexBuffer()->GetCount();
 		IN_RENDER1(indexCount, {
-			glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL);
+			glCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
 		})
 	}
 

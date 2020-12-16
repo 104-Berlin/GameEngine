@@ -20,7 +20,7 @@ namespace Engine {
 		std::cout << "OpenGL Shader "<< fRendererID << " destroyed!" << std::endl;
 		delete fUniformBuffer;
 		IN_RENDER1(fRendererID, {
-				glDeleteProgram(fRendererID);
+				glCall(glDeleteProgram(fRendererID));
 			})
 	}
 
@@ -61,26 +61,26 @@ namespace Engine {
 		// Note that std::EString's .c_str is NULL character terminated.
 		IN_RENDER_S1(shaderSources, {
 		const GLchar * source = (const GLchar*)shaderSources[0].c_str();
-		GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+		GLuint vertexShader = glCall(glCreateShader(GL_VERTEX_SHADER));
 
-		glShaderSource(vertexShader, 1, &source, 0);
+		glCall(glShaderSource(vertexShader, 1, &source, 0));
 
 		// Compile the vertex shader
-		glCompileShader(vertexShader);
+		glCall(glCompileShader(vertexShader));
 
 		GLint isCompiled = 0;
-		glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled);
+		glCall(glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &isCompiled));
 		if (isCompiled == GL_FALSE)
 		{
 			GLint maxLength = 0;
-			glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength);
+			glCall(glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &maxLength));
 
 			// The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]);
+			glCall(glGetShaderInfoLog(vertexShader, maxLength, &maxLength, &infoLog[0]));
 
 			// We don't need the shader anymore.
-			glDeleteShader(vertexShader);
+			glCall(glDeleteShader(vertexShader));
 
 			// Use the infoLog as you see fit.
 			std::cout << &infoLog[0] << std::endl;
@@ -90,30 +90,30 @@ namespace Engine {
 		}
 
 		// Create an empty fragment shader handle
-		GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+		GLuint fragmentShader = glCall(glCreateShader(GL_FRAGMENT_SHADER));
 
 		// Send the fragment shader source code to GL
 		// Note that std::EString's .c_str is NULL character terminated.
 		source = (const GLchar *)shaderSources[1].c_str();
-		glShaderSource(fragmentShader, 1, &source, 0);
+		glCall(glShaderSource(fragmentShader, 1, &source, 0));
 
 		// Compile the fragment shader
-		glCompileShader(fragmentShader);
+		glCall(glCompileShader(fragmentShader));
 
-		glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
+		glCall(glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled));
 		if (isCompiled == GL_FALSE)
 		{
 			GLint maxLength = 0;
-			glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength);
+			glCall(glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &maxLength));
 
 			// The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
-			glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]);
+			glCall(glGetShaderInfoLog(fragmentShader, maxLength, &maxLength, &infoLog[0]));
 
 			// We don't need the shader anymore.
-			glDeleteShader(fragmentShader);
+			glCall(glDeleteShader(fragmentShader));
 			// Either of them. Don't leak shaders.
-			glDeleteShader(vertexShader);
+			glCall(glDeleteShader(vertexShader));
 
 			// Use the infoLog as you see fit.
 			std::cout << &infoLog[0] << std::endl;
@@ -125,32 +125,32 @@ namespace Engine {
 		// Vertex and fragment shaders are successfully compiled.
 		// Now time to link them together into a fRendererID.
 		// Get a fRendererID object.
-		self->fRendererID = glCreateProgram();
+		self->fRendererID = glCall(glCreateProgram());
 
 		// Attach our shaders to our fRendererID
-		glAttachShader(self->fRendererID, vertexShader);
-		glAttachShader(self->fRendererID, fragmentShader);
+		glCall(glAttachShader(self->fRendererID, vertexShader));
+		glCall(glAttachShader(self->fRendererID, fragmentShader));
 
 		// Link our fRendererID
-		glLinkProgram(self->fRendererID);
+		glCall(glLinkProgram(self->fRendererID));
 
 		// Note the different functions here: glGetProgram* instead of glGetShader*.
 		GLint isLinked = 0;
-		glGetProgramiv(self->fRendererID, GL_LINK_STATUS, (int *)&isLinked);
+		glCall(glGetProgramiv(self->fRendererID, GL_LINK_STATUS, (int *)&isLinked));
 		if (isLinked == GL_FALSE)
 		{
 			GLint maxLength = 0;
-			glGetProgramiv(self->fRendererID, GL_INFO_LOG_LENGTH, &maxLength);
+			glCall(glGetProgramiv(self->fRendererID, GL_INFO_LOG_LENGTH, &maxLength));
 
 			// The maxLength includes the NULL character
 			std::vector<GLchar> infoLog(maxLength);
-			glGetProgramInfoLog(self->fRendererID, maxLength, &maxLength, &infoLog[0]);
+			glCall(glGetProgramInfoLog(self->fRendererID, maxLength, &maxLength, &infoLog[0]));
 
 			// We don't need the fRendererID anymore.
-			glDeleteProgram(self->fRendererID);
+			glCall(glDeleteProgram(self->fRendererID));
 			// Don't leak shaders either.
-			glDeleteShader(vertexShader);
-			glDeleteShader(fragmentShader);
+			glCall(glDeleteShader(vertexShader));
+			glCall(glDeleteShader(fragmentShader));
 
 			// Use the infoLog as you see fit.
 			std::cout <<&infoLog[0] << std::endl;
@@ -160,8 +160,8 @@ namespace Engine {
 		}
 
 		// Always detach shaders after a successful link.
-		glDetachShader(self->fRendererID, vertexShader);
-		glDetachShader(self->fRendererID, fragmentShader);
+		glCall(glDetachShader(self->fRendererID, vertexShader));
+		glCall(glDetachShader(self->fRendererID, fragmentShader));
 			})
 
 		ProcessResources();
@@ -341,7 +341,7 @@ namespace Engine {
 	void EOpenGLShader::Bind() const
 	{
 		IN_RENDER_S({
-				glUseProgram(self->fRendererID);
+				glCall(glUseProgram(self->fRendererID));
 			})
 	}
 
@@ -349,7 +349,7 @@ namespace Engine {
 	{
 #ifdef IN_DEBUG
 		IN_RENDER({
-				glUseProgram(0);
+				glCall(glUseProgram(0));
 			})
 #endif
 	}
@@ -407,49 +407,49 @@ namespace Engine {
 	void EOpenGLShader::SetUniform1i(const EString& name, const int& value)
 	{
 		IN_RENDER_S2(name, value, {
-			glUniform1i(self->GetUniformLocation(name), value);
+			glCall(glUniform1i(self->GetUniformLocation(name), value));
 		})
 	}
 
 	void EOpenGLShader::SetUniform1f(const EString& name, const float& value)
 	{
 		IN_RENDER_S2(name, value, {
-			glUniform1f(self->GetUniformLocation(name), value);
+			glCall(glUniform1f(self->GetUniformLocation(name), value));
 		})
 	}
 
 	void EOpenGLShader::SetUniform2f(const EString& name, const EVec2& value)
 	{
 		IN_RENDER_S2(name, value, {
-			glUniform2f(self->GetUniformLocation(name), value.x, value.y);
+			glCall(glUniform2f(self->GetUniformLocation(name), value.x, value.y));
 		})
 	}
 
 	void EOpenGLShader::SetUniform3f(const EString& name, const EVec3& value)
 	{
 		IN_RENDER_S2(name, value, {
-			glUniform3f(self->GetUniformLocation(name), value.x, value.y, value.z);
+			glCall(glUniform3f(self->GetUniformLocation(name), value.x, value.y, value.z));
 		})
 	}
 
 	void EOpenGLShader::SetUniform4f(const EString& name, const EVec4& value)
 	{
 		IN_RENDER_S2(name, value, {
-					glUniform4f(self->GetUniformLocation(name), value.x, value.y, value.z, value.w);
+					glCall(glUniform4f(self->GetUniformLocation(name), value.x, value.y, value.z, value.w));
 		})
 	}
 
 	void EOpenGLShader::SetUniformMat3(const EString& name, const glm::mat3& value)
 	{
 		IN_RENDER_S2(name, value, {
-			glUniformMatrix3fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+			glCall(glUniformMatrix3fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]));
 		})
 	}
 
 	void EOpenGLShader::SetUniformMat4(const EString& name, const glm::mat4& value)
 	{
 		IN_RENDER_S2(name, value, {
-				glUniformMatrix4fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]);
+				glCall(glUniformMatrix4fv(self->GetUniformLocation(name), 1, GL_FALSE, &value[0][0]));
 			})
 	}
 

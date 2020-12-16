@@ -2,10 +2,44 @@
 
 using namespace Engine;
 
+
+const char* vertex_shader_src = ""
+"#version 330 core\n"
+
+"layout(location = 0) in vec3 position;\n"
+"layout(location = 1) in vec3 normal;\n"
+"layout(location = 2) in vec2 texCoord;\n"
+
+"uniform mat4 vp_matrix = mat4(1.0);\n"
+
+"out vec2 UVS;\n"
+
+"void main()\n"
+"{\n"
+
+    "gl_Position = vp_matrix * vec4(position, 1.0);\n"
+    "UVS = texCoord;\n"
+"}\n"
+"";
+
+const char* fragment_shader_src = ""
+"#version 330 core\n"
+
+"in vec2 UVS;\n"
+
+"out vec4 FinalColor;\n"
+
+"void main()\n"
+"{\n"
+    "FinalColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+"}\n"
+"";
+
 EScene::EScene(const EString& name)
-    : fActiveCamera(nullptr), fSceneFrameBuffer(nullptr), fName(name)
+    : fActiveCamera(nullptr), fSceneFrameBuffer(nullptr), fName(name), fViewPortWidth(1270), fViewPortHeight(720)
 
 {
+    fShader = EShader::Create(vertex_shader_src, fragment_shader_src);
 }
 
 EScene::~EScene()
@@ -18,14 +52,25 @@ void EScene::Render()
 
     if (!fSceneFrameBuffer)
     {
-        fSceneFrameBuffer = EFrameBuffer::Create(1270, 720, EFramebufferFormat::RGBA8);
+        fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);
     }
+    fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
 
     fSceneFrameBuffer->Bind();
-    ERenderContext::s_Instance->SetClearColor({1.0f, 0.0f, 0.0f, 1.0f});
-    ERenderContext::s_Instance->Clear();
-
+    
     // Render components
+    ERenderer::Begin(fActiveCamera, {});
+    auto view = fRegistry.view<EMeshComponent>();
+    for (EEntity entity : view)
+    {
+        EMeshComponent meshComponent = view.get<EMeshComponent>(entity);
+        if (meshComponent.Mesh)
+        {
+            ERenderer::Draw(meshComponent.Mesh->fVertexArray, fShader);
+        }
+
+    }
+    ERenderer::End();
 
     fSceneFrameBuffer->Unbind();
 }
@@ -39,17 +84,20 @@ void EScene::RenderUI()
         ImGui::End();
     }
 
-    //fActiveCamera->UpdateImGui();
+    fActiveCamera->UpdateImGui();
 
     ImGui::Begin("SceneView##SCENEVIEW");
     // Render frame buffer
     auto viewportSize = ImGui::GetContentRegionAvail();
-    fSceneFrameBuffer->Resize(viewportSize.x, viewportSize.y);
+    fViewPortWidth = viewportSize.x;
+    fViewPortHeight = viewportSize.y;
+    
     
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
     ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+    glBindTexture(GL_TEXTURE_2D, 0);
     ImGui::End();
 
     // Render all objects for now

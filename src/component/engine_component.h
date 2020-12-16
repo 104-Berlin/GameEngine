@@ -27,7 +27,11 @@ namespace Engine {
 
     struct EMeshComponent
     {
-        
+        ERef<EMesh> Mesh;
+
+        EMeshComponent() = default;
+        EMeshComponent(const EMeshComponent&) = default;
+
     };
 
 }
