@@ -64,6 +64,7 @@ namespace Engine {
 
 		if (ImGui::IsItemHovered())
 		{
+			std::cout << "Here we do something" << std::endl;
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
 			{
 				MousePan(delta);
@@ -79,8 +80,9 @@ namespace Engine {
 
 		glm::quat orientation = GetOrientation();
 		fRotation = glm::eulerAngles(orientation) * (180.0f / (float)M_PI);
-		//fViewMatrix = glm::translate(glm::mat4(1.0f), EVec3(0, 0, 1)) * glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
-		fViewMatrix = glm::mat4(1.0f);
+		
+		fViewMatrix = glm::toMat4(glm::conjugate(orientation)) * glm::translate(glm::mat4(1.0f), -fPosition);
+		//fViewMatrix = glm::mat4(1.0f);
 	}
 
 	void ECamera::MousePan(const EVec2& delta)

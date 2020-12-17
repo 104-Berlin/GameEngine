@@ -331,7 +331,7 @@ void main()
 		ERenderContext::s_Instance->SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		ERenderContext::s_Instance->Clear();
 
-        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix();
+        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix() * camera->GetViewMatrix();
 		s_Instance->fCameraPosition = camera->GetPosition();
 		//Make that better
 		s_Instance->fLightMap.clear();

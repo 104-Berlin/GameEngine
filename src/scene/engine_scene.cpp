@@ -13,12 +13,14 @@ const char* vertex_shader_src = ""
 "uniform mat4 vp_matrix = mat4(1.0);\n"
 
 "out vec2 UVS;\n"
+"out vec3 TransNormals;\n"
 
 "void main()\n"
 "{\n"
 
     "gl_Position = vp_matrix * vec4(position, 1.0);\n"
     "UVS = texCoord;\n"
+    "TransNormals = normal;\n"
 "}\n"
 "";
 
@@ -26,12 +28,13 @@ const char* fragment_shader_src = ""
 "#version 330 core\n"
 
 "in vec2 UVS;\n"
+"in vec3 TransNormals;\n"
 
 "out vec4 FinalColor;\n"
 
 "void main()\n"
 "{\n"
-    "FinalColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+    "FinalColor = vec4((TransNormals.x + 1) / 2, (TransNormals.y + 1) / 2, (TransNormals.z + 1) / 2, 1.0);\n"
 "}\n"
 "";
 
@@ -84,7 +87,6 @@ void EScene::RenderUI()
         ImGui::End();
     }
 
-    fActiveCamera->UpdateImGui();
 
     ImGui::Begin("SceneView##SCENEVIEW");
     // Render frame buffer
@@ -97,6 +99,8 @@ void EScene::RenderUI()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
     ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+    fActiveCamera->UpdateImGui();
+
     glBindTexture(GL_TEXTURE_2D, 0);
     ImGui::End();
 
