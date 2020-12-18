@@ -5,7 +5,7 @@ namespace Engine {
 
 	ERef<EShader> EShader::DefaultShader;
 
-	EShader::EShader(const EString& filePath, const EString& name) : Resource(name,filePath) 
+	EShader::EShader(const EString& filePath) : EResource(filePath) 
 	{
 
 	}

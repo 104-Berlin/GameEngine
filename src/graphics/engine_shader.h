@@ -2,10 +2,10 @@
 
 namespace Engine {
 	
-	class EShader : public Resource
+	class EShader : public EResource
 	{
 	public:
-		EShader(const EString& filePath, const EString& name = "Unknown");
+		EShader(const EString& filePath);
 
 		virtual ~EShader() {}
 
@@ -26,7 +26,7 @@ namespace Engine {
 
 		virtual int GetResourceSlot(const EString& name) const = 0;
 
-		virtual bool OnReload() = 0;
+		virtual bool OnLoad() = 0;
 
 		static ERef<EShader> Create(const EString& filePath);
 		static ERef<EShader> Create(const EString& vertexSource, const EString& fragmentSource);

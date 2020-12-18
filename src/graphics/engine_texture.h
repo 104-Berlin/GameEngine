@@ -9,10 +9,10 @@ namespace Engine {
 		RGBA = 2
 	};
 
-	class ETexture : public Resource
+	class ETexture : public EResource
 	{
 	public:
-		ETexture(const EString& filePath, const EString& name = "Unknown") : Resource(name, filePath) {}
+		ETexture(const EString& filePath) : EResource(filePath) {}
 		virtual ~ETexture() {  }
 
 		virtual void Bind(u32 slot) const = 0;
@@ -23,13 +23,13 @@ namespace Engine {
 		virtual u32 GetRendererID() const = 0;
 		
 
-		virtual bool OnReload() = 0;
+		virtual bool OnLoad() = 0;
 	};
 
 	class ETexture2D : public ETexture
 	{
 	public:
-		ETexture2D(const EString& filePath, const EString& name = "Unknown") : ETexture(filePath, name) {}
+		ETexture2D(const EString& filePath) : ETexture(filePath) {}
 
 		static ERef<ETexture2D> Create(const EString& path, bool srgb = false);
 		static ERef<ETexture2D> Create(ETextureFormat format, u32 width, u32 height);
@@ -38,7 +38,7 @@ namespace Engine {
 	class ETextureCube : public ETexture
 	{
 	public:
-		ETextureCube(const EString& filePath, const EString& name = "Unknown") : ETexture(filePath, name) {}
+		ETextureCube(const EString& filePath) : ETexture(filePath) {}
 
 		static ERef<ETextureCube> Create(const EString& path, bool srgb = false);
 	};

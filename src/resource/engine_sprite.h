@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class ESprite : public Resource
+    class ESprite : public EResource
     {
     public:
         struct EVertex
@@ -16,12 +16,12 @@ namespace Engine {
         ERef<EIndexBuffer>   fIndexBuffer;
         ERef<ETexture2D>     fTexture;
     public:
-        ESprite(const EString& name, const EString& path);
+        ESprite(const EString& path);
         ~ESprite();
 
         void Draw();
 
-        virtual bool OnReload() override;
+        virtual bool OnLoad() override;
     };
 
 }

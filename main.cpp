@@ -6,6 +6,9 @@ using namespace Engine;
 
 int main(int argc, char const *argv[])
 {   
+    EResource res(Path::Join("Hello", "world.rc"));
+    std::cout << res.GetNameIdent() << std::endl;
+
     EApplication::gApp();
 
     ERef<EScene> startScene = EMakeRef(EScene, "Start Scene");

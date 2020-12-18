@@ -9,6 +9,7 @@
 #include <chrono>
 #include <stdarg.h>
 #include <memory>
+#include <filesystem>
 
 
 typedef int_fast16_t i16;
@@ -79,40 +80,6 @@ typedef nlohmann::json  EJson;
 
 
 
-// ------------------------------------------------------------------
-///// TEMP
-class Resource
-{
-protected:
-    EString fName;
-    EString fFilePath;
-public:
-    Resource(const EString& name, const EString& filepath = "")
-        : fName(name), fFilePath(filepath)
-    {}
-
-    bool Reload(const EString& filepath = "")
-    {
-        if (!filepath.empty() && fFilePath.compare(filepath) != 0)
-        {
-            fFilePath = filepath;
-        }
-        if (!fFilePath.empty())
-        {
-            return OnReload();
-        }
-        return false;
-    }
-
-    virtual bool OnReload() = 0;
-
-
-    void SetName(const EString& name) { fName = name; }
-    const EString& GetName() const { return fName; }
-
-    const EString& GetFilePath() const { return fFilePath; }
-};
-
 // ------------------------------------------------------------------ 
 
 #include "predefined_classes.h"
@@ -126,6 +93,7 @@ public:
 
 
 #include "scene/engine_uuid.h"
+#include "resource/engine_resource.h"
 #include "properties/engine_json_converter.h"
 
 
@@ -159,7 +127,6 @@ public:
 
 
 #include "scene/object/engine_object.h"
-#include "resource/engine_resource.h"
 
 
 #include "ui/engine_ui.h"

@@ -64,7 +64,6 @@ namespace Engine {
 
 		if (ImGui::IsItemHovered())
 		{
-			std::cout << "Here we do something" << std::endl;
 			if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
 			{
 				MousePan(delta);

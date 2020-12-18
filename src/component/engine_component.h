@@ -4,7 +4,10 @@ namespace Engine {
 
     struct EUUIDComponent
     {
-        EUUID UUID;
+        REFLACTABLE(
+            (EUUID, UUID)
+        )
+        
         EUUIDComponent(const EUUIDComponent&) = default;
         EUUIDComponent(const EUUID& uuid)
             : UUID(uuid)
@@ -14,7 +17,10 @@ namespace Engine {
 
     struct ENameComponent
     {
-        EString Name = "";
+        REFLACTABLE(
+            (EString, Name)
+        )
+        
         ENameComponent()
             : Name("Unknown")
         {}
@@ -27,7 +33,9 @@ namespace Engine {
 
     struct EMeshComponent
     {
-        ERef<EMesh> Mesh;
+        REFLACTABLE(
+            (ERef<EMesh>, Mesh)
+        )
 
         EMeshComponent() = default;
         EMeshComponent(const EMeshComponent&) = default;

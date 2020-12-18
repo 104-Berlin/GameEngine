@@ -51,12 +51,12 @@ namespace Engine {
 		})
 	}
 
-	bool EOpenGLTexture2D::OnReload()
+	bool EOpenGLTexture2D::OnLoad()
 	{
 		int width, height, channels;
-		std::cout << "Loading texture " << fFilePath << std::endl;
+		std::cout << "Loading texture " << GetName() << std::endl;
 		stbi_set_flip_vertically_on_load(false);
-		fImageData = stbi_load(fFilePath.c_str(), &width, &height, &channels, STBI_rgb_alpha);
+		fImageData = stbi_load(GetFilePath().c_str(), &width, &height, &channels, STBI_rgb_alpha);
 
 		fWidth = width;
 		fHeight = height;
@@ -103,14 +103,13 @@ namespace Engine {
 	EOpenGLTextureCube::EOpenGLTextureCube(const EString& path, bool srgb)
 		: ETextureCube(path), fWidth(0), fHeight(0)
 	{
-		Reload(path);
 	}
 
-	bool EOpenGLTextureCube::OnReload()
+	bool EOpenGLTextureCube::OnLoad()
 	{
 		int width, height, channels;
 		stbi_set_flip_vertically_on_load(false);
-		fImageData = stbi_load(fFilePath.c_str(), &width, &height, &channels, STBI_rgb);
+		fImageData = stbi_load(GetFilePath().c_str(), &width, &height, &channels, STBI_rgb);
 
 		fWidth = width;
 		fHeight = height;

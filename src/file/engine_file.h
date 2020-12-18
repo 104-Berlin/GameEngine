@@ -28,7 +28,8 @@ namespace Engine {
         ~EFile();
 
         bool Exist() const;
-        const EString& GetFilePath() const;
+        EString GetFullPath() const;
+        const EString& GetPath() const;
         const EString& GetFileExtension() const;
         const EString& GetFileName() const;
     private:

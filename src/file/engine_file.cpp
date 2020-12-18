@@ -38,7 +38,12 @@ bool EFile::Exist() const
     return file.good();
 }
 
-const EString& EFile::GetFilePath() const
+EString EFile::GetFullPath() const
+{
+    return std::filesystem::absolute(std::filesystem::path(fFilePath));
+}
+
+const EString& EFile::GetPath() const
 {
     return fFilePath;
 }

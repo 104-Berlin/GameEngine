@@ -5,11 +5,10 @@ namespace Engine {
 	EOpenGLShader::EOpenGLShader(const EString& path)
 		: EShader(path), fRendererID(0), fUniformBufferSize(0)
 	{
-		Reload(path);
 	}
 
 	EOpenGLShader::EOpenGLShader(const EString& vertexSource, const EString& fragmentSource)
-		: EShader("", "Default Shader"), fUniformBufferSize(0)
+		: EShader("Default Shader"), fUniformBufferSize(0)
 	{
 		fShaderSource = "#shader vertex\n" + vertexSource + "#shader fragment\n" + fragmentSource;
 		CompileShader();
@@ -24,10 +23,10 @@ namespace Engine {
 			})
 	}
 
-	bool EOpenGLShader::OnReload()
+	bool EOpenGLShader::OnLoad()
 	{
 		if (fRendererID) glDeleteProgram(fRendererID);
-		LoadShaderFromFile(fFilePath);
+		LoadShaderFromFile(GetFilePath());
 
 		CompileShader();
 		return true;

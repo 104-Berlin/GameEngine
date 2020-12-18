@@ -3,13 +3,13 @@
 using namespace Engine;
 
 EMesh::EMesh(const EString& path)
-    : Resource(EFile(path).GetFileName(), path)
+    : EResource(path)
 {
 
 }
 
 EMesh::EMesh(const EString& name, const EVector<EVertex>& vertices, const EVector<u32>& indices)
-    : Resource(name, "")
+    : EResource(name + ".rc")
 {
     fVertexArray = EVertexArray::Create();
     ERef<EVertexBuffer> vb = EVertexBuffer::Create(vertices.data(), vertices.size() * sizeof(EVertex));
@@ -29,7 +29,7 @@ EMesh::~EMesh()
 
 }
 
-bool EMesh::OnReload()
+bool EMesh::OnLoad()
 {
     return false;
 }
