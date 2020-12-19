@@ -8,8 +8,7 @@ namespace Engine {
 		static void Init();
 
 		static void Begin(const ERef<ECamera>& camera, const ELightMap& lights);
-		static void Draw(const ERef<EVertexArray>& vertexArray, const ERef<EShader>& shader);
-		//static void Draw(EMeshInstance* mesh, EMaterialInstance* material, const glm::mat4& modelMatrix = glm::mat4(1.0f));
+		static void Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform = EMat4(1.0f));
 		static void* Submit(ERenderCommandFn fn, u32 size) { return s_Instance->fCommandQueue.Allocate(fn, size); }
 		static void End();
 
@@ -20,10 +19,14 @@ namespace Engine {
 		static ERenderer* s_Instance;
 
 		ERenderCommandQueue fCommandQueue;
+
+
 		//TEMP
-		glm::mat4 fViewProjectionMatrix;
-		EVec3 fCameraPosition;
-		ELightMap fLightMap;
+		ERef<EShader>		fShader;
+
+		glm::mat4 			fViewProjectionMatrix;
+		EVec3 				fCameraPosition;
+		ELightMap 			fLightMap;
 	};
 
 }

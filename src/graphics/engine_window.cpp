@@ -58,7 +58,6 @@ namespace Engine {
 		glfwSetWindowCloseCallback(fWindow, [](GLFWwindow* EWindow)
 		{
 			EWindowData& data = *(EWindowData*)glfwGetWindowUserPointer(EWindow);
-			
 		});
 
 		glfwSetKeyCallback(fWindow, [](GLFWwindow* window, int keycode, int scancode, int action, int mods)

@@ -108,3 +108,65 @@ void UI::Render()
         }
     })
 }
+
+
+void UI::RenderComponentPanel(EObject object)
+{
+    ImGui::Begin("Components##COMPONENTPANEL");
+
+    if (object)
+    {
+        if (object.HasComponent<ETransformComponent>())
+        {
+            ETransformComponent& tc = object.GetComponent<ETransformComponent>();
+            RenderInputField<ETransformComponent>("Transform Component", &tc);
+        }    
+    }
+    ImGui::End();
+}
+
+void UI::RenderInputField(const EString& label, bool* value) 
+{
+    if (!value) { return; }
+    ImGui::Checkbox(label.c_str(), value);
+}
+
+void UI::RenderInputField(const EString& label, float* value) 
+{
+    if (!value) { return; }
+    ImGui::InputFloat(label.c_str(), value);
+}
+
+void UI::RenderInputField(const EString& label, double* value) 
+{
+    if (!value) { return; }
+    ImGui::InputDouble(label.c_str(), value);
+}
+
+void UI::RenderInputField(const EString& label, i32* value) 
+{
+    if (!value) { return; }
+    ImGui::InputInt(label.c_str(), value);
+}
+
+void UI::RenderInputField(const EString& label, EVec3* value) 
+{
+    if (!value) { return; }
+    ImGui::DragFloat3(label.c_str(), &value->x);
+}
+
+void UI::RenderInputField(const EString& label, EVec4* value) 
+{
+    if (!value) { return; }
+    ImGui::DragFloat4(label.c_str(), &value->x);
+}
+
+void UI::RenderInputField(const EString& label, EString* value) 
+{
+    if (!value) { return; }
+
+    size_t bufferSize = (value->length() + 10) * sizeof(char);
+    char* buffer = (char*) malloc(bufferSize);
+    strcpy(buffer, value->c_str());
+    ImGui::InputText(label.c_str(), buffer, bufferSize);
+}

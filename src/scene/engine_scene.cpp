@@ -3,46 +3,11 @@
 using namespace Engine;
 
 
-const char* vertex_shader_src = ""
-"#version 330 core\n"
-
-"layout(location = 0) in vec3 position;\n"
-"layout(location = 1) in vec3 normal;\n"
-"layout(location = 2) in vec2 texCoord;\n"
-
-"uniform mat4 vp_matrix = mat4(1.0);\n"
-
-"out vec2 UVS;\n"
-"out vec3 TransNormals;\n"
-
-"void main()\n"
-"{\n"
-
-    "gl_Position = vp_matrix * vec4(position, 1.0);\n"
-    "UVS = texCoord;\n"
-    "TransNormals = normal;\n"
-"}\n"
-"";
-
-const char* fragment_shader_src = ""
-"#version 330 core\n"
-
-"in vec2 UVS;\n"
-"in vec3 TransNormals;\n"
-
-"out vec4 FinalColor;\n"
-
-"void main()\n"
-"{\n"
-    "FinalColor = vec4((TransNormals.x + 1) / 2, (TransNormals.y + 1) / 2, (TransNormals.z + 1) / 2, 1.0);\n"
-"}\n"
-"";
 
 EScene::EScene(const EString& name)
-    : fActiveCamera(nullptr), fSceneFrameBuffer(nullptr), fName(name), fViewPortWidth(1270), fViewPortHeight(720)
+    : fActiveCamera(nullptr), fSceneFrameBuffer(nullptr), fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
 
 {
-    fShader = EShader::Create(vertex_shader_src, fragment_shader_src);
 }
 
 EScene::~EScene()
@@ -63,13 +28,14 @@ void EScene::Render()
     
     // Render components
     ERenderer::Begin(fActiveCamera, {});
-    auto view = fRegistry.view<EMeshComponent>();
+    auto view = fRegistry.group<EMeshComponent, ETransformComponent>();
     for (EEntity entity : view)
     {
         EMeshComponent meshComponent = view.get<EMeshComponent>(entity);
+        ETransformComponent transformComponent = view.get<ETransformComponent>(entity);
         if (meshComponent.Mesh)
         {
-            ERenderer::Draw(meshComponent.Mesh->fVertexArray, fShader);
+            ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
         }
 
     }
@@ -112,7 +78,10 @@ void EScene::RenderUI()
         if (object.HasComponent<ENameComponent>())
         {
             ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
-            ImGui::Selectable(nameComponent.Name.c_str());
+            if (ImGui::Selectable(nameComponent.Name.c_str()))
+            {
+                this->fSelectionContext = handle;
+            }
         }
         else
         {
@@ -120,6 +89,9 @@ void EScene::RenderUI()
         }
     });
     ImGui::End();
+
+    
+    UI::RenderComponentPanel(EObject(fSelectionContext, this));
 }
 
 void EScene::Update(float delta)
@@ -131,6 +103,7 @@ EObject EScene::CreateObject()
     EEntity handle = fRegistry.create();
     EObject object(handle, this);
     object.AddComponent<EUUIDComponent>(EUUID().CreateNew());
+    object.AddComponent<ETransformComponent>();
     return object;
 }
 

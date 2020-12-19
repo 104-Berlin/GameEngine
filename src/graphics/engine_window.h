@@ -47,7 +47,7 @@ namespace Engine {
 			u32 height;
 			// EVENT CALLBACK FUCNITON
 
-			
+						
 
 			/////////////////////////////////////////////
 			/////TEMP JUST FOR THE CAMERA AT FIRST///////
@@ -59,10 +59,6 @@ namespace Engine {
 			bool middlePress;
 		};
 		EWindowData fData;
-
-
-
-		
 	};
 
 }

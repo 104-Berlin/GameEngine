@@ -7,11 +7,11 @@ namespace Engine {
     private:
         EString                             fName;
         ERef<ECamera>                       fActiveCamera;
+        EEntity                             fSelectionContext;
 
 
         // TEMP
         ERef<EFrameBuffer>                  fSceneFrameBuffer;
-        ERef<EShader>                       fShader;
         float                               fViewPortWidth;
         float                               fViewPortHeight;
 

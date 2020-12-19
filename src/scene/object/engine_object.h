@@ -5,9 +5,10 @@ namespace Engine {
     class EObject
     {
     private:
-        EScene*    fScene;
-        EEntity             fHandle;
+        EScene*             fScene = nullptr;
+        EEntity             fHandle = entt::null;
     public:
+        EObject() = default;
         EObject(EEntity handle, EScene* scene);
         virtual ~EObject() = default;
 
@@ -34,6 +35,11 @@ namespace Engine {
         {
             fScene->fRegistry.destroy(fHandle);
         }       
+
+        operator bool () const
+        {
+            return fHandle != entt::null && fScene;
+        }
 
         void FromJsObject(const EJson& ref);
         void SetJsObject(EJson& ref) const;  

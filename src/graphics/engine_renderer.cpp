@@ -5,12 +5,45 @@ namespace Engine {
 	ERenderer* ERenderer::s_Instance = nullptr;
 
 
+const char* vertex_shader_src = ""
+"#version 330 core\n"
+
+"layout(location = 0) in vec3 position;\n"
+"layout(location = 1) in vec3 normal;\n"
+"layout(location = 2) in vec2 texCoord;\n"
+
+"uniform mat4 vp_matrix = mat4(1.0);\n"
+"uniform mat4 ml_matrix = mat4(1.0);\n"
+
+"out vec2 UVS;\n"
+"out vec3 TransNormals;\n"
+
+"void main()\n"
+"{\n"
+
+	"vec4 worldPosition = ml_matrix * vec4(position, 1.0);\n"
+    "gl_Position = vp_matrix * worldPosition;\n"
+    "UVS = texCoord;\n"
+    "TransNormals = normal;\n"
+"}\n"
+"";
+
+const char* fragment_shader_src = ""
+"#version 330 core\n"
+
+"in vec2 UVS;\n"
+"in vec3 TransNormals;\n"
+
+"out vec4 FinalColor;\n"
+
+"void main()\n"
+"{\n"
+    "FinalColor = vec4((TransNormals.x + 1) / 2, (TransNormals.y + 1) / 2, (TransNormals.z + 1) / 2, 1.0);\n"
+"}\n"
+"";
+
 	void CreateDefaults()
 	{
-		
-
-
-
 		/*Shader::DefaultShader = Shader::Create(vertexSource, fragmentSource);
 		Material::DefaultMaterial = std::shared_ptr<Material>(new Material(Shader::DefaultShader));*/
 	}
@@ -18,6 +51,8 @@ namespace Engine {
 	void ERenderer::Init()
 	{
 		s_Instance = new ERenderer();
+
+		s_Instance->fShader = EShader::Create(vertex_shader_src, fragment_shader_src);
 
 		CreateDefaults();
 	}
@@ -34,17 +69,23 @@ namespace Engine {
 		s_Instance->fLightMap = lightMap;
 	}
 
-	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray, const ERef<EShader>& shader)
+	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform)
 	{
         if (!s_Instance)
 		{
 			std::cout << "No render instance set. Cant draw anything" << std::endl;
 			return;
 		}
+		if (!s_Instance->fShader)
+		{
+			std::cout << "The renderer has no shader. To render to" << std::endl;
+			return;
+		}
 
+		s_Instance->fShader->Bind();
+		s_Instance->fShader->SetUniformMat4("vp_matrix", s_Instance->fViewProjectionMatrix);
+		s_Instance->fShader->SetUniformMat4("ml_matrix", transform);
 
-		shader->Bind();
-		shader->SetUniformMat4("vp_matrix", s_Instance->fViewProjectionMatrix);
 		vertexArray->Bind();
 
 		u32 indexCount = vertexArray->GetIndexBuffer()->GetCount();
