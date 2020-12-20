@@ -82,6 +82,7 @@ int main(int argc, char const *argv[])
 
     EObject object1 = startScene->CreateObject();
     object1.AddComponent<ENameComponent>("Object 1");
+    object1.AddComponent<TestComponent>();
     object1.AddComponent<EMeshComponent>();
     object1.GetComponent<EMeshComponent>().Mesh = EMakeRef(EMesh, "TestMesh", vertices, indices);
 

@@ -2,6 +2,20 @@
 
 namespace Engine {
 
+    struct TestComponent
+    {
+        REFLACTABLE(
+            (bool, Boolean),
+            (float, Float),
+            (double, Double),
+            (EVec3, Vector3),
+            (EVec4, Vector4),
+            (EString, StringValue)
+        )
+        TestComponent() = default;
+        TestComponent(const TestComponent&) = default;
+    };
+
     struct EUUIDComponent
     {
         REFLACTABLE(
@@ -65,6 +79,17 @@ namespace Engine {
         EMeshComponent() = default;
         EMeshComponent(const EMeshComponent&) = default;
 
+    };
+
+    struct ECameraComponent
+    {
+        REFLACTABLE(
+            (ERef<ECamera>, Camera),
+            (bool, Active)
+        )
+
+        ECameraComponent(ERef<ECamera> camera) : Camera(camera){};
+        ECameraComponent(const ECameraComponent&) = default;
     };
 
 }

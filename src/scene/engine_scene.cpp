@@ -92,6 +92,7 @@ void EScene::RenderUI()
 
     
     UI::RenderComponentPanel(EObject(fSelectionContext, this));
+
 }
 
 void EScene::Update(float delta)

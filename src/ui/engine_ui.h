@@ -15,6 +15,11 @@ namespace Engine {
 
         struct InputFieldIter
         {
+        private:
+            EString fLabel;
+        public:
+            InputFieldIter(const EString& label) : fLabel(label) {}
+
             template <class Obj>
             void convert(Obj* obj)
             {
@@ -37,8 +42,11 @@ namespace Engine {
         auto RenderInputField(const EString& label, T* object)
         -> decltype(T::_reflect_arg_count, void())
         {
-            InputFieldIter iter;
-            iter.convert(object);
+            InputFieldIter iter(label);
+            if (ImGui::CollapsingHeader(label.c_str()))
+            {
+                iter.convert(object);
+            }
         }
 
         template <class Obj, class Field>

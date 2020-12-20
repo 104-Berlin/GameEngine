@@ -17,7 +17,6 @@ namespace Engine {
 
         // Entities
         entt::registry                      fRegistry;
-
     public:
         EScene(const EString& name);
         ~EScene();
