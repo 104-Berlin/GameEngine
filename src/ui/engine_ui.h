@@ -80,7 +80,7 @@ namespace Engine {
         static void RenderInputField(const EString& label, EProperty<EVec3>& value) 
         {
             EVec3 val = value.GetValue();
-            if (ImGui::DragFloat3(label.c_str(), &val.x))
+            if (ImGui::DragFloat3(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
             {
                 value.SetValue(val);
             }
@@ -89,7 +89,7 @@ namespace Engine {
         static void RenderInputField(const EString& label, EProperty<EVec4>& value) 
         {
             EVec4 val = value.GetValue();
-            if (ImGui::DragFloat4(label.c_str(), &val.x))
+            if (ImGui::DragFloat4(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
             {
                 value.SetValue(val);
             }
@@ -134,6 +134,13 @@ namespace Engine {
 
 
         void RenderComponentPanel(EObject object);
+
+
+
+
+        // Resource manager
+
+        void RenderResourcePanel(EResourceManager& resourceManager);
 
     }
 

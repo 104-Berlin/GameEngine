@@ -9,6 +9,7 @@ namespace Engine {
         ERef<EScene>     fActiveScene;
         bool             fRunning;
 
+        EResourceManager fResourceManager;
         // TEMP
         ERef<ECamera>     fCamera;
     public:

@@ -73,6 +73,7 @@ add_executable(Engine
                         src/scene/engine_scene.cpp
                         src/component/engine_component.cpp
                         src/resource/engine_resource.cpp
+                        src/resource/engine_resource_manager.cpp
                         src/resource/engine_mesh.cpp
                         src/resource/engine_sprite.cpp
                         src/ui/engine_ui.cpp

@@ -53,6 +53,13 @@ const EString& EFile::GetFileExtension() const
     return fFileExtension;
 }
 
+EString EFile::GetFileAsString() 
+{
+    std::ifstream t(GetFullPath());
+    return EString((std::istreambuf_iterator<char>(t)),
+                 std::istreambuf_iterator<char>());
+}
+
 const EString& EFile::GetFileName() const
 {
     return fFileName;

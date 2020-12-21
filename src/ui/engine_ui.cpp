@@ -140,3 +140,13 @@ void UI::RenderComponentPanel(EObject object)
     }
     ImGui::End();
 }
+
+void UI::RenderResourcePanel(EResourceManager& resourceManager)
+{
+    ImGui::Begin("Resource Manager##RESOURCEMANAGER");
+    for (ERef<EResource> res : resourceManager)
+    {
+        ImGui::Selectable(res->GetNameIdent().c_str(), false);
+    }
+    ImGui::End();
+}

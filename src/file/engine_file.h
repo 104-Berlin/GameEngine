@@ -28,10 +28,29 @@ namespace Engine {
         ~EFile();
 
         bool Exist() const;
+
         EString GetFullPath() const;
         const EString& GetPath() const;
         const EString& GetFileExtension() const;
         const EString& GetFileName() const;
+
+
+        template <typename ...T>
+        bool HasExtension(const T&... extensions) const
+        {
+            const EString& thisExtension = GetFileExtension();
+            std::vector<const char*> strings = {extensions...};
+            for (const char* extension : strings)
+            {
+                if (thisExtension.compare(extension) == 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        EString GetFileAsString();
     private:
         void CreatePathStrings();
     };

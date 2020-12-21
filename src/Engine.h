@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -10,6 +12,8 @@
 #include <stdarg.h>
 #include <memory>
 #include <filesystem>
+#include <queue>
+#include <thread>
 
 
 typedef int_fast16_t i16;
@@ -94,6 +98,8 @@ typedef nlohmann::json  EJson;
 
 #include "scene/engine_uuid.h"
 #include "resource/engine_resource.h"
+#include "resource/engine_resource_loader.h"
+#include "resource/engine_resource_manager.h"
 #include "properties/engine_json_converter.h"
 
 

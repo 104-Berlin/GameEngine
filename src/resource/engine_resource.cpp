@@ -23,9 +23,9 @@ const EString& EResource::GetName() const
 
 EString EResource::GetNameIdent() const
 {
-    EString result = fFile.GetPath();
-    size_t root_dir_len = EString(ROOT_RES_DIR).length();
-    return result.substr(root_dir_len, result.length() - (fFile.GetFileExtension().length() + root_dir_len + 1));
+    EString result = GetFilePath();
+    size_t rootDirEnd = result.find_first_of(ROOT_RES_DIR);
+    return result.substr(rootDirEnd, result.length() - rootDirEnd);
 }
 
 bool EResource::Load() 

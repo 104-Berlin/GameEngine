@@ -24,6 +24,8 @@ EApplication::~EApplication()
 void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
+    // For now in edit mode
+    fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
     if (!fActiveScene)
     {
         fActiveScene = EMakeRef(EScene, "Scene 1");
@@ -90,7 +92,9 @@ void EApplication::RenderImGui()
 
     IN_RENDER_S({
 
+        UI::RenderResourcePanel(self->fResourceManager);
         
+
         if (self->fActiveScene)
         {
             self->fActiveScene->RenderUI();
