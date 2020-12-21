@@ -67,6 +67,7 @@ add_executable(Engine
                         src/graphics/engine_texture.cpp
                         src/graphics/engine_window.cpp
                         src/properties/engine_json_converter.cpp
+                        src/properties/engine_property.cpp
                         src/scene/engine_uuid.cpp
                         src/scene/object/engine_object.cpp
                         src/scene/engine_scene.cpp

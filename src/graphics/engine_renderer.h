@@ -6,6 +6,7 @@ namespace Engine {
 	{
 	public:
 		static void Init();
+		static void CleanUp();
 
 		static void Begin(const ERef<ECamera>& camera, const ELightMap& lights);
 		static void Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform = EMat4(1.0f));
@@ -15,6 +16,7 @@ namespace Engine {
 		static ERenderer* Get() { return s_Instance; }
 
 		static void WaitAndRender();
+
 	private:
 		static ERenderer* s_Instance;
 

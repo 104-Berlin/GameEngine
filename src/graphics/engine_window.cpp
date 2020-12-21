@@ -125,6 +125,7 @@ namespace Engine {
 	EWindow::~EWindow()
 	{
 		glfwTerminate();
+		ERenderer::CleanUp();
 	}
 
 	void EWindow::Update() const

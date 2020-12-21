@@ -100,6 +100,11 @@ void EApplication::RenderImGui()
     UI::Render();
 }
 
+void EApplication::CleanUp() 
+{
+    ERenderer::CleanUp();
+}
+
 const ERef<EScene>& EApplication::GetActiveScene() const
 {
     return fActiveScene;

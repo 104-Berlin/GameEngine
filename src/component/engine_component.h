@@ -5,26 +5,28 @@ namespace Engine {
     struct TestComponent
     {
         REFLACTABLE(
-            (bool, Boolean),
-            (float, Float),
-            (double, Double),
-            (EVec3, Vector3),
-            (EVec4, Vector4),
-            (EString, StringValue)
+            (EProperty<bool>, Boolean),
+            (EProperty<float>, Float),
+            (EProperty<double>, Double),
+            (EProperty<EVec3>, Vector3),
+            (EProperty<EVec4>, Vector4),
+            (EProperty<EString>, StringValue)
         )
-        TestComponent() = default;
+        TestComponent()
+            : Boolean("Boolean"), Float("Float"), Double("Double"), Vector3("Vector3"), Vector4("Vector4"), StringValue("StringValue")
+            {}
         TestComponent(const TestComponent&) = default;
     };
 
     struct EUUIDComponent
     {
         REFLACTABLE(
-            (EUUID, UUID)
+            (EProperty<EUUID>, UUID)
         )
         
         EUUIDComponent(const EUUIDComponent&) = default;
         EUUIDComponent(const EUUID& uuid)
-            : UUID(uuid)
+            : UUID("UUID", uuid)
         {}
         
     };
@@ -32,13 +34,13 @@ namespace Engine {
     struct ETransformComponent
     {
         REFLACTABLE(
-            (EVec3, Position),
-            (EVec3, Rotation),
-            (EVec3, Scale)
+            (EProperty<EVec3>, Position),
+            (EProperty<EVec3>, Rotation),
+            (EProperty<EVec3>, Scale)
         )
 
         ETransformComponent(const EVec3& position = EVec3(0.0f, 0.0f, 0.0f), const EVec3& rotation = EVec3(0.0f, 0.0f, 0.0f), const EVec3& scale = EVec3(1.0f, 1.0f, 1.0f))
-            : Position(position), Rotation(rotation), Scale(scale)
+            : Position("Position", position), Rotation("Rotation", rotation), Scale("Scale", scale)
         {}
         ETransformComponent(const ETransformComponent&) = default;
 
@@ -46,9 +48,9 @@ namespace Engine {
         operator EMat4 () const
         {
             EMat4 result = EMat4(1.0f);
-            glm::quat quat = glm::quat(Rotation);
-            result *= glm::translate(EMat4(1.0f), Position);
-            result *= glm::scale(EMat4(1.0f), Scale);
+            glm::quat quat = glm::quat(Rotation.GetValue());
+            result *= glm::translate(EMat4(1.0f), Position.GetValue());
+            result *= glm::scale(EMat4(1.0f), Scale.GetValue());
             result *= glm::toMat4(glm::conjugate(quat));
             return result;
         }
@@ -57,16 +59,16 @@ namespace Engine {
     struct ENameComponent
     {
         REFLACTABLE(
-            (EString, Name)
+            (EProperty<EString>, Name)
         )
         
         ENameComponent()
-            : Name("Unknown")
+            : Name("Name", "Unknown")
         {}
         ENameComponent(const ENameComponent&) = default;
 
         ENameComponent(const EString& name)
-            : Name(name)
+            : Name("Name", name)
         {}
     };
 
@@ -85,10 +87,10 @@ namespace Engine {
     {
         REFLACTABLE(
             (ERef<ECamera>, Camera),
-            (bool, Active)
+            (EProperty<bool>, Active)
         )
 
-        ECameraComponent(ERef<ECamera> camera) : Camera(camera){};
+        ECameraComponent(ERef<ECamera> camera) : Camera(camera), Active("Active"){};
         ECameraComponent(const ECameraComponent&) = default;
     };
 

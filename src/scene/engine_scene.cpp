@@ -78,7 +78,7 @@ void EScene::RenderUI()
         if (object.HasComponent<ENameComponent>())
         {
             ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
-            if (ImGui::Selectable(nameComponent.Name.c_str()))
+            if (ImGui::Selectable(nameComponent.Name.GetValue().c_str()))
             {
                 this->fSelectionContext = handle;
             }

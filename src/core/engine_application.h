@@ -20,6 +20,7 @@ namespace Engine {
         void Update(float delta);
         void Render();
         void RenderImGui();
+        void CleanUp();
 
         const ERef<EScene>& GetActiveScene() const;
     private:

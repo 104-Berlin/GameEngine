@@ -97,7 +97,7 @@ typedef nlohmann::json  EJson;
 #include "properties/engine_json_converter.h"
 
 
-
+#include "properties/engine_property.h"
 
 
 #include "graphics/engine_window.h"

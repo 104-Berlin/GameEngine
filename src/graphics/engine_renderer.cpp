@@ -56,6 +56,15 @@ const char* fragment_shader_src = ""
 
 		CreateDefaults();
 	}
+	
+	void ERenderer::CleanUp() 
+	{
+		if (s_Instance)
+		{
+			delete s_Instance;
+			s_Instance = nullptr;
+		}
+	}
 
 	void ERenderer::Begin(const ERef<ECamera>& camera, const ELightMap& lightMap)
 	{

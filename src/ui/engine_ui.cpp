@@ -6,24 +6,13 @@ using namespace Engine;
 
 #include <imgui_internal.h>
 
-bool IsItemActiveLastFrame()
+bool UI::IsItemActiveLastFrame() 
 {
     ImGuiContext& g = *GImGui;
     if (g.ActiveIdPreviousFrame)
         return g.ActiveIdPreviousFrame == g.CurrentWindow->DC.LastItemId;
     return false;
 }
-
-bool IsItemJustReleased()
-{
-    return IsItemActiveLastFrame() && !ImGui::IsItemActive();
-}
-
-
-
-
-
-
 
 
 void UI::Init(EWindow& window)
@@ -150,75 +139,4 @@ void UI::RenderComponentPanel(EObject object)
         }
     }
     ImGui::End();
-}
-
-void UI::RenderInputField(const EString& label, bool* value) 
-{
-    if (!value) { return; }
-    if (ImGui::Checkbox(label.c_str(), value))
-    {
-        std::cout << "Changed checkbox" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, float* value) 
-{
-    if (!value) { return; }
-    ImGui::DragFloat(label.c_str(), value);
-    if (IsItemJustReleased())
-    {
-        std::cout << "Float Changed" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, double* value) 
-{
-    if (!value) { return; }
-    if (ImGui::InputDouble(label.c_str(), value, 0.0f, 0.0f, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
-    {   
-        std::cout << "Double changed" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, i32* value) 
-{
-    if (!value) { return; }
-    ImGui::DragInt(label.c_str(), value);
-    if (IsItemJustReleased())
-    {
-        std::cout << "Integer changed" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, EVec3* value) 
-{
-    if (!value) { return; }
-    ImGui::DragFloat3(label.c_str(), &value->x);
-    if (IsItemJustReleased())
-    {
-        std::cout << "Vector 3 changed" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, EVec4* value) 
-{
-    if (!value) { return; }
-    ImGui::DragFloat4(label.c_str(), &value->x);
-    if (IsItemJustReleased())
-    {
-        std::cout << "Vector 4 changed" << std::endl;
-    }
-}
-
-void UI::RenderInputField(const EString& label, EString* value) 
-{
-    if (!value) { return; }
-
-    size_t bufferSize = (value->length() + 10) * sizeof(char);
-    char* buffer = (char*) malloc(bufferSize);
-    strcpy(buffer, value->c_str());
-    if (ImGui::InputText(label.c_str(), buffer, bufferSize, ImGuiInputTextFlags_EnterReturnsTrue))
-    {
-        std::cout << "String changed" << std::endl;
-    }
 }
