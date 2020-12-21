@@ -4,8 +4,9 @@ namespace Engine {
 
     class EResourceManager
     {
+        using ResourceMap = EUnorderedMap<EString, ERef<EResource>>;
     private:
-        EVector<ERef<EResource>>    fLoadedResources;
+        ResourceMap                 fLoadedResources;
         std::mutex                  fLoadedMutex;
 
         std::queue<EString>         fLoadingQueue;
@@ -22,10 +23,17 @@ namespace Engine {
         void LoadingFunc();
         void AddLoadedResource(ERef<EResource> resource);
 
-        EVector<ERef<EResource>>::iterator begin();
-        EVector<ERef<EResource>>::const_iterator begin() const;
-        EVector<ERef<EResource>>::iterator end();
-        EVector<ERef<EResource>>::const_iterator end() const;
+        template <typename T>
+        ERef<T> GetResource(const EString& fileIdent)
+        {
+            std::lock_guard<std::mutex> guard(fLoadedMutex);
+            return std::static_pointer_cast<T>(fLoadedResources.at(fileIdent));
+        }
+
+        ResourceMap::iterator begin();
+        ResourceMap::const_iterator begin() const;
+        ResourceMap::iterator end();
+        ResourceMap::const_iterator end() const;
 
         static EString GetResourceTypeFromFile(const EString& filePath);
     };

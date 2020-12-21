@@ -23,6 +23,8 @@ namespace Engine {
         void RenderImGui();
         void CleanUp();
 
+        EResourceManager& GetResourceManager();
+
         const ERef<EScene>& GetActiveScene() const;
     private:
         void Run();

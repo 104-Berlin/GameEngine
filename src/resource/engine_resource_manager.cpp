@@ -59,7 +59,7 @@ void EResourceManager::LoadingFunc()
             }
 
             // Add resource to array
-            if (newResource)
+            if (newResource && newResource->Load())
             {
                 AddLoadedResource(newResource);
             }
@@ -71,25 +71,26 @@ void EResourceManager::LoadingFunc()
 void EResourceManager::AddLoadedResource(ERef<EResource> resource) 
 {
     std::lock_guard<std::mutex> guard(fLoadedMutex);
-    fLoadedResources.push_back(resource);
+    std::cout << "Finished loading resource \"" << resource->GetNameIdent() << "\"" << std::endl;
+    fLoadedResources[resource->GetNameIdent()] = resource;
 }
 
-EVector<ERef<EResource>>::iterator EResourceManager::begin() 
+EResourceManager::ResourceMap::iterator EResourceManager::begin() 
 {
     return fLoadedResources.begin();
 }
 
-EVector<ERef<EResource>>::const_iterator EResourceManager::begin() const
+EResourceManager::ResourceMap::const_iterator EResourceManager::begin() const
 {
     return fLoadedResources.begin();
 }
 
-EVector<ERef<EResource>>::iterator EResourceManager::end() 
+EResourceManager::ResourceMap::iterator EResourceManager::end() 
 {
     return fLoadedResources.end();
 }
 
-EVector<ERef<EResource>>::const_iterator EResourceManager::end() const
+EResourceManager::ResourceMap::const_iterator EResourceManager::end() const
 {
     return fLoadedResources.end();
 }
@@ -97,7 +98,6 @@ EVector<ERef<EResource>>::const_iterator EResourceManager::end() const
 EString EResourceManager::GetResourceTypeFromFile(const EString& filePath) 
 {
     EFile file(filePath);
-    if (!file.Exist()) {return "NON EXISTING FILE"; }
 
     if (file.HasExtension("rc")) // Own Engine resource format. Read type from that
     {

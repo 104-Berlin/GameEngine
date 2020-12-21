@@ -28,12 +28,12 @@ namespace Engine {
 
 	//Remove srgb??
 	EOpenGLTexture2D::EOpenGLTexture2D(const EString& path, bool srgb)
-		: ETexture2D(path)
+		: ETexture2D(path), fRendererID(0)
 	{
 	}
 
 	EOpenGLTexture2D::EOpenGLTexture2D(ETextureFormat format, u32 width, u32 height)
-		: ETexture2D(""), fFormat(format), fWidth(width), fHeight(height)
+		: ETexture2D(""), fFormat(format), fWidth(width), fHeight(height), fRendererID(0)
 	{
 		IN_RENDER_S({
 			glCall(glGenTextures(1, &self->fRendererID));

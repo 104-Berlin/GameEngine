@@ -6,9 +6,9 @@ using namespace Engine;
 #define ROOT_RES_DIR "res/"
 
 EResource::EResource(const EString& path) 
-    : fFile(ROOT_RES_DIR + path)
+    : fFile(path)
 {
-    Load();
+    
 }
 
 EString EResource::GetFilePath() const
@@ -24,8 +24,15 @@ const EString& EResource::GetName() const
 EString EResource::GetNameIdent() const
 {
     EString result = GetFilePath();
-    size_t rootDirEnd = result.find_first_of(ROOT_RES_DIR);
-    return result.substr(rootDirEnd, result.length() - rootDirEnd);
+    size_t rootDirEnd = result.find(ROOT_RES_DIR);
+    if (rootDirEnd != EString::npos)
+    {
+        return result.substr(rootDirEnd + std::strlen(ROOT_RES_DIR), result.length() - (rootDirEnd + std::strlen(ROOT_RES_DIR)));
+    }
+    else
+    {
+        return result;
+    }
 }
 
 bool EResource::Load() 

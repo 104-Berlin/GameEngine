@@ -109,6 +109,11 @@ void EApplication::CleanUp()
     ERenderer::CleanUp();
 }
 
+EResourceManager& EApplication::GetResourceManager() 
+{
+    return fResourceManager;
+}
+
 const ERef<EScene>& EApplication::GetActiveScene() const
 {
     return fActiveScene;

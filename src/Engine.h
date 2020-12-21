@@ -34,6 +34,9 @@ using EVector = std::vector<T>;
 template <typename K, typename V>
 using EMap = std::map<K, V>;
 
+template <typename K, typename V>
+using EUnorderedMap = std::unordered_map<K, V>;
+
 
 template <typename T>
 using EScope = std::unique_ptr<T>;

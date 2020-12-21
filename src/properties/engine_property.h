@@ -161,7 +161,7 @@ namespace Engine {
     class EObjectProperty : public EBaseProperty
     {
     private:
-        ObjectType*     fObjectValue;
+        ERef<ObjectType>     fObjectValue;
     public:
         EObjectProperty(const EString& name)
             : EBaseProperty(name)
@@ -169,7 +169,7 @@ namespace Engine {
             fObjectValue = nullptr;
         }
 
-        void SetValue(ObjectType* object)
+        void SetValue(ERef<ObjectType> object)
         {
             if (object == fObjectValue) { return; }
 
@@ -187,7 +187,7 @@ namespace Engine {
             }
         }
 
-        ObjectType* GetValue() const
+        ERef<ObjectType> GetValue() const
         {
             return fObjectValue;
         }
@@ -196,9 +196,9 @@ namespace Engine {
         {
             if (JSHelper::HasParam(ref, GetPropertyName()))
             {
-                ObjectType** newValue = new ObjectType*;
-                JSHelper::ConvertObject(ref[GetPropertyName()], newValue);
-                SetValue(*newValue);
+                //ObjectType** newValue = new ObjectType*;
+                //JSHelper::ConvertObject(ref[GetPropertyName()], newValue);
+                //SetValue(*newValue);
             }
         }
 
@@ -206,7 +206,7 @@ namespace Engine {
         {
             if (fObjectValue)
             {
-                fObjectValue->SetJsObject(ref[GetPropertyName()]);
+                //fObjectValue->SetJsObject(ref[GetPropertyName()]);
             }
         }
     };
