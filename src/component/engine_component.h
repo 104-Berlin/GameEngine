@@ -87,11 +87,11 @@ namespace Engine {
     struct ECameraComponent
     {
         REFLACTABLE(
-            (ERef<ECamera>, Camera),
+            (EObjectProperty<ECamera>, Camera),
             (EProperty<bool>, Active)
         )
 
-        ECameraComponent(ERef<ECamera> camera) : Camera(camera), Active("Active"){};
+        ECameraComponent(ERef<ECamera> camera) : Camera("Camera", camera), Active("Active"){};
         ECameraComponent(const ECameraComponent&) = default;
     };
 

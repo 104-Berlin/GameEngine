@@ -6,7 +6,6 @@ namespace Engine {
     {
     private:
         EString                             fName;
-        ERef<ECamera>                       fActiveCamera;
         EEntity                             fSelectionContext;
 
 
@@ -20,9 +19,6 @@ namespace Engine {
     public:
         EScene(const EString& name);
         ~EScene();
-
-        void SetActiveCamera(const ERef<ECamera>& camera);
-        const ERef<ECamera>& GetActiveCamera() const;
 
         EObject CreateObject();
 

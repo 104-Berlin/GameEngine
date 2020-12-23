@@ -42,7 +42,7 @@ void EResourceManager::LoadingFunc()
                 fLoadingQueue.pop();
             }
             EString resourceType = GetResourceTypeFromFile(resourcePath);
-            // throw error when resource type ?? "NON EXISTING FILE" or "UNKOWN"
+            // throw error when resource type "UNKOWN"
 
             ERef<EResource> newResource = nullptr;
             if (resourceType == typeid(ETexture2D).name())

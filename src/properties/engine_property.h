@@ -75,6 +75,11 @@ namespace Engine {
         {
             ref[fName] = JSHelper::ConvertValue((const Type&) *fValue);
         }
+
+        operator const Type&() const
+        {
+            return *fValue;
+        }
     };
 
     template <typename ListType>
@@ -163,10 +168,10 @@ namespace Engine {
     private:
         ERef<ObjectType>     fObjectValue;
     public:
-        EObjectProperty(const EString& name)
+        EObjectProperty(const EString& name, ERef<ObjectType> initValue = nullptr)
             : EBaseProperty(name)
         {
-            fObjectValue = nullptr;
+            fObjectValue = initValue;
         }
 
         void SetValue(ERef<ObjectType> object)
@@ -208,6 +213,11 @@ namespace Engine {
             {
                 //fObjectValue->SetJsObject(ref[GetPropertyName()]);
             }
+        }
+
+        operator ERef<ObjectType>()
+        {
+            return fObjectValue;
         }
     };
 
