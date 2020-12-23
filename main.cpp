@@ -80,11 +80,15 @@ int main(int argc, char const *argv[])
         2, 3, 0
     };
 
+    EObject cameraObject = startScene->CreateObject();
+    cameraObject.AddComponent<ENameComponent>("Camera Object");
+    cameraObject.AddComponent<ECameraComponent>(true);
+
     EObject object1 = startScene->CreateObject();
     object1.AddComponent<ENameComponent>("Object 1");
     object1.AddComponent<TestComponent>();
     object1.AddComponent<EMeshComponent>();
-    object1.GetComponent<EMeshComponent>().Mesh = EMakeRef(EMesh, "TestMesh", vertices, indices);
+    object1.GetComponent<EMeshComponent>().Mesh.SetValue(EMakeRef(EMesh, "TestMesh", vertices, indices));
 
     EApplication::gApp().Start(startScene);
     return 0;

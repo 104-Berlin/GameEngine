@@ -26,13 +26,14 @@
 
 #define LR_GET_FIELD(type, name) type name
 #define LR_GET_PROP_NAME(type, name) name
+#define LR_GET_INIT(type, name) type (EXPAND(STRINGIFY_FIELD(name)))
 
-#define LR_FIELD(field) EXPAND(LR_GET_FIELD field );
+#define LR_FIELD(field) EXPAND(LR_GET_FIELD field ) = EXPAND(LR_GET_INIT field);
 #define LR_SINGLE_REFLECT_METHOD(field) v ( this, STRINGIFY_FIELD(EXPAND(LR_GET_PROP_NAME field)), LR_GET_PROP_NAME field);
 
 
 
-#define LR_RUN_1(FUNCTION, arg, ...) EXPAND(FUNCTION (arg))
+#define LR_RUN_1(FUNCTION, arg, ...) EXPAND(FUNCTION (arg)) 
 #define LR_RUN_2(FUNCTION, arg, ...) EXPAND(FUNCTION (arg))\
                                 EXPAND(LR_RUN_1 (FUNCTION, __VA_ARGS__))
 #define LR_RUN_3(FUNCTION, arg, ...) EXPAND(FUNCTION (arg))\

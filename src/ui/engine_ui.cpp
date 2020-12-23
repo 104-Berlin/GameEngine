@@ -228,6 +228,10 @@ void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>& val
     
 }
 
+void UI::RenderInputField(const EString& label, EObjectProperty<ECamera>& value) 
+{
+    ImGui::Text("CAMERA");
+}
 
 
 
@@ -246,6 +250,11 @@ void UI::RenderComponentPanel(EObject object)
         {
             TestComponent& tc = object.GetComponent<TestComponent>();
             RenderInputField("Test Component", &tc);
+        }
+        if (object.HasComponent<ECameraComponent>())
+        {
+            ECameraComponent& cc = object.GetComponent<ECameraComponent>();
+            RenderInputField("Camera Component", &cc);
         }
     }
     ImGui::End();

@@ -16,7 +16,7 @@ EScene::~EScene()
 
 void EScene::Render()
 {
-    auto cameraView = fRegistry.view<ECameraComponent>();
+    auto cameraView = fRegistry.view<ECameraComponent, ETransformComponent>();
     if (cameraView.empty()) { std::cout << "No active camera set to scene!" << std::endl; return; }
     
 
@@ -32,13 +32,14 @@ void EScene::Render()
     for (auto& entry : cameraView)
     {
         ECameraComponent& camComp = fRegistry.get<ECameraComponent>(entry);
-        if (camComp.Active.GetValue())
+        ETransformComponent& cameraTransform = fRegistry.get<ETransformComponent>(entry);
+        if (camComp.Active)
         {
             fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
             fSceneFrameBuffer->Bind();
 
             
-            ERenderer::Begin(camComp.Camera.GetValue(), {});
+            ERenderer::Begin(camComp.Camera, glm::inverse((EMat4)cameraTransform), {});
             auto view = fRegistry.group<EMeshComponent, ETransformComponent>();
             for (EEntity entity : view)
             {
@@ -51,7 +52,6 @@ void EScene::Render()
 
             }
             ERenderer::End();
-
 
             break;
         }
@@ -77,9 +77,10 @@ void EScene::RenderUI()
 
     for (EEntity handle : fRegistry.view<ECameraComponent>())
     {
-        if (fRegistry.get<ECameraComponent>(entity).Camera)
+        ECameraComponent& cameraComponent = fRegistry.get<ECameraComponent>(handle);
+        if (cameraComponent.Active)
         {
-            fRegistry.get<ECameraComponent>(entity).Camera->UpdateImGui();
+            ((ERef<ECamera>) cameraComponent.Camera)->UpdateImGui();
         }
     }
 

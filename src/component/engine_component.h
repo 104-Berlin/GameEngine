@@ -76,7 +76,7 @@ namespace Engine {
     struct EMeshComponent
     {
         REFLACTABLE(
-            (ERef<EMesh>, Mesh)
+            (EObjectProperty<EMesh>, Mesh)
         )
 
         EMeshComponent() = default;
@@ -84,15 +84,38 @@ namespace Engine {
 
     };
 
+    
+
     struct ECameraComponent
     {
+        enum class CameraMode : i32
+        {
+            ORTHOGRAPHIC,
+            PERSPECTIVE
+        };
+
         REFLACTABLE(
             (EObjectProperty<ECamera>, Camera),
             (EProperty<bool>, Active)
         )
 
-        ECameraComponent(ERef<ECamera> camera) : Camera("Camera", camera), Active("Active"){};
+        ECameraComponent()
+        {
+            Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
+        }
+
+        ECameraComponent(bool active)
+            : ECameraComponent()
+        {
+            Active.SetValue(active);
+            Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
+        }
         ECameraComponent(const ECameraComponent&) = default;
+    };
+
+    struct Test
+    {
+        EObjectProperty<ECamera> Camera = EObjectProperty<ECamera>("Camera");
     };
 
 }

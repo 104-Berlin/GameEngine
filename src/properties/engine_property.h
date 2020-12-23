@@ -80,6 +80,11 @@ namespace Engine {
         {
             return *fValue;
         }
+
+        void operator =(const Type& other)
+        {
+            SetValue(other);
+        }
     };
 
     template <typename ListType>
@@ -218,6 +223,21 @@ namespace Engine {
         operator ERef<ObjectType>()
         {
             return fObjectValue;
+        }
+
+        ERef<ObjectType> operator ->()
+        {
+            return fObjectValue;
+        }
+
+        operator bool() const
+        {
+            return fObjectValue != nullptr;
+        }
+
+        void operator =(ERef<ObjectType> other)
+        {
+            SetValue(other);
         }
     };
 

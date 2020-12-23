@@ -66,12 +66,12 @@ const char* fragment_shader_src = ""
 		}
 	}
 
-	void ERenderer::Begin(const ERef<ECamera>& camera, const ELightMap& lightMap)
+	void ERenderer::Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lightMap)
 	{
 		ERenderContext::s_Instance->SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
 		ERenderContext::s_Instance->Clear();
 
-        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix();
+        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix() * viewMatrix;
 		s_Instance->fCameraPosition = EVec3();
 		//Make that better
 		s_Instance->fLightMap.clear();

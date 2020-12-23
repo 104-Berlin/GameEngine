@@ -30,11 +30,7 @@ void EApplication::Start(const ERef<EScene>& scene)
     {
         fActiveScene = EMakeRef(EScene, "Scene 1");
     }
-    if (!fActiveScene->GetActiveCamera())
-    {
-        fActiveScene->SetActiveCamera(fCamera);
-    }
-
+    
     fRunning = true;
     Run();
 }
