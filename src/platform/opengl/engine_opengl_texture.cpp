@@ -35,6 +35,7 @@ namespace Engine {
 	EOpenGLTexture2D::EOpenGLTexture2D(ETextureFormat format, u32 width, u32 height)
 		: ETexture2D(""), fFormat(format), fWidth(width), fHeight(height), fRendererID(0)
 	{
+		
 		IN_RENDER_S({
 			glCall(glGenTextures(1, &self->fRendererID));
 			glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
@@ -84,7 +85,7 @@ namespace Engine {
 
 	EOpenGLTexture2D::~EOpenGLTexture2D()
 	{
-		std::cout << "OpenGL Texture detroyed!" << std::endl;
+		std::cout << "OpenGLTexture " << fRendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteTextures(1, &self->fRendererID));
 			})

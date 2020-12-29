@@ -65,6 +65,7 @@ add_executable(Engine
                         deps/imgui/backends/imgui_impl_glfw.cpp
                         deps/imgui/backends/imgui_impl_opengl3.cpp
                         src/util/engine_timer.cpp
+                        src/util/engine_camera_helper.cpp
                         src/file/engine_file.cpp
                         src/file/engine_folder.cpp
                         src/platform/opengl/engine_opengl_buffer.cpp

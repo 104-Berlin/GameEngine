@@ -134,8 +134,11 @@ typedef nlohmann::json  EJson;
 
 
 #include "component/engine_component.h"
-#include "scene/engine_scene.h"
 
+
+
+#include "util/engine_camera_helper.h"
+#include "scene/engine_scene.h"
 #include "scene/object/engine_object.h"
 
 

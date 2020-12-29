@@ -184,7 +184,10 @@ EOpenGLFrameBuffer::EOpenGLFrameBuffer(u32 width, u32 height, EFramebufferFormat
 
 EOpenGLFrameBuffer::~EOpenGLFrameBuffer()
 {
-
+	std::cout << "OpenGLFrameBuffer " << m_RendererID << " Deleted!" << std::endl;
+	IN_RENDER_S({
+		glCall(glDeleteFramebuffers(1, &self->m_RendererID));
+	})
 }
 
 void EOpenGLFrameBuffer::Resize(u32 width, u32 height)

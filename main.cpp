@@ -80,9 +80,21 @@ int main(int argc, char const *argv[])
         2, 3, 0
     };
 
-    EObject cameraObject = startScene->CreateObject();
-    cameraObject.AddComponent<ENameComponent>("Camera Object");
-    cameraObject.AddComponent<ECameraComponent>(true);
+    EObject cameraObject1 = startScene->CreateObject();
+    cameraObject1.AddComponent<ENameComponent>("Camera Object 1");
+    cameraObject1.AddComponent<ECameraComponent>(true);
+
+    EObject cameraObject2 = startScene->CreateObject();
+    cameraObject2.AddComponent<ENameComponent>("Camera Object 2");
+    cameraObject2.AddComponent<ECameraComponent>(false);
+
+    /*EObject cameraObject3 = startScene->CreateObject();
+    cameraObject3.AddComponent<ENameComponent>("Camera Object 3");
+    cameraObject3.AddComponent<ECameraComponent>(false);
+
+    EObject cameraObject4 = startScene->CreateObject();
+    cameraObject4.AddComponent<ENameComponent>("Camera Object 4");
+    cameraObject4.AddComponent<ECameraComponent>(false);*/
 
     EObject object1 = startScene->CreateObject();
     object1.AddComponent<ENameComponent>("Object 1");

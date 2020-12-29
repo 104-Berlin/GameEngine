@@ -52,6 +52,13 @@ namespace Engine {
         void RenderInputField(const EString& label, EObjectProperty<EMesh>& value);
         void RenderInputField(const EString& label, EObjectProperty<ECamera>& value);
 
+
+        template <typename T>
+        void RenderInputField(const EString& label, EProperty<T>& value) {}
+
+        template <typename T>
+        void RenderInputField(const EString& label, EObjectProperty<T>& value) {}
+
         template <typename T>
         auto RenderInputField(const EString& label, T* object)
         -> decltype(T::_reflect_arg_count, void())

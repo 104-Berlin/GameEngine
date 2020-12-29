@@ -21,20 +21,4 @@ namespace Engine {
 	void ECamera::UpdateImGui()
 	{
 	}
-	
-	void ECamera::SetCameraSize(ECameraComponent::CameraMode cameraMode, u32 width, u32 height) 
-	{
-		if (fScreenHeight == height && fScreenWidth == width) { return; }
-
-		switch (cameraMode)
-		{
-		case ECameraComponent::CameraMode::ORTHOGRAPHIC:
-			fProjectionMatrix = glm::ortho(-1.0f, 1.0f, -((float) height) / ((float)width), ((float)height) / ((float)width));
-			break;
-		
-		case ECameraComponent::CameraMode::PERSPECTIVE:
-			fProjectionMatrix = glm::perspective(30.0f, ((float)width) / ((float) height), 0.00001f, 100000.0f);
-			break;
-		}
-	}
 }

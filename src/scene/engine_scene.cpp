@@ -21,12 +21,6 @@ void EScene::Render()
     
 
 
-    if (!fSceneFrameBuffer)
-    {
-        fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);
-    }
-
-    
     // Render components
 
     for (auto& entry : cameraView)
@@ -35,7 +29,7 @@ void EScene::Render()
         ETransformComponent& cameraTransform = fRegistry.get<ETransformComponent>(entry);
         if (camComp.Active)
         {
-            camComp.FrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
+            //camComp.FrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
             camComp.FrameBuffer->Bind();
 
             
@@ -52,39 +46,46 @@ void EScene::Render()
 
             }
             ERenderer::End();
-
+            camComp.FrameBuffer->Unbind();
             break;
         }
     }
-    
-
-    fSceneFrameBuffer->Unbind();
 }
 
 void EScene::RenderUI()
 {
-    ImGui::Begin("SceneView##SCENEVIEW");
-    // Render frame buffer
-    auto viewportSize = ImGui::GetContentRegionAvail();
-    fViewPortWidth = viewportSize.x;
-    fViewPortHeight = viewportSize.y;
-    
-    
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
-    ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+
+
 
     for (EEntity handle : fRegistry.view<ECameraComponent>())
     {
         ECameraComponent& cameraComponent = fRegistry.get<ECameraComponent>(handle);
+
         if (cameraComponent.Active)
         {
-            ((ERef<ECamera>) cameraComponent.Camera)->UpdateImGui();
+            EString name = "Scene View##" + std::to_string((int)handle);
+            ImGui::Begin(name.c_str());
+            ImGui::Separator();
+
+            // Render frame buffer
+            auto viewportSize = ImGui::GetContentRegionAvail();
+            fViewPortWidth = viewportSize.x;
+            fViewPortHeight = viewportSize.y;
+
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, cameraComponent.FrameBuffer->GetColorAttachment());
+            ImGui::Image((void*)(u64)cameraComponent.FrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+
+            if (cameraComponent.Active)
+            {
+                ((ERef<ECamera>) cameraComponent.Camera)->UpdateImGui();
+            }
+            ImGui::End();
         }
     }
 
-    ImGui::End();
 
     // Render all objects for now
     ImGui::Begin("SceneTree");
@@ -116,7 +117,7 @@ void EScene::Update(float delta)
     for (EEntity entity : fRegistry.view<ECameraComponent>())
     {
         ECameraComponent& cameraComponent = fRegistry.get<ECameraComponent>(entity);
-        cameraComponent.Camera->SetCameraSize();
+        cameraComponent.Camera->SetProjectionMatrix(GetProjectionMatrix(ECameraComponent::CameraMode::PERSPECTIVE, cameraComponent.FrameBuffer->GetWidth(), cameraComponent.FrameBuffer->GetHeight()));
     }
 }
 

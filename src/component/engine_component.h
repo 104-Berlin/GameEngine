@@ -68,7 +68,7 @@ namespace Engine {
 
         ENameComponent(const EString& name)
         {
-            Name.SetValue("Name");
+            Name.SetValue(name);
         }
     };
 
