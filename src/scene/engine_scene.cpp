@@ -35,8 +35,8 @@ void EScene::Render()
         ETransformComponent& cameraTransform = fRegistry.get<ETransformComponent>(entry);
         if (camComp.Active)
         {
-            fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
-            fSceneFrameBuffer->Bind();
+            camComp.FrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
+            camComp.FrameBuffer->Bind();
 
             
             ERenderer::Begin(camComp.Camera, glm::inverse((EMat4)cameraTransform), {});
@@ -113,6 +113,11 @@ void EScene::RenderUI()
 
 void EScene::Update(float delta)
 {
+    for (EEntity entity : fRegistry.view<ECameraComponent>())
+    {
+        ECameraComponent& cameraComponent = fRegistry.get<ECameraComponent>(entity);
+        cameraComponent.Camera->SetCameraSize();
+    }
 }
 
 EObject EScene::CreateObject()

@@ -2,6 +2,7 @@
 
 namespace Engine {
 
+
     typedef std::function<void()> EChangeFunc;
 
     class EBaseProperty

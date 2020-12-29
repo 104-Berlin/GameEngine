@@ -63,14 +63,13 @@ namespace Engine {
             (EProperty<EString>, Name)
         )
         
-        ENameComponent()
-            : Name("Name", "Unknown")
-        {}
+        ENameComponent() = default;
         ENameComponent(const ENameComponent&) = default;
 
         ENameComponent(const EString& name)
-            : Name("Name", name)
-        {}
+        {
+            Name.SetValue("Name");
+        }
     };
 
     struct EMeshComponent
@@ -96,12 +95,14 @@ namespace Engine {
 
         REFLACTABLE(
             (EObjectProperty<ECamera>, Camera),
+            (EObjectProperty<EFrameBuffer>, FrameBuffer),
             (EProperty<bool>, Active)
         )
 
         ECameraComponent()
         {
             Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
+            FrameBuffer.SetValue(EFrameBuffer::Create(1270, 720, EFramebufferFormat::RGBA8));
         }
 
         ECameraComponent(bool active)
@@ -109,6 +110,7 @@ namespace Engine {
         {
             Active.SetValue(active);
             Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
+            FrameBuffer.SetValue(EFrameBuffer::Create(1270, 720, EFramebufferFormat::RGBA8));
         }
         ECameraComponent(const ECameraComponent&) = default;
     };
