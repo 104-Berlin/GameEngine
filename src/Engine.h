@@ -72,7 +72,9 @@ const char kPathSeparator =
 #include <nlohmann/json.hpp>
 
 #include <imgui.h>
+#include <ImGuizmo.h>
 #include <entt/entt.hpp>
+
 
 // Entities are saved in a registry and can have components attached to
 typedef entt::entity    EEntity;

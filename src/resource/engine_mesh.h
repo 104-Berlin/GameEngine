@@ -20,6 +20,8 @@ namespace Engine {
         ~EMesh();
 
         virtual bool OnLoad() override;
+    private:
+        void Create(const EVector<EVertex>& vertices, const EVector<u32>& indices);
     };
 
 }

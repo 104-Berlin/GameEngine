@@ -224,8 +224,31 @@ void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>& val
     else
     {
         ImGui::Selectable(value.GetValue()->GetName().c_str(), false);
+    }    
+}
+
+void UI::RenderInputField(const EString& label, EObjectProperty<EMesh>& value) 
+{
+    ImGui::Text("%s", label.c_str());
+    EString resName = "";
+    if (!value.GetValue())
+    {
+        resName = value->GetName();
     }
-    
+    ImGui::Button((resName + "##RESOURCEDRAGIN").c_str(), ImVec2(200, 200));
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_RESOURCEDRAG"))
+        {
+            EString nameIdent = EString((const char*)payload->Data);
+            ERef<EMesh> meshRes = EApplication::gApp().GetResourceManager().GetResource<EMesh>(nameIdent);
+            if (meshRes)
+            {
+                value.SetValue(meshRes);
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
 }
 
 void UI::RenderInputField(const EString& label, EObjectProperty<ECamera>& value) 
@@ -255,6 +278,11 @@ void UI::RenderComponentPanel(EObject object)
         {
             ECameraComponent& cc = object.GetComponent<ECameraComponent>();
             RenderInputField("Camera Component", &cc);
+        }
+        if (object.HasComponent<EMeshComponent>())
+        {
+            EMeshComponent& mc = object.GetComponent<EMeshComponent>();
+            RenderInputField("Mesh Component", &mc);
         }
     }
     ImGui::End();

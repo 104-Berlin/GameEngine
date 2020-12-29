@@ -49,6 +49,7 @@ namespace Engine {
         void RenderInputField(const EString& label, EProperty<EString>& value);
         void RenderInputField(const EString& label, EProperty<EUUID>& value);
         void RenderInputField(const EString& label, EObjectProperty<ETexture2D>& value);
+        void RenderInputField(const EString& label, EObjectProperty<EMesh>& value);
         void RenderInputField(const EString& label, EObjectProperty<ECamera>& value);
 
         template <typename T>

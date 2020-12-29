@@ -9,15 +9,28 @@ set(CMAKE_SYSTEM_VERSION 10.0)
 
 
 include_directories(Infinit/src     deps/glfw/include
+                                    deps/assimp/include
                                     glad/include
                                     deps/glm/glm
                                     deps/json/single_include
                                     deps/imgui
+                                    deps/imguizmo
                                     deps/entt/single_include
                                     ./src )
 
 
 add_subdirectory(deps/glfw)
+
+
+set(ZLIB_LIBRARIES zlibstatic)
+set(ASSIMP_BUILD_TESTS OFF)
+set(ENABLE_BOOST_WORKAROUND ON)
+set(BUILD_STATIC_LIB ON)
+set(BUILD_ASSIMP_TOOLS  ON)
+set(ASSIMP_BUILD_STATIC_LIB ON)
+add_subdirectory(deps/assimp)
+
+
 find_package(OpenGL)
 
 if (WIN32)
@@ -83,6 +96,7 @@ add_executable(Engine
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
+target_link_libraries(Engine assimp)
 
 if (WIN32)
 target_link_libraries(Engine opengl32)
