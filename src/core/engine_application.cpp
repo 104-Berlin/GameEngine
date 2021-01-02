@@ -86,16 +86,13 @@ void EApplication::RenderImGui()
     UI::NewFrame();
 
 
-    IN_RENDER_S({
+    UI::RenderResourcePanel(fResourceManager);
+    
 
-        UI::RenderResourcePanel(self->fResourceManager);
-        
-
-        if (self->fActiveScene)
-        {
-            self->fActiveScene->RenderUI();
-        }
-    })
+    if (fActiveScene)
+    {
+        fActiveScene->RenderUI();
+    }
 
     UI::Render();
 }
