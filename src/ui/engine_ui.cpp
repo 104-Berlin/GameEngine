@@ -290,8 +290,6 @@ void UI::RenderComponentPanel(EObject object)
 
 void UI::RenderResourcePanel(EResourceManager& resourceManager)
 {
-    ImGui::ShowDemoWindow();
-
     ImGui::Begin("Resource Manager##RESOURCEMANAGER");
     for (auto& res : resourceManager)
     {

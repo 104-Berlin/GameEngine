@@ -1,4 +1,5 @@
-#include <iostream>
+#define ENGINE_NO_LIB
+#include "Engine.h"
 
 #ifdef __cplusplus
     #define EXTERN_C extern "C" 
@@ -6,12 +7,11 @@
     #define EXTERN_C
 #endif
 
-#ifndef EXPORT_API
 #define EXPORT_API  EXTERN_C __attribute__((visibility("default")))
-#endif
 
 
 EXPORT_API void LoadExtension()
 {
     std::cout << "Loaded animation extension" << std::endl;
 }
+
