@@ -80,6 +80,8 @@ int main(int argc, char const *argv[])
         2, 3, 0
     };
 
+    EExtension extension("libAnimation");
+
     EObject cameraObject = startScene->CreateObject();
     cameraObject.AddComponent<ENameComponent>("Camera Object");
     cameraObject.AddComponent<ECameraComponent>(true);

@@ -16,6 +16,13 @@
 #include <thread>
 
 
+#ifdef EWIN
+#include <Windows.h>
+#else
+#include <dlfcn.h>
+#endif
+
+
 typedef int_fast16_t i16;
 typedef int_fast32_t i32;
 typedef int_fast64_t i64;
@@ -131,6 +138,9 @@ typedef nlohmann::json  EJson;
 
 #include "resource/engine_mesh.h"
 #include "resource/engine_sprite.h"
+
+
+#include "extensions/engine_extension_manager.h"
 
 
 #include "component/engine_component.h"

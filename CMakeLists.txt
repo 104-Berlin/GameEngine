@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SYSTEM_VERSION 10.0)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 include_directories(Infinit/src     deps/glfw/include
@@ -92,6 +93,7 @@ add_executable(Engine
                         src/ui/engine_ui.cpp
                         src/ui/engine_input_field.cpp
                         src/core/engine_application.cpp
+                        src/extensions/engine_extension_manager.cpp
                         main.cpp )
 
 target_link_libraries(Engine ${EXTRA_LIBS})

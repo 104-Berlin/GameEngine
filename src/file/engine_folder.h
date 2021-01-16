@@ -6,7 +6,7 @@ namespace Engine {
     {
         RES,
         APPLICATION,
-
+        PLUGIN,
     };
 
     class EFolder

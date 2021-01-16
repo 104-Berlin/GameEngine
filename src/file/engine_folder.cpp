@@ -32,8 +32,9 @@ EString EFolder::GetBaseFolderPath(EBaseFolder f)
     EString result = "";
     switch(f)
     {
-    case EBaseFolder::APPLICATION: result = std::filesystem::current_path(); break;
-    case EBaseFolder::RES:         result = std::filesystem::absolute(std::filesystem::path("../res/")).lexically_normal(); break;
+    case EBaseFolder::APPLICATION:  result = std::filesystem::current_path(); break;
+    case EBaseFolder::PLUGIN:       result = std::filesystem::absolute(std::filesystem::path("plugins/")).lexically_normal(); break;
+    case EBaseFolder::RES:          result = std::filesystem::absolute(std::filesystem::path("res/")).lexically_normal(); break;
     }
     return result;
 }
