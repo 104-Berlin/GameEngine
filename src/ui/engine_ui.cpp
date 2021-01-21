@@ -2,9 +2,10 @@
 #include "backends/imgui_impl_opengl3.h"
 #include "backends/imgui_impl_glfw.h"
 
+#include <imgui_internal.h>
+
 using namespace Engine;
 
-#include <imgui_internal.h>
 
 bool UI::IsItemActiveLastFrame() 
 {
@@ -123,87 +124,90 @@ void UI::Render()
 
 
 
-
-
-void UI::RenderInputField(const EString& label, EProperty<bool>& value) 
+void UI::RenderInputField(const EString& label, EBaseProperty* value)
 {
-    bool val = value.GetValue();
+
+}
+
+void UI::RenderInputField(const EString& label, EProperty<bool>* value) 
+{
+    bool val = value->GetValue();
     if (ImGui::Checkbox(label.c_str(), &val))
     {
-        value.SetValue(val);
+        value->SetValue(val);
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<float>& value) 
+void UI::RenderInputField(const EString& label, EProperty<float>* value) 
 {
-    float val = value.GetValue();
+    float val = value->GetValue();
     if (ImGui::DragFloat(label.c_str(), &val))
     {
-        value.SetValue(val);
+        value->SetValue(val);
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<double>& value) 
+void UI::RenderInputField(const EString& label, EProperty<double>* value) 
 {
-    double val = value.GetValue();
+    double val = value->GetValue();
     if (ImGui::InputDouble(label.c_str(), &val, 0.0f, 0.0f, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
     {   
-        value.SetValue(val);
+        value->SetValue(val);
         std::cout << "Doulbe changed" << std::endl;
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<i32>& value) 
+void UI::RenderInputField(const EString& label, EProperty<i32>* value) 
 {
-    i32 val = value.GetValue();
+    i32 val = value->GetValue();
     if (ImGui::DragInt(label.c_str(), &val))
     {
-        value.SetValue(val);
+        value->SetValue(val);
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<EVec3>& value) 
+void UI::RenderInputField(const EString& label, EProperty<EVec3>* value) 
 {
-    EVec3 val = value.GetValue();
+    EVec3 val = value->GetValue();
     if (ImGui::DragFloat3(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
     {
-        value.SetValue(val);
+        value->SetValue(val);
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<EVec4>& value) 
+void UI::RenderInputField(const EString& label, EProperty<EVec4>* value) 
 {
-    EVec4 val = value.GetValue();
+    EVec4 val = value->GetValue();
     if (ImGui::DragFloat4(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
     {
-        value.SetValue(val);
+        value->SetValue(val);
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<EString>& value) 
+void UI::RenderInputField(const EString& label, EProperty<EString>* value) 
 {
     size_t bufferSize = 256 * sizeof(char);
     char* buffer = (char*) malloc(bufferSize);
     memset(buffer, 0, bufferSize);
-    strcpy(buffer, value.GetValue().c_str());
+    strcpy(buffer, value->GetValue().c_str());
     if (ImGui::InputText(label.c_str(), buffer, bufferSize, ImGuiInputTextFlags_EnterReturnsTrue))
     {
-        value.SetValue(buffer);
+        value->SetValue(buffer);
         std::cout << "String changed" << std::endl;
     }
 }
 
-void UI::RenderInputField(const EString& label, EProperty<EUUID>& value) 
+void UI::RenderInputField(const EString& label, EProperty<EUUID>* value) 
 {
     ImGui::Text("%s", label.c_str());
     ImGui::SameLine();
-    ImGui::Text("%s", value.GetValue().ToString().c_str());
+    ImGui::Text("%s", value->GetValue().ToString().c_str());
 }
 
-void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>& value) 
+void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>* value) 
 {
     ImGui::Text("%s", label.c_str());
-    if (!value.GetValue())
+    if (!value->GetValue())
     {
         ImGui::Button("##RESOURCEDRAGIN", ImVec2(200, 200));
         if (ImGui::BeginDragDropTarget())
@@ -215,7 +219,7 @@ void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>& val
                 if (textureRes)
                 {
                     std::cout << "Drag texture finished" << textureRes->GetWidth() << " | " << textureRes->GetHeight() << std::endl;
-                    value.SetValue(textureRes);
+                    value->SetValue(textureRes);
                 }
             }
             ImGui::EndDragDropTarget();
@@ -223,17 +227,17 @@ void UI::RenderInputField(const EString& label, EObjectProperty<ETexture2D>& val
     }
     else
     {
-        ImGui::Selectable(value.GetValue()->GetName().c_str(), false);
+        ImGui::Selectable((*value)->GetName().c_str(), false);
     }    
 }
 
-void UI::RenderInputField(const EString& label, EObjectProperty<EMesh>& value) 
+void UI::RenderInputField(const EString& label, EObjectProperty<EMesh>* value) 
 {
     ImGui::Text("%s", label.c_str());
     EString resName = "";
-    if (!value.GetValue())
+    if (!value->GetValue())
     {
-        resName = value->GetName();
+        resName = (*value)->GetName();
     }
     ImGui::Button((resName + "##RESOURCEDRAGIN").c_str(), ImVec2(200, 200));
     if (ImGui::BeginDragDropTarget())
@@ -244,14 +248,14 @@ void UI::RenderInputField(const EString& label, EObjectProperty<EMesh>& value)
             ERef<EMesh> meshRes = EApplication::gApp().GetResourceManager().GetResource<EMesh>(nameIdent);
             if (meshRes)
             {
-                value.SetValue(meshRes);
+                value->SetValue(meshRes);
             }
         }
         ImGui::EndDragDropTarget();
     }
 }
 
-void UI::RenderInputField(const EString& label, EObjectProperty<ECamera>& value) 
+void UI::RenderInputField(const EString& label, EObjectProperty<ECamera>* value) 
 {
     ImGui::Text("CAMERA");
 }
@@ -267,7 +271,7 @@ void UI::RenderComponentPanel(EObject object)
         if (object.HasComponent<ETransformComponent>())
         {
             ETransformComponent& tc = object.GetComponent<ETransformComponent>();
-            RenderInputField<ETransformComponent>("Transform Component", &tc);
+            RenderInputField("Transform Component", &tc);
         }
         if (object.HasComponent<TestComponent>())
         {

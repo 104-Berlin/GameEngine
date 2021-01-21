@@ -8,10 +8,12 @@ EScene::EScene(const EString& name)
     : fSceneFrameBuffer(nullptr), fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
 
 {
+    fComponentPanel = new EComponentPanel();
 }
 
 EScene::~EScene()
 {
+    delete fComponentPanel;
 }
 
 void EScene::Render()
@@ -97,6 +99,7 @@ void EScene::RenderUI()
             if (ImGui::Selectable(nameComponent.Name.GetValue().c_str()))
             {
                 this->fSelectionContext = handle;
+                this->fComponentPanel->SetObjectToDisplay(EObject(handle, this));
             }
         }
         else
@@ -107,7 +110,9 @@ void EScene::RenderUI()
     ImGui::End();
 
     
-    UI::RenderComponentPanel(EObject(fSelectionContext, this));
+    //UI::RenderComponentPanel(EObject(fSelectionContext, this));
+    //fComponentPanel->Render();
+
 
 }
 

@@ -23,9 +23,13 @@ namespace Engine {
 
     class EExtensionManager
     {
+    private:
+        EVector<EExtension*> fLoadedExtensions;
     public:
         EExtensionManager();
+        ~EExtensionManager();
         
+        void LoadPluginFolder();
     };
 
 }

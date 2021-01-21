@@ -44,3 +44,27 @@ void* EExtension::GetFunction(const EString& functionName)
     return result;
 #endif
 }
+
+EExtensionManager::EExtensionManager() 
+{
+    
+}
+
+EExtensionManager::~EExtensionManager() 
+{
+    for (EExtension* extension : fLoadedExtensions)
+    {
+        delete extension;
+    }
+    fLoadedExtensions.clear();
+}
+
+void EExtensionManager::LoadPluginFolder() 
+{
+    EFolder pluginFolder(EBaseFolder::PLUGIN);
+    for (const auto file : pluginFolder.Iterator())
+    {
+        EFile e_file(file.path());
+        fLoadedExtensions.push_back(new EExtension(e_file.GetFileName()));
+    }
+}

@@ -145,12 +145,12 @@ typedef nlohmann::json  EJson;
 
 #include "component/engine_component.h"
 #include "scene/engine_scene.h"
-
 #include "scene/object/engine_object.h"
 
-
-
+#include "ui/engine_ui_fields.h"
 #include "ui/engine_ui.h"
-#include "ui/engine_input_field.h"
+#include "ui/engine_panels.h"
+
+
 
 #include "core/engine_application.h"

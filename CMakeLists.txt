@@ -42,17 +42,9 @@ endif()
 
 if (APPLE)
 INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
-FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-FIND_LIBRARY(METAL_LIBRARY MetalKit)
 FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-SET(EXTRA_LIBS ${COCOA_LIBRARY} ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${METAL_LIBRARY})
+SET(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY})
 
-set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} \
-  -framework AppKit \
-  -framework Metal \
-  -framework MetalKit \
-  -framework ModelIO \
-  -framework QuartzCore" )
 endif(APPLE)
 
 file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c

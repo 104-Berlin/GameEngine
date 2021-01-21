@@ -2,6 +2,8 @@
 
 namespace Engine {
 
+    class EComponentPanel;
+
     class EScene
     {
     private:
@@ -13,6 +15,7 @@ namespace Engine {
         ERef<EFrameBuffer>                  fSceneFrameBuffer;
         float                               fViewPortWidth;
         float                               fViewPortHeight;
+        EComponentPanel*                    fComponentPanel;
 
         // Entities
         entt::registry                      fRegistry;

@@ -15,6 +15,8 @@ EApplication::EApplication()
 
     EWindowProp windowInit("ENGINE", 1270, 720);
     fWindow = EMakeRef(EWindow, windowInit);
+
+    fComponentPanelData = EMakeRef(EPanelComponentData);
 }
 
 EApplication::~EApplication()
@@ -25,6 +27,15 @@ void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
     // For now in edit mode
+    fExtensionManager.LoadPluginFolder();
+
+    REGISTER_COMPONENT(ETransformComponent)
+    //fComponentPanelData->RegisterComponent<ETransformComponent>();
+    //fComponentPanelData->RegisterComponent<EMeshComponent>();
+    //fComponentPanelData->RegisterComponent<TestComponent>();
+    //fComponentPanelData->RegisterComponent<ECameraComponent>();
+
+
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
     if (!fActiveScene)
     {
@@ -113,4 +124,9 @@ EResourceManager& EApplication::GetResourceManager()
 const ERef<EScene>& EApplication::GetActiveScene() const
 {
     return fActiveScene;
+}
+
+ERef<EPanelComponentData> EApplication::GetComponentPanelData() const
+{
+    return fComponentPanelData;
 }

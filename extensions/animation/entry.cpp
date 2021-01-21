@@ -1,4 +1,3 @@
-#define ENGINE_NO_LIB
 #include "Engine.h"
 
 #ifdef __cplusplus
@@ -10,8 +9,24 @@
 #define EXPORT_API  EXTERN_C __attribute__((visibility("default")))
 
 
-EXPORT_API void LoadExtension()
+struct SomeStruct
+{
+    
+};
+
+struct SomeComponent
+{
+    REFLACTABLE(
+        (int, x)
+    )
+};
+
+
+
+EXPORT_API void LoadExtension(SomeStruct* data)
 {
     std::cout << "Loaded animation extension" << std::endl;
+
+    REGISTER_COMPONENT(SomeComponent);
 }
 

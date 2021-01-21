@@ -9,9 +9,13 @@ namespace Engine {
         ERef<EScene>     fActiveScene;
         bool             fRunning;
 
-        EResourceManager fResourceManager;
+        EExtensionManager   fExtensionManager;
+        EResourceManager    fResourceManager;
         // TEMP
         ERef<ECamera>     fCamera;
+
+        //TODO: Find a better way for this
+        ERef<EPanelComponentData> fComponentPanelData;
     public:
         EApplication();
         ~EApplication();
@@ -26,6 +30,9 @@ namespace Engine {
         EResourceManager& GetResourceManager();
 
         const ERef<EScene>& GetActiveScene() const;
+
+
+        ERef<EPanelComponentData> GetComponentPanelData() const;
     private:
         void Run();
     public:
