@@ -13,6 +13,7 @@ EUIField::EUIField()
 
 void EUIField::Render() 
 {
+    ImGui::PushID(fId);
     if (OnRender())
     {
         for (ERef<EUIField> field : fChildren)
@@ -21,6 +22,7 @@ void EUIField::Render()
         }
     }
     OnRenderEnd();
+    ImGui::PopID();
 }
 
 bool EUIField::OnRender() 
@@ -72,30 +74,8 @@ void EUIPanel::OnRenderEnd()
     ImGui::End();
 }
 
-
 // ----------------------------------
-// UI Input Field
-EInputField::EInputField(EBaseProperty* property) 
-    : fProperty(property)
-{
-    
-}
-
-const EString& EInputField::GetDisplayName() const
-{
-    return fProperty->GetPropertyName();    
-}
-
-bool EInputField::OnRender() 
-{
-    UI::RenderInputField(fProperty->GetPropertyName(), fProperty);
-    return true; // ?
-}
-
-
-
-// ----------------------------------
-// UI Input Field
+// Component Container
 EComponentContainer::EComponentContainer(const EString& componentName) 
     : fComponentName(componentName)
 {
@@ -109,5 +89,10 @@ const EString& EComponentContainer::GetDisplayName() const
 
 bool EComponentContainer::OnRender() 
 {
-    return ImGui::CollapsingHeader(fComponentName.c_str());
+    return ImGui::CollapsingHeader("fComponentName.c_str()");
+}
+
+void EComponentContainer::OnRenderEnd() 
+{
+    EUIField::OnRenderEnd();
 }

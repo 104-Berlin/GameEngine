@@ -2,6 +2,7 @@
 
 namespace Engine
 {
+
     static i32 next_ui_id()
     {
         static i32 currentUiId = 0;
@@ -46,16 +47,28 @@ namespace Engine
     };
 
 
+    template <typename Renderable>
     class EInputField : public EUIField
     {
     private:
-        EBaseProperty* fProperty;
+        Renderable fProperty;
     public:
-        EInputField(EBaseProperty* property);
+        EInputField(Renderable property)
+            : fProperty(property)
+        {
 
-        virtual const EString& GetDisplayName() const override;
+        }
 
-        virtual bool OnRender() override;
+        virtual const EString& GetDisplayName() const override
+        {
+            return fProperty->GetPropertyName();
+        }
+
+        virtual bool OnRender() override
+        {
+            UI::RenderInputField(fProperty->GetPropertyName(), fProperty);
+            return true; // ?
+        }
     };
 
     class EComponentContainer : public EUIField
@@ -68,6 +81,7 @@ namespace Engine
         virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
+        virtual void OnRenderEnd() override;
     };
 
 

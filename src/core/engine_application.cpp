@@ -15,8 +15,6 @@ EApplication::EApplication()
 
     EWindowProp windowInit("ENGINE", 1270, 720);
     fWindow = EMakeRef(EWindow, windowInit);
-
-    fComponentPanelData = EMakeRef(EPanelComponentData);
 }
 
 EApplication::~EApplication()
@@ -27,13 +25,14 @@ void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
     // For now in edit mode
+    EPanelComponentData::data(). RegisterComponent<ETransformComponent>("Transform Component");
+    EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
+    EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
+    EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
+
+
     fExtensionManager.LoadPluginFolder();
 
-    REGISTER_COMPONENT(ETransformComponent)
-    //fComponentPanelData->RegisterComponent<ETransformComponent>();
-    //fComponentPanelData->RegisterComponent<EMeshComponent>();
-    //fComponentPanelData->RegisterComponent<TestComponent>();
-    //fComponentPanelData->RegisterComponent<ECameraComponent>();
 
 
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
@@ -99,7 +98,7 @@ void EApplication::RenderImGui()
 
     IN_RENDER_S({
 
-        UI::RenderResourcePanel(self->fResourceManager);
+        RenderResourcePanel(self->fResourceManager);
         
 
         if (self->fActiveScene)
@@ -126,7 +125,30 @@ const ERef<EScene>& EApplication::GetActiveScene() const
     return fActiveScene;
 }
 
-ERef<EPanelComponentData> EApplication::GetComponentPanelData() const
+
+
+
+void EApplication::RenderResourcePanel(EResourceManager& resourceManager)
 {
-    return fComponentPanelData;
+    ImGui::Begin("Resource Manager##RESOURCEMANAGER");
+    for (auto& res : resourceManager)
+    {
+        ImGui::Selectable(res.first.c_str(), false);
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload("_RESOURCEDRAG", res.first.c_str(), strlen(res.first.c_str()));
+
+            EString resourceType = EResourceManager::GetResourceTypeFromFile(res.first);
+            if (resourceType == typeid(ETexture2D).name())
+            {
+                ERef<ETexture2D> texture = std::static_pointer_cast<ETexture2D>(res.second);
+                // This should not be here
+                //glBindTexture(GL_TEXTURE_2D, );
+                ImGui::Image((void*)(u64)texture->GetRendererID(), ImVec2(100, 100));
+            }
+            
+            ImGui::EndDragDropSource();
+        }
+    }
+    ImGui::End();
 }

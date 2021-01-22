@@ -14,11 +14,13 @@ EExtension::EExtension(const EString& pluginName)
     }
 
     LoadPlugin(pluginFile.GetFullPath());
-    auto loadFunction = (void(*)())dlsym(fHandle, "LoadExtension");
+    auto loadFunction = (void(*)(EExtensionInitializer&))dlsym(fHandle, "LoadExtension");
     if (loadFunction)
     {
+        EExtensionInitializer init = { EPanelComponentData::data() };
+        
         std::cout << "Running load function\n";
-        loadFunction();
+        loadFunction(init);
     }
 }
 

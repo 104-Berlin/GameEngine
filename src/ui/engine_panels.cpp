@@ -2,8 +2,6 @@
 
 using namespace Engine;
 
-EVector<ComponentDescription*> EPanelComponentData::sComponentDescriptions;
-
 void EPanelComponentData::AddComponentDescription(ComponentDescription* dsc) 
 {
     EPanelComponentData::sComponentDescriptions.push_back(dsc);   
@@ -14,6 +12,12 @@ const EVector<ComponentDescription*>& EPanelComponentData::GetComponentDescripti
     return sComponentDescriptions;
 }
 
+EPanelComponentData& EPanelComponentData::data() 
+{
+    static EPanelComponentData data;
+    return data;
+    
+}
 
 EComponentPanel::EComponentPanel() 
     : EUIPanel("Components")
@@ -23,16 +27,40 @@ EComponentPanel::EComponentPanel()
 
 void EComponentPanel::SetObjectToDisplay(EObject object) 
 {
-    ClearChildren();
-    if (!object) { return; }
-    for (ComponentDescription* compDsc : EPanelComponentData::GetComponentDescription())
+    fActiveObject = object;
+    UpdateComponents();
+}
+
+bool EComponentPanel::OnRender() 
+{
+    EUIPanel::OnRender();
+    
+    if (!fActiveObject) { return false; }
+    if (ImGui::BeginPopupContextWindow())
     {
-        if (compDsc->Has(object))
+        for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
         {
-            ERef<EUIField> componentContainer = AddChild(EMakeRef(EComponentContainer, compDsc->Name));
-            compDsc->Reflect(object, [componentContainer](const char* name, EBaseProperty* property){
-                componentContainer->AddChild(EMakeRef(EInputField, property));
-            });
+            if (ImGui::MenuItem(compDsc->Name.c_str()))
+            {
+                compDsc->Create(fActiveObject);
+                UpdateComponents();
+            }
+        }
+        ImGui::EndPopup();
+    }
+    return true;
+}
+
+void EComponentPanel::UpdateComponents() 
+{
+    ClearChildren();
+    if (!fActiveObject) { return; }
+    for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+    {
+        if (compDsc->Has(fActiveObject))
+        {
+            AddChild(compDsc->CreateUIField(fActiveObject));
+            //ERef<EUIField> componentContainer = AddChild(EMakeRef(EComponentContainer, compDsc->Name));
         }
     }
 }

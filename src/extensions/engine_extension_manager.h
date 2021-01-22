@@ -4,6 +4,7 @@ namespace Engine {
     struct EExtensionInitializer
     {
         // A registry of funtions to call to register components or something
+        EPanelComponentData& componentData;
     };
 
     class EExtension

@@ -2,64 +2,72 @@
 
 namespace Engine {
 
-    typedef std::function<void(const char*, EBaseProperty*)> EReflectFn;
-
     struct ComponentDescription
     {
+        using Callback = std::function<void(EObject)>;
+        using FieldsUIFn = std::function<ERef<EUIField>(EObject)>;
+        using HasFn = std::function<bool(EObject)>;
+
         EString Name;
-
-        void Reflect(EObject entity, EReflectFn reflectFunction)
-        {
-            OnReflect(entity, reflectFunction);
-        }
-
-        bool Has(EObject entity)
-        {
-            return OnHas(entity);
-        }
-
-        virtual bool OnHas(EObject entity) = 0;
-        virtual void OnReflect(EObject entity, EReflectFn relfectFn) = 0;
-    protected:
-        ComponentDescription() : Name("EMPTY") {}
+        FieldsUIFn CreateUIField;
+        HasFn Has;
+        Callback Create;
     };
-
-#define REGISTER_COMPONENT(type) struct CONCATENATE(type, __Description) : public ComponentDescription {\
-                                        CONCATENATE(type, __Description)()\
-                                        {\
-                                            this->Name = #type;\
-                                        }\
-                                        virtual void OnReflect(EObject entity, EReflectFn reflectFn)\
-                                        {\
-                                            if (entity.HasComponent<type>())\
-                                            {\
-                                                entity.GetComponent<type>()._reflect(reflectFn);\
-                                            }\
-                                        }\
-                                        virtual bool OnHas(EObject entity)\
-                                        {\
-                                            return entity.HasComponent<type>();\
-                                        }\
-                                    };\
-                                    EPanelComponentData::AddComponentDescription(new CONCATENATE(type, __Description)());
-
+ 
 
 
     class EPanelComponentData
     {
     private:
-        static EVector<ComponentDescription*> sComponentDescriptions;
+        EVector<ComponentDescription*> sComponentDescriptions;
     public:
-        static void AddComponentDescription(ComponentDescription* dsc);
-        static const EVector<ComponentDescription*>& GetComponentDescription();
+        void AddComponentDescription(ComponentDescription* dsc);
+        const EVector<ComponentDescription*>& GetComponentDescription();
+
+        template <typename T>
+        void RegisterComponent(const EString& componentName)
+        {
+            ComponentDescription* newComponentDsc = new ComponentDescription();
+            newComponentDsc->Name = componentName;
+            
+            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EUIField> {
+                ERef<EComponentContainer> result = EMakeRef(EComponentContainer, newComponentDsc->Name);
+                if (object.HasComponent<T>())
+                {
+                    object.GetComponent<T>()._reflect([result](const char* name, auto property){
+                        result->AddChild(EMakeRef(EInputField<decltype(property)>, property));
+                    });
+                }
+                return result;
+            };
+
+            newComponentDsc->Has = [](EObject object) -> bool {
+                return object.HasComponent<T>();
+            };
+
+            newComponentDsc->Create = [](EObject object) {
+                object.AddComponent<T>();
+            };
+
+            sComponentDescriptions.push_back(newComponentDsc);
+        }
+
+        static EPanelComponentData& data();
+
     };
 
     class EComponentPanel : public EUIPanel
     {
+    private:
+        EObject fActiveObject;
     public:
         EComponentPanel();
 
         void SetObjectToDisplay(EObject object);
+
+        virtual bool OnRender() override;
+    private:
+        void UpdateComponents();
     };
 
 }

@@ -6,18 +6,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SYSTEM_VERSION 10.0)
 
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-include_directories(Infinit/src     deps/glfw/include
-                                    deps/assimp/include
-                                    glad/include
-                                    deps/glm/glm
-                                    deps/json/single_include
-                                    deps/imgui
-                                    deps/imguizmo
-                                    deps/entt/single_include
-                                    ./src )
+include_directories(deps/glfw/include
+                    deps/assimp/include
+                    deps/imgui
+                    glad/include
+                    ./src )
 
 
 add_subdirectory(deps/glfw)
@@ -26,8 +23,8 @@ add_subdirectory(deps/glfw)
 set(ZLIB_LIBRARIES zlibstatic)
 set(ASSIMP_BUILD_TESTS OFF)
 set(ENABLE_BOOST_WORKAROUND ON)
-set(BUILD_STATIC_LIB ON)
-set(BUILD_ASSIMP_TOOLS  ON)
+set(BUILD_STATIC_LIB OFF)
+set(BUILD_ASSIMP_TOOLS  OFF)
 set(ASSIMP_BUILD_STATIC_LIB ON)
 add_subdirectory(deps/assimp)
 
@@ -43,7 +40,8 @@ endif()
 if (APPLE)
 INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
 FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-SET(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY})
+FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+SET(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
 
 endif(APPLE)
 
@@ -58,24 +56,20 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
                                     deps/imgui/backends/imgui_impl_glfw.cpp
                                     deps/imgui/backends/imgui_impl_opengl3.cpp)
 
-add_executable(Engine   ${ENGINE_SRC_FILES}
-                        main.cpp )
 
 # Maybe just compile a single folder in wich all symbols are that the extensions need
-add_library(sEngine     ${ENGINE_SRC_FILES})
+add_library(Engine     ${ENGINE_SRC_FILES})
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
 target_link_libraries(Engine assimp)
-
-target_link_libraries(sEngine ${EXTRA_LIBS})
-target_link_libraries(sEngine glfw)
-target_link_libraries(sEngine assimp)
+target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI)
 
 if (WIN32)
 target_link_libraries(Engine opengl32)
 target_link_libraries(Engine gdi32)
-
-target_link_libraries(sEngine opengl32)
-target_link_libraries(sEngine gdi32)
 endif(WIN32)
+
+
+add_executable(EngineRun main.cpp)
+target_link_libraries(EngineRun Engine)

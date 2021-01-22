@@ -13,9 +13,6 @@ namespace Engine {
         EResourceManager    fResourceManager;
         // TEMP
         ERef<ECamera>     fCamera;
-
-        //TODO: Find a better way for this
-        ERef<EPanelComponentData> fComponentPanelData;
     public:
         EApplication();
         ~EApplication();
@@ -30,13 +27,61 @@ namespace Engine {
         EResourceManager& GetResourceManager();
 
         const ERef<EScene>& GetActiveScene() const;
-
-
-        ERef<EPanelComponentData> GetComponentPanelData() const;
     private:
         void Run();
+
+        static void RenderResourcePanel(EResourceManager& resourceManager);
     public:
         static EApplication& gApp();
     };
+
+
+
+
+    namespace UI {
+        template <typename Resource>
+        static void RenderResourceField(const EString& label, EObjectProperty<Resource>* value)
+        {
+            ImGui::Text("%s", label.c_str());
+            if (!value->GetValue())
+            {
+                ImGui::Button("##RESOURCEDRAGIN", ImVec2(200, 200));
+            }
+            else
+            {
+                ImGui::Selectable((*value)->GetName().c_str(), false);
+            }
+            if (ImGui::BeginDragDropTarget())
+            {
+                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_RESOURCEDRAG"))
+                {
+                    EString nameIdent = EString((const char*)payload->Data);
+                    ERef<Resource> textureRes = EApplication::gApp().GetResourceManager().GetResource<Resource>(nameIdent);
+                    if (textureRes)
+                    {
+                        value->SetValue(textureRes);
+                    }
+                }
+                ImGui::EndDragDropTarget();
+            }
+        }
+        
+        template <>
+        inline void RenderInputField<EObjectProperty<ETexture2D>*>(const EString& label, EObjectProperty<ETexture2D>* value)
+        {
+            RenderResourceField(label, value);
+        }
+
+        template <>
+        inline void RenderInputField<EObjectProperty<EMesh>*>(const EString& label, EObjectProperty<EMesh>* value)
+        {
+            RenderResourceField(label, value);
+        }
+
+        template <>
+        inline void RenderInputField<EObjectProperty<ECamera>*>(const EString& label, EObjectProperty<ECamera>* value)
+        {
+        }
+    }
 
 }

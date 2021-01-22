@@ -1,4 +1,4 @@
-#include "Engine.h"
+#include <extensions/engine_extension.h>
 
 #ifdef __cplusplus
     #define EXTERN_C extern "C" 
@@ -9,24 +9,20 @@
 #define EXPORT_API  EXTERN_C __attribute__((visibility("default")))
 
 
-struct SomeStruct
-{
-    
-};
-
 struct SomeComponent
 {
     REFLACTABLE(
-        (int, x)
+        (Engine::EProperty<float>, SomeValue)
     )
+
+
+    SomeComponent() = default;
+    SomeComponent(const SomeComponent&) = default;
 };
 
 
 
-EXPORT_API void LoadExtension(SomeStruct* data)
+EXPORT_API void LoadExtension(Engine::EExtensionInitializer& data)
 {
-    std::cout << "Loaded animation extension" << std::endl;
-
-    REGISTER_COMPONENT(SomeComponent);
+    data.componentData.RegisterComponent<SomeComponent>("FancySomeComponent");
 }
-
