@@ -18,9 +18,11 @@ EExtension::EExtension(const EString& pluginName)
     if (loadFunction)
     {
         EExtensionInitializer init = { EPanelComponentData::data() };
+        UI::ResetContext();
         
         std::cout << "Running load function\n";
         loadFunction(init);
+
     }
 }
 
@@ -47,6 +49,15 @@ void* EExtension::GetFunction(const EString& functionName)
 #endif
 }
 
+void EExtension::InitImGui(ImGuiContext* context) 
+{
+    auto loadFunction = (void(*)(ImGuiContext*))GetFunction("InitImGui");
+    if (loadFunction)
+    {
+        loadFunction(context);
+    }
+}
+
 EExtensionManager::EExtensionManager() 
 {
     
@@ -69,4 +80,9 @@ void EExtensionManager::LoadPluginFolder()
         EFile e_file(file.path());
         fLoadedExtensions.push_back(new EExtension(e_file.GetFileName()));
     }
+}
+
+const EVector<EExtension*>& EExtensionManager::GetLoadedExtensions() 
+{
+    return fLoadedExtensions;
 }

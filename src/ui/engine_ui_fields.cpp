@@ -89,7 +89,7 @@ const EString& EComponentContainer::GetDisplayName() const
 
 bool EComponentContainer::OnRender() 
 {
-    return ImGui::CollapsingHeader("fComponentName.c_str()");
+    return ImGui::CollapsingHeader(fComponentName.c_str());
 }
 
 void EComponentContainer::OnRenderEnd() 

@@ -60,7 +60,8 @@ void EComponentPanel::UpdateComponents()
         if (compDsc->Has(fActiveObject))
         {
             AddChild(compDsc->CreateUIField(fActiveObject));
-            //ERef<EUIField> componentContainer = AddChild(EMakeRef(EComponentContainer, compDsc->Name));
+            //ERef<EUIField> componentContainer = EMakeRef(EComponentContainer, compDsc->Name);
+            //AddChild(componentContainer);
         }
     }
 }

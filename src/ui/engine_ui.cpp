@@ -7,6 +7,8 @@
 using namespace Engine;
 
 
+static ImGuiContext* context = NULL;
+
 
 void UI::Init(EWindow& window)
 {
@@ -15,7 +17,8 @@ void UI::Init(EWindow& window)
     IN_RENDER1(win, {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
+        ResetContext();
+        
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -111,4 +114,21 @@ void UI::Render()
             glfwMakeContextCurrent(backup_current_context);
         }
     })
+}
+
+void UI::ResetContext() 
+{
+    if (context)
+    {
+        ImGui::SetCurrentContext(context);    
+    }
+    else 
+    {
+        context = ImGui::CreateContext();
+    }
+}
+
+ImGuiContext* UI::GetContext() 
+{
+    return context;
 }

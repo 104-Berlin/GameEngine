@@ -19,7 +19,7 @@ EScene::~EScene()
 void EScene::Render()
 {
     auto cameraView = fRegistry.view<ECameraComponent, ETransformComponent>();
-    if (cameraView.empty()) { std::cout << "No active camera set to scene!" << std::endl; return; }
+    if (cameraView.empty()) { /*std::cout << "No active camera set to scene!" << std::endl;*/ return; }
     
     // Render components
 

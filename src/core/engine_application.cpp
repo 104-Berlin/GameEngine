@@ -25,13 +25,21 @@ void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
     // For now in edit mode
-    EPanelComponentData::data(). RegisterComponent<ETransformComponent>("Transform Component");
+    EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
     EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
 
 
     fExtensionManager.LoadPluginFolder();
+
+    EVector<EExtension*> extensions = fExtensionManager.GetLoadedExtensions();
+    IN_RENDER1(extensions, {
+        for (EExtension* ext : extensions)
+        {
+            ext->InitImGui(UI::GetContext());
+        }
+    })
 
 
 

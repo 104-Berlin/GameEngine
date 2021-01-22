@@ -20,9 +20,19 @@ struct SomeComponent
     SomeComponent(const SomeComponent&) = default;
 };
 
+void RegisterComponents(Engine::EExtensionInitializer& data)
+{
+    data.componentData.RegisterComponent<SomeComponent>("Fancy Some Component");
+}
+
+
+EXPORT_API void InitImGui(ImGuiContext* context)
+{
+    ImGui::SetCurrentContext(context);
+}
 
 
 EXPORT_API void LoadExtension(Engine::EExtensionInitializer& data)
 {
-    data.componentData.RegisterComponent<SomeComponent>("FancySomeComponent");
+    RegisterComponents(data);
 }

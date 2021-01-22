@@ -14,6 +14,8 @@ namespace Engine {
     private:
         void    LoadPlugin(const EString& fullPath);
         void*   GetFunction(const EString& functionName);
+    public:
+        void InitImGui(ImGuiContext* context);
     private:
 #ifdef EWIN
         HINSTANCE fHandle;
@@ -31,6 +33,8 @@ namespace Engine {
         ~EExtensionManager();
         
         void LoadPluginFolder();
+        
+        const EVector<EExtension*>& GetLoadedExtensions();
     };
 
 }
