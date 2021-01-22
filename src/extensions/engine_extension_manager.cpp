@@ -80,6 +80,14 @@ void EExtensionManager::LoadPluginFolder()
         EFile e_file(file.path());
         fLoadedExtensions.push_back(new EExtension(e_file.GetFileName()));
     }
+
+    EVector<EExtension*> extensions = GetLoadedExtensions();
+    IN_RENDER1(extensions, {
+        for (EExtension* ext : extensions)
+        {
+            ext->InitImGui(UI::GetContext());
+        }
+    })
 }
 
 const EVector<EExtension*>& EExtensionManager::GetLoadedExtensions() 

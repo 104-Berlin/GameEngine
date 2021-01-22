@@ -32,18 +32,9 @@ void EApplication::Start(const ERef<EScene>& scene)
 
 
     fExtensionManager.LoadPluginFolder();
-
-    EVector<EExtension*> extensions = fExtensionManager.GetLoadedExtensions();
-    IN_RENDER1(extensions, {
-        for (EExtension* ext : extensions)
-        {
-            ext->InitImGui(UI::GetContext());
-        }
-    })
-
-
-
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
+
+
     if (!fActiveScene)
     {
         fActiveScene = EMakeRef(EScene, "Scene 1");

@@ -28,7 +28,6 @@ void UI::RenderInputField_Float(const EString& label, EProperty<float>* value)
     if (ImGui::InputDouble(label.c_str(), &val, 0.0f, 0.0f, "%.6f", ImGuiInputTextFlags_EnterReturnsTrue))
     {   
         value->SetValue(val);
-        std::cout << "Doulbe changed" << std::endl;
     }
 }
 
