@@ -75,16 +75,11 @@ EExtensionManager::EExtensionManager()
 
 EExtensionManager::~EExtensionManager() 
 {
-    for (EExtension* extension : fLoadedExtensions)
-    {
-        delete extension;
-    }
-    fLoadedExtensions.clear();
 }
 
 void EExtensionManager::LoadPluginFolder() 
 {
-    EFolder pluginFolder(EBaseFolder::PLUGIN);
+    EFolder pluginFolder(EBaseFolder::PLUGIN, "", EFolderOptions_CreateIfNotExist);
     for (const auto file : pluginFolder.Iterator())
     {
         EFile e_file(file.path());

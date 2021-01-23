@@ -52,7 +52,8 @@ void UI::RenderInputField_I32(const EString& label, EProperty<i32>* value)
 void UI::RenderInputField_Vec3(const EString& label, EProperty<EVec3>* value)
 {
     EVec3 val = value->GetValue();
-    if (ImGui::DragFloat3(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
+    ImGui::DragFloat3(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f");
+    if (IsItemJustReleased())
     {
         value->SetValue(val);
     }
@@ -62,7 +63,8 @@ void UI::RenderInputField_Vec3(const EString& label, EProperty<EVec3>* value)
 void UI::RenderInputField_Vec4(const EString& label, EProperty<EVec4>* value)
 {
     EVec4 val = value->GetValue();
-    if (ImGui::DragFloat4(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f"))
+    ImGui::DragFloat4(label.c_str(), &val.x, 0.1f, -10000.0f, 10000.0f, "%.3f");
+    if (IsItemJustReleased())
     {
         value->SetValue(val);
     }
