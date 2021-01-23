@@ -55,6 +55,7 @@ void EScene::Render()
 
 void EScene::RenderUI()
 {
+    ImGui::ShowDemoWindow();
     ImGui::Begin("SceneView##SCENEVIEW");
     // Render frame buffer
     auto viewportSize = ImGui::GetContentRegionAvail();
@@ -109,10 +110,7 @@ void EScene::RenderUI()
     }
     ImGui::End();
 
-    
-    //UI::RenderComponentPanel(EObject(fSelectionContext, this));
     fComponentPanel->Render();
-
 }
 
 void EScene::Update(float delta)

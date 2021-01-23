@@ -25,13 +25,6 @@ namespace Engine {
             return fScene->fRegistry.has<T>(fHandle);
         }
 
-        bool HasComponentRuntime(entt::id_type type)
-        {
-            std::vector<entt::id_type> types = {type};
-            entt::basic_runtime_view runtimeView = fScene->fRegistry.runtime_view(std::cbegin(types), std::cend(types));
-            return runtimeView.contains(fHandle);
-        }
-
         template <typename T>
         T& GetComponent()
         {

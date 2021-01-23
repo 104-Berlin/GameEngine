@@ -69,6 +69,7 @@ void EApplication::SetUpMainMenuBar()
 
 void EApplication::RegisterInternComponents() 
 {
+    EPanelComponentData::data().RegisterComponent<ENameComponent>("Name");
     EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");

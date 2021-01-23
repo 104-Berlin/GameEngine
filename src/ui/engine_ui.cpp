@@ -17,7 +17,7 @@ void UI::Init(EWindow& window)
     IN_RENDER1(win, {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
-        ResetContext();
+        context = ImGui::CreateContext();
         
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -118,17 +118,6 @@ void UI::Render()
     })
 }
 
-void UI::ResetContext() 
-{
-    if (context)
-    {
-        ImGui::SetCurrentContext(context);    
-    }
-    else 
-    {
-        context = ImGui::CreateContext();
-    }
-}
 
 ImGuiContext* UI::GetContext() 
 {
