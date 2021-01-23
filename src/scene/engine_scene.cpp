@@ -86,11 +86,13 @@ void EScene::RenderUI()
         if (object.HasComponent<ENameComponent>())
         {
             ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
+            ImGui::PushID((int)handle);
             if (ImGui::Selectable(nameComponent.Name.GetValue().c_str()))
             {
                 this->fSelectionContext = handle;
                 this->fComponentPanel->SetObjectToDisplay(EObject(handle, this));
             }
+            ImGui::PopID();
         }
         else
         {
