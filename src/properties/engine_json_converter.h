@@ -29,7 +29,7 @@
 #define LR_GET_INIT(type, name) type (EXPAND(STRINGIFY_FIELD(name)))
 
 #define LR_FIELD(field) EXPAND(LR_GET_FIELD field ) = EXPAND(LR_GET_INIT field);
-#define LR_SINGLE_REFLECT_METHOD(field) v ( this, STRINGIFY_FIELD(EXPAND(LR_GET_PROP_NAME field)), LR_GET_PROP_NAME field);
+#define LR_SINGLE_REFLECT_METHOD(field) v ( STRINGIFY_FIELD(EXPAND(LR_GET_PROP_NAME field)), &LR_GET_PROP_NAME field);
 
 
 
@@ -75,7 +75,7 @@
 
 #define REFLECT_METHOD(t, N, ...) \
                     template <class Visitor>\
-                    void _reflect(Visitor& v) t {\
+                    void _reflect(Visitor v) t {\
                         EXPAND(LR_RUN_N(LR_SINGLE_REFLECT_METHOD, N, __VA_ARGS__))\
                     }
 
@@ -111,8 +111,8 @@ namespace Engine {
                 obj->_reflect(*this);
             }
 
-            template <class Obj, class Field>
-            void operator() (const Obj* obj, const char* name, const Field& field);
+            template <class Field>
+            void operator() (const char* name, const Field& field);
         };
     
         class JsonStructConverter
@@ -134,8 +134,8 @@ namespace Engine {
                 obj->_reflect(*this);
             }
 
-            template <class Obj, class Field>
-            void operator() (Obj* obj, const char* name, Field& field);
+            template <class Field>
+            void operator() (const char* name, Field& field);
         };
 
         EJson ConvertValue(const bool value);
@@ -171,8 +171,8 @@ namespace Engine {
             return result;
         }
 
-        template <class Obj, class Field>
-        void StructJsonConverter::operator() (const Obj* obj, const char* name, const Field& field) {
+        template <class Field>
+        void StructJsonConverter::operator() (const char* name, const Field& field) {
             fRef[name] = ConvertValue(field);
         }
 
@@ -210,8 +210,8 @@ namespace Engine {
             }
         }
 
-        template <class Obj, class Field>
-        void JsonStructConverter::operator() (Obj* obj, const char* name, Field& field)
+        template <class Field>
+        void JsonStructConverter::operator() (const char* name, Field& field)
         {
             if (fRef.find(name)!=fRef.end())
             {

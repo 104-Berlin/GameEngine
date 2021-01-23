@@ -84,7 +84,7 @@ namespace Engine {
 
 	EOpenGLTexture2D::~EOpenGLTexture2D()
 	{
-		std::cout << "OpenGL Texture detroyed!" << std::endl;
+		std::cout << "OpenGLTexture " << fRendererID << " detroyed!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteTextures(1, &self->fRendererID));
 			})

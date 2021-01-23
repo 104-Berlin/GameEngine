@@ -23,7 +23,6 @@ void EResourceManager::LoadAllFromFolder(const EFolder& folder)
 
     for (auto& p : folder.Iterator())
     {
-        std::cout << "Adding " << p.path() << " to loading queue width type: " << GetResourceTypeFromFile(p.path()) << std::endl;
         std::lock_guard<std::mutex> quard(fQueueMutex);
         fLoadingQueue.push(p.path().lexically_normal());
     }

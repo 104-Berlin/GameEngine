@@ -86,6 +86,9 @@
         "variant": "cpp",
         "__functional_03": "cpp",
         "memory_resource": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "codecvt": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp"
     }
 }

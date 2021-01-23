@@ -5,6 +5,7 @@
 *.dSYM
 main
 build/
+plugins/
 **.vcxproj
 **.filters
 **.log
