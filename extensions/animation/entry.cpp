@@ -11,5 +11,6 @@ struct SomeComponent
 
 EE_ENTRY
 {
+    printf("LOADING ANIMATIONS \n");
     data.componentData.RegisterComponent<SomeComponent>("Fancy Some Component");
 }

@@ -9,18 +9,25 @@ namespace Engine {
         PLUGIN,
     };
 
+
+
+    constexpr i32 EFolderOptions_None = 0;
+    constexpr i32 EFolderOptions_CreateIfNotExist = BIT(0);
+
     class EFolder
     {
     public:
     private:
-        EString fFullPath;
+        EString         fFullPath;
+        i32             fFolderOptions;
     public:
-        EFolder(const EString& path);
-        EFolder(EBaseFolder f, const EString& path = "");
+        EFolder(const EString& path, i32 folderOptions = EFolderOptions_None);
+        EFolder(EBaseFolder f, const EString& path = "", i32 folderOptions = EFolderOptions_None);
 
         const EString& GetFullPath() const;
 
         bool Exist() const;
+        void Create();
 
         std::filesystem::directory_iterator Iterator() const;
 

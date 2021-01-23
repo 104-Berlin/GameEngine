@@ -13,6 +13,7 @@
 #include <queue>
 #include <thread>
 
+#define BIT(x) (1 << x)
 
 #ifdef EWIN
 #include <Windows.h>

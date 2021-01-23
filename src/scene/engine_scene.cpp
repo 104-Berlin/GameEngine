@@ -9,6 +9,7 @@ EScene::EScene(const EString& name)
 
 {
     fComponentPanel = new EComponentPanel();
+    //fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);		
 }
 
 EScene::~EScene()
@@ -29,6 +30,9 @@ void EScene::Render()
         ETransformComponent& cameraTransform = fRegistry.get<ETransformComponent>(entry);
         if (camComp.Active)
         {
+            //fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);		
+            //fSceneFrameBuffer->Bind();		
+
             ERenderer::Begin(camComp.Camera, glm::inverse((EMat4)cameraTransform), {});
             auto view = fRegistry.group<EMeshComponent, ETransformComponent>();
             for (EEntity entity : view)
@@ -46,6 +50,7 @@ void EScene::Render()
             break;
         }
     }
+    //fSceneFrameBuffer->Unbind();
 }
 
 void EScene::RenderUI()
@@ -58,9 +63,9 @@ void EScene::RenderUI()
     
     
 
-    /*glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
-    ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });*/
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
+    //ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
 
     for (EEntity handle : fRegistry.view<ECameraComponent>())
     {
@@ -92,6 +97,14 @@ void EScene::RenderUI()
             ImGui::Selectable("Unknown");
         }
     });
+    if (ImGui::BeginPopupContextWindow())
+    {
+        if (ImGui::MenuItem("New Object"))
+        {
+            CreateObject();
+        }
+        ImGui::EndPopup();
+    }
     ImGui::End();
 
     

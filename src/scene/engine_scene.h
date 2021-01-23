@@ -16,6 +16,7 @@ namespace Engine {
         float                               fViewPortWidth;
         float                               fViewPortHeight;
         EComponentPanel*                    fComponentPanel;
+        ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
         // Entities
         entt::registry                      fRegistry;

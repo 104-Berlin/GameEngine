@@ -11,6 +11,7 @@ namespace Engine {
     {
     public:
         EExtension(const EString& pluginName);
+        ~EExtension();
     private:
         void    LoadPlugin(const EString& fullPath);
         void*   GetFunction(const EString& functionName);
@@ -33,6 +34,7 @@ namespace Engine {
         ~EExtensionManager();
         
         void LoadPluginFolder();
+        void UnLoadExtensions();
         
         const EVector<EExtension*>& GetLoadedExtensions();
     };

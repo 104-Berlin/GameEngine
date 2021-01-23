@@ -11,7 +11,11 @@ namespace Engine {
 
         EExtensionManager   fExtensionManager;
         EResourceManager    fResourceManager;
+
+
+
         // TEMP
+        EMainMenuBar      fMainMenuBar;
         ERef<ECamera>     fCamera;
     public:
         EApplication();
@@ -29,6 +33,9 @@ namespace Engine {
         const ERef<EScene>& GetActiveScene() const;
     private:
         void Run();
+
+        void SetUpMainMenuBar();
+        void RegisterInternComponents();
 
         static void RenderResourcePanel(EResourceManager& resourceManager);
     public:

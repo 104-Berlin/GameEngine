@@ -9,11 +9,14 @@ namespace Engine
         return ++currentUiId; 
     }
 
+    typedef std::function<void()> EUICallbackFn;
+
     class EUIField
     {
     protected:
         EVector<ERef<EUIField>>         fChildren;
         i32                             fId;
+        EUICallbackFn                   fOnClickCallback;
     public:
         EUIField();
 
@@ -29,6 +32,8 @@ namespace Engine
 
         ERef<EUIField> AddChild(const ERef<EUIField>& child);
         void ClearChildren();
+
+        void SetOnClick(EUICallbackFn fn);
     };
 
     class EUIPanel : public EUIField
@@ -82,6 +87,47 @@ namespace Engine
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
+    };
+
+    class EMainMenuBar : public EUIField
+    {
+    private:
+        bool fOpen;
+    public:
+        EMainMenuBar();
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
+        virtual void OnRenderEnd() override;
+        
+    };
+
+    class EMenu : public EUIField
+    {
+    private:
+        EString fDisplayName;
+        bool    fOpen;
+    public:
+        EMenu(const EString& displayName = "MenuBar");
+
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
+        virtual void OnRenderEnd() override;
+    };
+
+    class EMenuItem : public EUIField
+    {
+    private:
+        EString fLabel;
+    public:
+        EMenuItem(const EString& label);
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
     };
 
 

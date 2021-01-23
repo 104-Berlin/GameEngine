@@ -21,6 +21,8 @@ namespace Engine {
     private:
         EVector<ComponentDescription*> sComponentDescriptions;
     public:
+        ~EPanelComponentData();
+
         void AddComponentDescription(ComponentDescription* dsc);
         const EVector<ComponentDescription*>& GetComponentDescription();
 
@@ -52,6 +54,8 @@ namespace Engine {
 
             sComponentDescriptions.push_back(newComponentDsc);
         }
+
+        void ClearComponentData();
 
         static EPanelComponentData& data();
 

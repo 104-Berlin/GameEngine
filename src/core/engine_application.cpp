@@ -24,16 +24,13 @@ EApplication::~EApplication()
 void EApplication::Start(const ERef<EScene>& scene)
 {
     fActiveScene = scene;
-    // For now in edit mode
-    EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
-    EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
-    EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
-    EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
 
+    RegisterInternComponents();
 
     fExtensionManager.LoadPluginFolder();
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
 
+    SetUpMainMenuBar();
 
     if (!fActiveScene)
     {
@@ -62,6 +59,20 @@ void EApplication::Run()
 
         fRunning = !fWindow->IsClosed();
     }
+}
+
+void EApplication::SetUpMainMenuBar() 
+{
+    ERef<EUIField> fileMenu = fMainMenuBar.AddChild(EMakeRef(EMenu, "File"));
+    ERef<EUIField> editMenu = fMainMenuBar.AddChild(EMakeRef(EMenu, "Edit"));
+}
+
+void EApplication::RegisterInternComponents() 
+{
+    EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
+    EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
+    EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
+    EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
 }
 
 void EApplication::Update(float delta)
@@ -95,7 +106,13 @@ void EApplication::RenderImGui()
     UI::NewFrame();
 
 
+
     IN_RENDER_S({
+        self->fMainMenuBar.Render();
+
+
+
+
 
         RenderResourcePanel(self->fResourceManager);
         

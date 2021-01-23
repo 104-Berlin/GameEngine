@@ -82,6 +82,7 @@ int main(int argc, char const *argv[])
     };
 
     EObject cameraObject = startScene->CreateObject();
+    //cameraObject.AddComponent<ECameraComponent>();
     
 
     EApplication::gApp().Start(startScene);

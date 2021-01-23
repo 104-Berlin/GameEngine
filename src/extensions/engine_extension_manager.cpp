@@ -20,10 +20,19 @@ EExtension::EExtension(const EString& pluginName)
         EExtensionInitializer init = { EPanelComponentData::data() };
         UI::ResetContext();
         
-        std::cout << "Running load function\n";
+        std::cout << "Running load function for plugin \"" << pluginName << "\"\n";
         loadFunction(init);
 
     }
+}
+
+EExtension::~EExtension() 
+{
+    #ifdef EWIN
+    FreeLibrary(fHandle);
+    #else
+    dlclose(fHandle);
+    #endif
 }
 
 void EExtension::LoadPlugin(const EString& fullPath) 
@@ -36,6 +45,7 @@ void EExtension::LoadPlugin(const EString& fullPath)
     {
         std::cout << "Could not load plugin \"" << fullPath << "\"!" << std::endl;
     }
+    
 #endif
 }
 
@@ -88,6 +98,15 @@ void EExtensionManager::LoadPluginFolder()
             ext->InitImGui(UI::GetContext());
         }
     })
+}
+
+void EExtensionManager::UnLoadExtensions() 
+{
+    for (EExtension* extension : fLoadedExtensions)
+    {
+        delete extension;
+    }   
+    fLoadedExtensions.clear();
 }
 
 const EVector<EExtension*>& EExtensionManager::GetLoadedExtensions() 

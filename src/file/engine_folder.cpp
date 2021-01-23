@@ -2,14 +2,19 @@
 
 using namespace Engine;
 
-EFolder::EFolder(const EString& path) 
+EFolder::EFolder(const EString& path, i32 folderOptions) 
+    : fFolderOptions(folderOptions)
 {
     fFullPath = path;
+    if (fFolderOptions & EFolderOptions_CreateIfNotExist && !Exist())
+    {
+        Create();
+    }
 }
 
-EFolder::EFolder(EBaseFolder f, const EString& path) 
-{
-    fFullPath = GetBaseFolderPath(f) + path;    
+EFolder::EFolder(EBaseFolder f, const EString& path, i32 folderOptions) 
+    : EFolder(GetBaseFolderPath(f) + path, folderOptions)
+{    
 }
 
 const EString& EFolder::GetFullPath() const
@@ -20,6 +25,11 @@ const EString& EFolder::GetFullPath() const
 bool EFolder::Exist() const
 {
     return std::filesystem::exists(fFullPath);
+}
+
+void EFolder::Create() 
+{
+    std::filesystem::create_directories(GetFullPath());
 }
 
 std::filesystem::directory_iterator EFolder::Iterator()  const

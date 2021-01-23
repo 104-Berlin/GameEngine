@@ -32,7 +32,7 @@ bool EUIField::OnRender()
 
 void EUIField::OnRenderEnd() 
 {
-    
+    if (ImGui::IsItemClicked() && fOnClickCallback) { fOnClickCallback(); }
 }
 
 ERef<EUIField> EUIField::AddChild(const ERef<EUIField>& child) 
@@ -44,6 +44,11 @@ ERef<EUIField> EUIField::AddChild(const ERef<EUIField>& child)
 void EUIField::ClearChildren()
 {
     fChildren.clear();
+}
+
+void EUIField::SetOnClick(EUICallbackFn fn) 
+{
+    fOnClickCallback = fn;
 }
 
 
@@ -95,4 +100,78 @@ bool EComponentContainer::OnRender()
 void EComponentContainer::OnRenderEnd() 
 {
     EUIField::OnRenderEnd();
+}
+
+
+// ----------------------------------------
+// Main Menu Bar
+EMainMenuBar::EMainMenuBar() 
+{
+
+}
+
+const EString& EMainMenuBar::GetDisplayName() const 
+{
+    static const EString mainMenuDisplayName = "MainMenu";
+    return mainMenuDisplayName;
+}
+
+bool EMainMenuBar::OnRender() 
+{
+    return fOpen = ImGui::BeginMainMenuBar();
+}
+
+void EMainMenuBar::OnRenderEnd() 
+{
+    if (fOpen)
+    {
+        ImGui::EndMainMenuBar();
+    }
+}
+
+
+// ----------------------------------------
+// Menu
+EMenu::EMenu(const EString& displayName) 
+    : fDisplayName(displayName), fOpen(false)
+{
+    
+}
+
+const EString& EMenu::GetDisplayName() const 
+{
+    return fDisplayName;
+}
+
+bool EMenu::OnRender() 
+{
+    return fOpen = ImGui::BeginMenu(fDisplayName.c_str());
+}
+
+void EMenu::OnRenderEnd() 
+{
+    if (fOpen)
+    {
+        ImGui::EndMenu();
+    }
+    
+}
+
+// ----------------------------------------
+// Menu Item
+EMenuItem::EMenuItem(const EString& label) 
+    : fLabel(label)
+{
+    
+}
+
+const EString& EMenuItem::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EMenuItem::OnRender() 
+{
+    ImGui::MenuItem(fLabel.c_str());
+    return true;
 }
