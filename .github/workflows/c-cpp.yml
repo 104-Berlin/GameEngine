@@ -1,7 +1,5 @@
 name: C/C++ CI
 
-
-
 on:
   push:
     branches: [ master ]
@@ -11,7 +9,6 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v2
     - name: configure
