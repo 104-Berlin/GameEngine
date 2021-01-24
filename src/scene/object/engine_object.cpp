@@ -20,7 +20,7 @@ void EObject::SetJsObject(EJson& ref) const
 
 void EObject::OnFromJsObject(const EJson& ref)
 {
-
+    
 }
 
 void EObject::OnSetJsObject(EJson& ref) const

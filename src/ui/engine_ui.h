@@ -10,7 +10,6 @@ namespace Engine {
         void Init(EWindow& window);
         void NewFrame();
         void Render();
-        void ResetContext();
         ImGuiContext* GetContext();
 
     }

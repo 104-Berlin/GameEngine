@@ -109,10 +109,7 @@ void EScene::RenderUI()
     }
     ImGui::End();
 
-    
-    //UI::RenderComponentPanel(EObject(fSelectionContext, this));
     fComponentPanel->Render();
-
 }
 
 void EScene::Update(float delta)

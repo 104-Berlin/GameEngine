@@ -70,8 +70,8 @@ void UI::RenderInputField_Vec4(const EString& label, EProperty<EVec4>* value)
 
 void UI::RenderInputField_String(const EString& label, EProperty<EString>* value)
 {
-    size_t bufferSize = 256 * sizeof(char);
-    char* buffer = (char*) malloc(bufferSize);
+    size_t bufferSize = value->GetValue().length() * sizeof(char) + 1;
+    char* buffer = new char[bufferSize];
     memset(buffer, 0, bufferSize);
     strcpy(buffer, value->GetValue().c_str());
     if (ImGui::InputText(label.c_str(), buffer, bufferSize, ImGuiInputTextFlags_EnterReturnsTrue))
@@ -79,6 +79,7 @@ void UI::RenderInputField_String(const EString& label, EProperty<EString>* value
         value->SetValue(buffer);
         std::cout << "String changed" << std::endl;
     }
+    delete[] buffer;
 }
 
 void UI::RenderInputField_UUID(const EString& label, EProperty<EUUID>* value)

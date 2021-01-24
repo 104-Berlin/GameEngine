@@ -18,7 +18,6 @@ EExtension::EExtension(const EString& pluginName)
     if (loadFunction)
     {
         EExtensionInitializer init = { EPanelComponentData::data() };
-        UI::ResetContext();
         
         std::cout << "Running load function for plugin \"" << pluginName << "\"\n";
         loadFunction(init);
