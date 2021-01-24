@@ -55,7 +55,6 @@ void EScene::Render()
 
 void EScene::RenderUI()
 {
-    ImGui::ShowDemoWindow();
     ImGui::Begin("SceneView##SCENEVIEW");
     // Render frame buffer
     auto viewportSize = ImGui::GetContentRegionAvail();
