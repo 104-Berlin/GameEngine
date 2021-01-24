@@ -153,7 +153,7 @@ void EApplication::RenderResourcePanel(EResourceManager& resourceManager)
         ImGui::Selectable(res.first.c_str(), false);
         if (ImGui::BeginDragDropSource())
         {
-            ImGui::SetDragDropPayload("_RESOURCEDRAG", res.first.c_str(), strlen(res.first.c_str()));
+            ImGui::SetDragDropPayload("_RESOURCEDRAG", res.first.c_str(), res.first.length() + 1);
 
             EString resourceType = EResourceManager::GetResourceTypeFromFile(res.first);
             if (resourceType == typeid(ETexture2D).name())

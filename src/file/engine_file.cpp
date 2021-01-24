@@ -40,7 +40,7 @@ bool EFile::Exist() const
 
 EString EFile::GetFullPath() const
 {
-    return std::filesystem::absolute(std::filesystem::path(fFilePath));
+    return std::filesystem::absolute(std::filesystem::path(fFilePath)).string();
 }
 
 const EString& EFile::GetPath() const

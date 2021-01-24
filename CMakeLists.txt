@@ -38,11 +38,12 @@ add_compile_definitions(EMAC)
 endif()
 
 if (APPLE)
-INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
-FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-SET(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
-
+include_directories( /System/Library/Frameworks )
+find_library(OpenGL_LIBRARY OpenGL )
+find_library(COCOA_LIBRARY Cocoa)
+setT(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
+elseif(WIN32)
+set(EXTRA_LIBS ${EXTRA_LIBS} Rpcrt4.lib)
 endif(APPLE)
 
 file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
@@ -68,6 +69,8 @@ target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_I
 if (WIN32)
 target_link_libraries(Engine opengl32)
 target_link_libraries(Engine gdi32)
+
+set_target_properties(Engine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif(WIN32)
 
 

@@ -2,6 +2,7 @@
 
 #ifdef EWIN
 #include <windows.h>
+#include <rpcdce.h>
 #elif  EMAC
 #include <CoreFoundation/CoreFoundation.h>
 #endif

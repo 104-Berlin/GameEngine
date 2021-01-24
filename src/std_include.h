@@ -17,6 +17,8 @@
 
 #ifdef EWIN
 #include <Windows.h>
+#include <mutex>
+#include <atomic>
 #else
 #include <dlfcn.h>
 #endif
