@@ -106,17 +106,8 @@ void EApplication::RenderImGui()
 
     UI::NewFrame();
 
-
-
-    IN_RENDER_S({
-        self->fMainMenuBar.Render();
-
-
-
-
-
-        RenderResourcePanel(self->fResourceManager);
-        
+    fMainMenuBar.Render();
+    RenderResourcePanel(fResourceManager);
 
     if (fActiveScene)
     {
