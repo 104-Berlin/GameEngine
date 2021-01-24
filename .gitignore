@@ -5,7 +5,10 @@
 *.dSYM
 main
 build/
+plugins/
 **.vcxproj
 **.filters
 **.log
 CMakeFiles/**
+.DS_Store
+EngineRun

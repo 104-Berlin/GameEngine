@@ -2,6 +2,9 @@
 
 namespace Engine {
 
+    struct EObject;
+    class EComponentPanel;
+
     class EScene
     {
     private:
@@ -10,9 +13,10 @@ namespace Engine {
 
 
         // TEMP
-        ERef<EFrameBuffer>                  fSceneFrameBuffer;
         float                               fViewPortWidth;
         float                               fViewPortHeight;
+        EComponentPanel*                    fComponentPanel;
+        //ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
         // Entities
         entt::registry                      fRegistry;
@@ -25,9 +29,6 @@ namespace Engine {
         void Render();
         void RenderUI();
         void Update(float delta);
-
-        //TEMP
-        ERef<EFrameBuffer> GetFrameBuffer(){ return fSceneFrameBuffer;}
     public:
         friend class EObject;
     };

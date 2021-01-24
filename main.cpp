@@ -1,3 +1,4 @@
+#define E_NO_IMPL
 #include "Engine.h"
 
 using namespace Engine;
@@ -6,9 +7,6 @@ using namespace Engine;
 
 int main(int argc, char const *argv[])
 {   
-    EResource res(Path::Join("Hello", "world.rc"));
-    std::cout << res.GetNameIdent() << std::endl;
-
     EApplication::gApp();
 
     ERef<EScene> startScene = EMakeRef(EScene, "Start Scene");
@@ -81,14 +79,8 @@ int main(int argc, char const *argv[])
     };
 
     EObject cameraObject = startScene->CreateObject();
-    cameraObject.AddComponent<ENameComponent>("Camera Object");
-    cameraObject.AddComponent<ECameraComponent>(true);
-
-    EObject object1 = startScene->CreateObject();
-    object1.AddComponent<ENameComponent>("Object 1");
-    object1.AddComponent<TestComponent>();
-    object1.AddComponent<EMeshComponent>();
-    object1.GetComponent<EMeshComponent>().Mesh.SetValue(EMakeRef(EMesh, "TestMesh", vertices, indices));
+    cameraObject.AddComponent<ECameraComponent>().Active = true;
+    
 
     EApplication::gApp().Start(startScene);
     return 0;

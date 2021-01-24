@@ -31,6 +31,9 @@ namespace Engine {
             return fScene->fRegistry.get<T>(fHandle);   
         }
 
+
+
+
         void Delete()
         {
             fScene->fRegistry.destroy(fHandle);

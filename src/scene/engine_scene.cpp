@@ -5,27 +5,22 @@ using namespace Engine;
 
 
 EScene::EScene(const EString& name)
-    : fSceneFrameBuffer(nullptr), fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
+    : fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
 
 {
+    fComponentPanel = new EComponentPanel();
+    //fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);		
 }
 
 EScene::~EScene()
 {
+    delete fComponentPanel;
 }
 
 void EScene::Render()
 {
     auto cameraView = fRegistry.view<ECameraComponent, ETransformComponent>();
-    if (cameraView.empty()) { std::cout << "No active camera set to scene!" << std::endl; return; }
-    
-
-
-    if (!fSceneFrameBuffer)
-    {
-        fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);
-    }
-
+    if (cameraView.empty()) { /*std::cout << "No active camera set to scene!" << std::endl;*/ return; }
     
     // Render components
 
@@ -35,10 +30,9 @@ void EScene::Render()
         ETransformComponent& cameraTransform = fRegistry.get<ETransformComponent>(entry);
         if (camComp.Active)
         {
-            fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);
-            fSceneFrameBuffer->Bind();
+            //fSceneFrameBuffer->Resize(fViewPortWidth, fViewPortHeight);		
+            //fSceneFrameBuffer->Bind();		
 
-            
             ERenderer::Begin(camComp.Camera, glm::inverse((EMat4)cameraTransform), {});
             auto view = fRegistry.group<EMeshComponent, ETransformComponent>();
             for (EEntity entity : view)
@@ -56,9 +50,7 @@ void EScene::Render()
             break;
         }
     }
-    
-
-    fSceneFrameBuffer->Unbind();
+    //fSceneFrameBuffer->Unbind();
 }
 
 void EScene::RenderUI()
@@ -71,9 +63,9 @@ void EScene::RenderUI()
     
     
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
-    ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
+    //ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
 
     for (EEntity handle : fRegistry.view<ECameraComponent>())
     {
@@ -94,21 +86,30 @@ void EScene::RenderUI()
         if (object.HasComponent<ENameComponent>())
         {
             ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
+            ImGui::PushID((int)handle);
             if (ImGui::Selectable(nameComponent.Name.GetValue().c_str()))
             {
                 this->fSelectionContext = handle;
+                this->fComponentPanel->SetObjectToDisplay(EObject(handle, this));
             }
+            ImGui::PopID();
         }
         else
         {
             ImGui::Selectable("Unknown");
         }
     });
+    if (ImGui::BeginPopupContextWindow())
+    {
+        if (ImGui::MenuItem("New Object"))
+        {
+            CreateObject();
+        }
+        ImGui::EndPopup();
+    }
     ImGui::End();
 
-    
-    UI::RenderComponentPanel(EObject(fSelectionContext, this));
-
+    fComponentPanel->Render();
 }
 
 void EScene::Update(float delta)
@@ -121,5 +122,6 @@ EObject EScene::CreateObject()
     EObject object(handle, this);
     object.AddComponent<EUUIDComponent>(EUUID().CreateNew());
     object.AddComponent<ETransformComponent>();
+    object.AddComponent<ENameComponent>("Empty Object");
     return object;
 }
