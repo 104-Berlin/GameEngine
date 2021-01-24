@@ -14,7 +14,7 @@ EExtension::EExtension(const EString& pluginName)
     }
 
     LoadPlugin(pluginFile.GetFullPath());
-    auto loadFunction = (void(*)(EExtensionInitializer&))dlsym(fHandle, "LoadExtension");
+    auto loadFunction = (void(*)(EExtensionInitializer&))GetFunction("LoadExtension");
     if (loadFunction)
     {
         EExtensionInitializer init = { EPanelComponentData::data() };
@@ -81,7 +81,7 @@ void EExtensionManager::LoadPluginFolder()
     EFolder pluginFolder(EBaseFolder::PLUGIN, "", EFolderOptions_CreateIfNotExist);
     for (const auto file : pluginFolder.Iterator())
     {
-        EFile e_file(file.path());
+        EFile e_file(file.path().string());
         fLoadedExtensions.push_back(new EExtension(e_file.GetFileName()));
     }
 

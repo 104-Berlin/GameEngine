@@ -1,7 +1,3 @@
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/Importer.hpp>
-
 #include "Engine.h"
 
 using namespace Engine;
@@ -31,7 +27,7 @@ bool EMesh::OnLoad()
     EVector<EVertex>    vertices;
     EVector<u32>        indices;
 
-    Assimp::Importer importer;
+    /*Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(GetFilePath(), aiProcess_Triangulate | aiProcess_PreTransformVertices | aiProcess_GenNormals);
     
     if (scene && scene->HasMeshes())
@@ -69,7 +65,7 @@ bool EMesh::OnLoad()
         }
         Create(vertices, indices);
         return true;
-    }
+    }*/
 
 
 

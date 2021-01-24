@@ -16,6 +16,3 @@
 [submodule "deps/imguizmo"]
 	path = deps/imguizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
-[submodule "deps/assimp"]
-	path = deps/assimp
-	url = https://github.com/assimp/assimp.git

@@ -11,22 +11,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 include_directories(deps/glfw/include
-                    deps/assimp/include
                     deps/imgui
                     glad/include
                     ./src )
 
 
 add_subdirectory(deps/glfw)
-
-
-set(ZLIB_LIBRARIES zlibstatic)
-set(ASSIMP_BUILD_TESTS OFF)
-set(ENABLE_BOOST_WORKAROUND ON)
-set(BUILD_STATIC_LIB OFF)
-set(BUILD_ASSIMP_TOOLS  OFF)
-set(ASSIMP_BUILD_STATIC_LIB ON)
-add_subdirectory(deps/assimp)
 
 
 find_package(OpenGL)
@@ -38,11 +28,12 @@ add_compile_definitions(EMAC)
 endif()
 
 if (APPLE)
-INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
-FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-SET(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
-
+include_directories( /System/Library/Frameworks )
+find_library(OpenGL_LIBRARY OpenGL )
+find_library(COCOA_LIBRARY Cocoa)
+set(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
+elseif(WIN32)
+set(EXTRA_LIBS ${EXTRA_LIBS} Rpcrt4.lib)
 endif(APPLE)
 
 file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
@@ -62,12 +53,13 @@ add_library(Engine     ${ENGINE_SRC_FILES})
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
-target_link_libraries(Engine assimp)
 target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI)
 
 if (WIN32)
 target_link_libraries(Engine opengl32)
 target_link_libraries(Engine gdi32)
+
+set_target_properties(Engine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif(WIN32)
 
 

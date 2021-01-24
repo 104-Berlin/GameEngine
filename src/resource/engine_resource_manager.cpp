@@ -24,7 +24,7 @@ void EResourceManager::LoadAllFromFolder(const EFolder& folder)
     for (auto& p : folder.Iterator())
     {
         std::lock_guard<std::mutex> quard(fQueueMutex);
-        fLoadingQueue.push(p.path().lexically_normal());
+        fLoadingQueue.push(p.path().lexically_normal().string());
     }
 }
 
