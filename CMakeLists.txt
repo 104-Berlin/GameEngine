@@ -11,22 +11,12 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 include_directories(deps/glfw/include
-                    deps/assimp/include
                     deps/imgui
                     glad/include
                     ./src )
 
 
 add_subdirectory(deps/glfw)
-
-
-set(ZLIB_LIBRARIES zlibstatic)
-set(ASSIMP_BUILD_TESTS OFF)
-set(ENABLE_BOOST_WORKAROUND ON)
-set(BUILD_STATIC_LIB OFF)
-set(BUILD_ASSIMP_TOOLS  OFF)
-set(ASSIMP_BUILD_STATIC_LIB ON)
-add_subdirectory(deps/assimp)
 
 
 find_package(OpenGL)
@@ -63,7 +53,6 @@ add_library(Engine     ${ENGINE_SRC_FILES})
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
-target_link_libraries(Engine assimp)
 target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI)
 
 if (WIN32)
