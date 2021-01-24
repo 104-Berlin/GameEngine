@@ -10,3 +10,4 @@ plugins/
 **.filters
 **.log
 CMakeFiles/**
+.DS_Store
