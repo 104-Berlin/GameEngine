@@ -11,3 +11,4 @@ plugins/
 **.log
 CMakeFiles/**
 .DS_Store
+EngineRun
