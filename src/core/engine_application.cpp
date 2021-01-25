@@ -106,13 +106,15 @@ void EApplication::RenderImGui()
 
     UI::NewFrame();
 
-    fMainMenuBar.Render();
-    RenderResourcePanel(fResourceManager);
+    IN_RENDER_S({
+        self->fMainMenuBar.Render();
+        RenderResourcePanel(self->fResourceManager);
 
-    if (fActiveScene)
-    {
-        fActiveScene->RenderUI();
-    }
+        if (self->fActiveScene)
+        {
+            self->fActiveScene->RenderUI();
+        }
+    })
 
     UI::Render();
 }
