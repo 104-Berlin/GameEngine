@@ -17,10 +17,6 @@ void UI::Init(EWindow& window)
     IN_RENDER1(win, {
         // Setup Dear ImGui context
         IMGUI_CHECKVERSION();
-        context = ImGui::CreateContext();
-        
-        // Setup Dear ImGui context
-        IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
@@ -84,6 +80,14 @@ void UI::NewFrame()
 
         if (opt_fullscreen)
             ImGui::PopStyleVar(2);
+
+        // Dockspace		         
+ 		ImGuiIO& io = ImGui::GetIO();		        
+ 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+ 		{		
+ 			ImGuiID dockspace_id = ImGui::GetID("MyDockspace");		
+ 			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);		
+ 		}
     })
 
 }

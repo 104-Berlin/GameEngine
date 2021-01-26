@@ -22,6 +22,7 @@ namespace Engine {
 		virtual u32 GetHeight() const = 0;
 		virtual u32 GetRendererID() const = 0;
 		
+		virtual void SetTextureData(byte* pixels, u32 width, u32 height) {}
 
 		virtual bool OnLoad() = 0;
 	};

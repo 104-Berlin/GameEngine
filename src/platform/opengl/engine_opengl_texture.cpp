@@ -98,6 +98,14 @@ namespace Engine {
 			})
 
 	}
+	
+	void EOpenGLTexture2D::SetTextureData(byte* pixels, u32 width, u32 height) 
+	{
+		IN_RENDER_S3(pixels, width, height, {
+			glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), width, height, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, pixels));
+		})
+	}
 
 //REMOVE srgb??
 	EOpenGLTextureCube::EOpenGLTextureCube(const EString& path, bool srgb)

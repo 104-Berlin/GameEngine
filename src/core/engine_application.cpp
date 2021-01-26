@@ -103,7 +103,7 @@ void EApplication::RenderImGui()
         glCall(glViewport(0, 0, width, height));
     })
 
-
+    fUIRenderer.Begin();
     UI::NewFrame();
 
     IN_RENDER_S({
@@ -115,7 +115,8 @@ void EApplication::RenderImGui()
             self->fActiveScene->RenderUI();
         }
     })
-
+    
+    fUIRenderer.Render();
     UI::Render();
 }
 

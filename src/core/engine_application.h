@@ -12,7 +12,7 @@ namespace Engine {
         EExtensionManager   fExtensionManager;
         EResourceManager    fResourceManager;
 
-
+        EUIRenderer         fUIRenderer;
 
         // TEMP
         EMainMenuBar      fMainMenuBar;
