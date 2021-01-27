@@ -17,6 +17,17 @@ namespace Engine {
 		return 0;
 	}
 
+	static size_t GetTextureFormatPixelSizeInBytes(ETextureFormat format)
+	{
+		switch (format)
+		{
+		case ETextureFormat::RGB:     return 3;
+		case ETextureFormat::RGBA:    return 4;
+		case ETextureFormat::None:	  break;
+		}
+		return 0;
+	}
+
 	static int CalculateMipMapCount(int width, int height)
 	{
 		int levels = 1;
@@ -101,9 +112,12 @@ namespace Engine {
 	
 	void EOpenGLTexture2D::SetTextureData(byte* pixels, u32 width, u32 height) 
 	{
-		IN_RENDER_S3(pixels, width, height, {
+		byte* copy_array = new byte[width * height * GetTextureFormatPixelSizeInBytes(fFormat)];
+		memcpy(copy_array, pixels, width * height * GetTextureFormatPixelSizeInBytes(fFormat));
+		IN_RENDER_S3(copy_array, width, height, {
 			glCall(glBindTexture(GL_TEXTURE_2D, self->fRendererID));
-			glCall(glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), width, height, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, pixels));
+			glCall(glTexImage2D(GL_TEXTURE_2D, 0, InfinitToOpenGLTextureFormat(self->fFormat), width, height, 0, InfinitToOpenGLTextureFormat(self->fFormat), GL_UNSIGNED_BYTE, copy_array));
+			delete[] copy_array;
 		})
 	}
 

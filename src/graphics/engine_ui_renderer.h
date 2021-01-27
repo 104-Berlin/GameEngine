@@ -5,10 +5,13 @@ namespace Engine {
     class EUIRenderer
     {
     private:
-        ERef<EVertexBuffer> fVertexBuffer;
         ERef<EVertexArray>  fVertexArray;
+        ERef<EVertexBuffer> fVertexBuffer;
+        ERef<EIndexBuffer>  fIndexBuffer;
         ERef<EShader>       fShader;
         ERef<ETexture2D>    fFontTexture;
+
+        bool                fIsInitialized;
     public:
         EUIRenderer();
         void Init(ERef<EWindow> window);
@@ -16,6 +19,8 @@ namespace Engine {
         void Begin();
         void Render();
         void End();
+
+        bool IsInitialized() const { return fIsInitialized; }
     private:
 
         void CreateRenderingStorage();

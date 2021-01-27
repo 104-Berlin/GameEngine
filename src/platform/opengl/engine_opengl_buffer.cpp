@@ -1,13 +1,42 @@
 #include "Engine.h"
 
 namespace Engine {
-	
-	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, u32 size)
+
+	static GLenum GetGLBufferUsage(EBufferUsage usage)
 	{
-		IN_RENDER_S2(data, size, {
+		switch (usage)
+		{
+		case EBufferUsage::STREAM_DRAW: return GL_STREAM_DRAW;
+		case EBufferUsage::STREAM_READ: return GL_STREAM_READ;
+		case EBufferUsage::STREAM_COPY: return GL_STREAM_COPY;
+		case EBufferUsage::STATIC_DRAW: return GL_STATIC_DRAW;
+		case EBufferUsage::STATIC_READ: return GL_STATIC_READ;
+		case EBufferUsage::STATIC_COPY: return GL_STATIC_COPY;
+		case EBufferUsage::DYNAMIC_DRAW: return GL_DYNAMIC_DRAW;
+		case EBufferUsage::DYNAMIC_READ: return GL_DYNAMIC_READ;
+		case EBufferUsage::DYNAMIC_COPY: return GL_DYNAMIC_COPY;
+		}
+		return GL_NONE;
+	}
+
+
+
+	EOpenGLVertexBuffer::EOpenGLVertexBuffer(EBufferUsage usage) 
+		: EVertexBuffer(usage)
+	{
+		IN_RENDER_S({
+			glCall(glGenBuffers(1, &self->m_RendererID));
+		})
+	}
+
+	
+	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, u32 size, EBufferUsage usage)
+		: EVertexBuffer(usage)
+	{
+		IN_RENDER_S3(data, size, usage, {
 				glCall(glGenBuffers(1, &self->m_RendererID));
 				glCall(glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID));
-				glCall(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+				glCall(glBufferData(GL_ARRAY_BUFFER, size, data, GetGLBufferUsage(usage)));
 			})
 	}
 
@@ -35,6 +64,15 @@ namespace Engine {
 	{
 		glCall(glUnmapBuffer(GL_ARRAY_BUFFER));
 	}
+	
+	void EOpenGLVertexBuffer::SetData(void* data, size_t dataSize) 
+	{
+		Bind();
+		// Propbably copy the data?
+		IN_RENDER_S2(data, dataSize, {
+			glCall(glBufferData(GL_ARRAY_BUFFER, dataSize, data, GetGLBufferUsage(self->fBufferUsage)));
+		})
+	}
 
 
 
@@ -52,13 +90,22 @@ namespace Engine {
 #endif
 	}
 
-	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const u32* data, u32 count)
-		: m_Count(count)
+	
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(EBufferUsage usage) 
+		: EIndexBuffer(usage), m_Count(0)
 	{
-		IN_RENDER_S2(data, count, {
+		IN_RENDER_S({
+			glCall(glGenBuffers(1, &self->m_RendererID));	
+		})
+	}
+
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const u32* data, u32 count, EBufferUsage usage)
+		: EIndexBuffer(usage), m_Count(count)
+	{
+		IN_RENDER_S3(data, count, usage, {
 				glCall(glGenBuffers(1, &self->m_RendererID));
 				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID));
-				glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GL_STATIC_DRAW));
+				glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GetGLBufferUsage(usage)));
 			})
 	}
 
@@ -84,6 +131,22 @@ namespace Engine {
 				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 			})
 #endif
+	}
+	
+	void EOpenGLIndexBuffer::SetData(u32* data, u32 indexCount) 
+	{
+		Bind();
+		IN_RENDER_S2(data, indexCount, {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
+		})
+	}
+	
+	void EOpenGLIndexBuffer::SetData(u16* data, u32 indexCount) 
+	{
+		Bind();
+		IN_RENDER_S2(data, indexCount, {
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
+		})
 	}
 
 EOpenGLVertexArray::EOpenGLVertexArray()

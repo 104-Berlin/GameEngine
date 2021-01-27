@@ -132,9 +132,25 @@ namespace Engine {
 		u32 fStride = 0;
 	};
 
+	enum class EBufferUsage
+	{
+		STREAM_DRAW, 
+		STREAM_READ, 
+		STREAM_COPY, 
+		STATIC_DRAW, 
+		STATIC_READ, 
+		STATIC_COPY, 
+		DYNAMIC_DRAW, 
+		DYNAMIC_READ, 
+		DYNAMIC_COPY
+	};
+
 	class EVertexBuffer
 	{
+	protected:
+		EBufferUsage fBufferUsage;
 	public:
+		EVertexBuffer(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		virtual ~EVertexBuffer() {}
 
 		virtual void Bind() const = 0;
@@ -148,19 +164,30 @@ namespace Engine {
 		// DO NOT Call this in a IN_RENDER({})
 		virtual void Unmap() = 0;
 
+
+		virtual void SetData(void* data, size_t dataSize) = 0;
+
+		static ERef<EVertexBuffer> Create(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		static ERef<EVertexBuffer> Create(const void* data, u32 size);
 	};
 
 	class EIndexBuffer
 	{
+	protected:
+		EBufferUsage fBufferUsage;
 	public:
+		EIndexBuffer(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		virtual ~EIndexBuffer() {}
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
+		virtual void SetData(u32* data, u32 indexCount) = 0;
+		virtual void SetData(u16* data, u32 indexCount) = 0;
+
 		virtual u32 GetCount() const = 0;
 
+		static ERef<EIndexBuffer> Create(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		static ERef<EIndexBuffer> Create(const u32* indices, u32 count);
 	};
 
