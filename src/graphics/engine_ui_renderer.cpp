@@ -51,6 +51,8 @@ void EUIRenderer::Init(ERef<EWindow> window)
     ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
+
+    
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
@@ -59,7 +61,6 @@ void EUIRenderer::Init(ERef<EWindow> window)
     io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
 
     ImGui::StyleColorsDark();
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 24.0f);
 
     ImGuiStyle& style = ImGui::GetStyle();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -70,7 +71,6 @@ void EUIRenderer::Init(ERef<EWindow> window)
 
     // Setup glfw for imgui. using the impl from imgui, because it has everything i want
     ImGui_ImplGlfw_InitForOpenGL(window->GetNativeWindow(), true);
-
 
 
 
@@ -282,16 +282,20 @@ void EUIRenderer::CreateRenderingStorage()
 void EUIRenderer::CreateFontAtlas() 
 {
     ImGuiIO& io = ImGui::GetIO();
+    ImFont* pFont = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 24.0f);
+
+
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
 
     fFontTexture = ETexture2D::Create(ETextureFormat::RGBA, width, height);
     fFontTexture->SetTextureData(pixels, width, height);
-    IN_RENDER_S({
+    IN_RENDER_S1(pFont, {
         ImGuiIO& io = ImGui::GetIO();
         io.Fonts->TexID = (ImTextureID)(intptr_t)self->fFontTexture->GetRendererID();
         self->fIsInitialized = true;
+        ImGui::PushFont(pFont);
     });
 
 }
