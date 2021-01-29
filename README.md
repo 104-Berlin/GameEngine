@@ -1,3 +1,5 @@
+![C/C++ CI](https://github.com/104-Berlin/GameEngine/workflows/C/C++%20CI/badge.svg?branch=master)
+
 # GameEngine
 
 ### Building:
