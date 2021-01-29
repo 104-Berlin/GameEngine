@@ -4,6 +4,17 @@
 
 using namespace Engine;
 
+EVector<EMesh::EVertex> vertices_2 = {
+        {{-0.5f, -0.5f, 0.0f}, {0, 0, 0}, {0, 0}},
+        {{-0.5f,  0.5f, 0.0f}, {0, 0, 0}, {0, 1}},
+        {{ 0.5f,  0.5f, 0.0f}, {0, 0, 0}, {1, 1}},
+        {{ 0.5f, -0.5f, 0.0f}, {0, 0, 0}, {1, 0}},
+    };
+
+    EVector<u32> indices_2 = {
+        0, 1, 2,
+        2, 3, 0
+    };
 
 const char* fragment_shader =
         "#version 330 core\n"
@@ -13,7 +24,8 @@ const char* fragment_shader =
         "layout (location = 0) out vec4 Out_Color;\n"
         "void main()\n"
         "{\n"
-        "    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n"
+        "    Out_Color = Frag_Color * texture(Texture, Frag_UV);\n"
+        "    //Out_Color = vec4(Frag_UV, 0.0, 1.0);\n"
         "}\n";
 
 const char* vertex_shader =
@@ -30,6 +42,32 @@ const char* vertex_shader =
         "    Frag_Color = Color;\n"
         "    gl_Position = ProjMtx * vec4(Position.xy,0,1);\n"
         "}\n";
+
+
+// TEMP
+
+const char* fragment_shader2 =
+        "#version 330 core\n"
+        "in vec2 Frag_UV;\n"
+        "uniform sampler2D Texture;\n"
+        "layout (location = 0) out vec4 Out_Color;\n"
+        "void main()\n"
+        "{\n"
+        "    Out_Color = texture(Texture, Frag_UV);\n"
+        "}\n";
+
+const char* vertex_shader2 =
+        "#version 330 core\n"
+        "layout (location = 0) in vec3 Position;\n"
+        "layout (location = 1) in vec3 Normal;\n"
+        "layout (location = 2) in vec2 UV;\n"
+        "out vec2 Frag_UV;\n"
+        "void main()\n"
+        "{\n"
+        "    Frag_UV = UV;\n"
+        "    gl_Position = vec4(Position,1);\n"
+        "}\n";
+    
 
 
 void Render_Window(ImGuiViewport* vp, void* data)
@@ -56,16 +94,17 @@ EUIRenderer::EUIRenderer()
 
 void EUIRenderer::Init(ERef<EWindow> window) 
 {
+    fMainWindow = window->GetNativeWindow();
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
-    io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 24.0f);
+    io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 24.0f);
 
     
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     io.BackendRendererName = "104-engine";
     io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
@@ -89,12 +128,32 @@ void EUIRenderer::Init(ERef<EWindow> window)
     platform_io.Renderer_RenderWindow = &Render_Window;
 
     CreateRenderingStorage();
+
+
+    // TEMP
+
+    
+
+
+    fVertexQuatArray = EVertexArray::Create();
+    fVertexQuatBuffer = EVertexBuffer::Create(vertices_2.data(), vertices_2.size() * sizeof(EMesh::EVertex));
+    EBufferLayout layout({
+        EBufferElement(EShaderDataType::Float3, "POSITION"),
+        EBufferElement(EShaderDataType::Float3, "NORMAL"),
+        EBufferElement(EShaderDataType::Float2, "UV")
+    });
+    fVertexQuatBuffer->SetLayout(layout);
+    fIndexQuatBuffer = EIndexBuffer::Create(indices_2.data(), indices_2.size());
+
+    fVertexQuatArray->AddVertexBuffer(fVertexQuatBuffer);
+    fVertexQuatArray->SetIndexBuffer(fIndexQuatBuffer);
+
+    fQuatShader = EShader::Create(vertex_shader2, fragment_shader2);
 }
 
 void EUIRenderer::Begin() 
 {
     CreateFontAtlas();
-
     ImGui_ImplGlfw_NewFrame();
 
     ImGui::NewFrame();
@@ -135,11 +194,17 @@ void EUIRenderer::Begin()
     }
 }
 
+static bool draw = true;    
 void EUIRenderer::Render() 
 {
     ImGui::End();
     ImGui::Render();
 
+    if (draw)
+    {
+        std::cout << "DRAW\n";
+        draw = false;
+    }
     DrawData(ImGui::GetDrawData());
 
 
@@ -151,6 +216,26 @@ void EUIRenderer::Render()
         ImGui::RenderPlatformWindowsDefault(NULL,this);
         glfwMakeContextCurrent(backup_current_context);
     }
+
+    IN_RENDER_S({
+        //glfwMakeContextCurrent(self->fMainWindow);
+        glCall(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
+
+        glCall(glEnable(GL_BLEND));
+        //glCall(glBlendEquation(GL_FUNC_ADD));
+        glCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+        glCall(glDisable(GL_CULL_FACE));
+        glCall(glDisable(GL_SCISSOR_TEST));
+
+        glCall(glBindSampler(0, 0));
+
+    })
+
+    fQuatShader->Bind();
+    fQuatShader->SetUniform1i("Texture", 0);
+    fFontTexture->Bind(0);
+
+    ERenderer::RenderVertexArray(fVertexQuatArray);
 }
 
 void EUIRenderer::DrawData(ImDrawData* drawData) 
@@ -211,8 +296,8 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                         // Apply scissor/clipping rectangle
                         glCall(glScissor((int)clip_rect.x, (int)(fb_height - clip_rect.w), (int)(clip_rect.z - clip_rect.x), (int)(clip_rect.w - clip_rect.y)));
                         // Bind texture, Draw
+                        printf("BInding texture %d\n", (u32)(intptr_t)textureId);
                         glCall(glActiveTexture(GL_TEXTURE0));
-                        printf("Textureid: %d\n", textureId);
                         glCall(glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)textureId));
                     })
                     
@@ -255,7 +340,7 @@ void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeig
         glCall(glDisable(GL_DEPTH_TEST));
         glCall(glEnable(GL_SCISSOR_TEST));
 
-        glCall(glBindSampler(0, 0));
+        //glCall(glBindSampler(0, 0));
     })
 
 
