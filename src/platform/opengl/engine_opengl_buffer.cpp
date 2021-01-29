@@ -141,11 +141,11 @@ namespace Engine {
 		})
 	}
 	
-	void EOpenGLIndexBuffer::SetData16(u16* data, u32 indexCount) 
+	void EOpenGLIndexBuffer::SetDataImChar(ImWchar* data, u32 indexCount) 
 	{
 		Bind();
 		IN_RENDER_S2(data, indexCount, {
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ImWchar) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
 		})
 	}
 

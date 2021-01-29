@@ -183,7 +183,7 @@ namespace Engine {
 		virtual void Unbind() const = 0;
 
 		virtual void SetData32(u32* data, u32 indexCount) = 0;
-		virtual void SetData16(u16* data, u32 indexCount) = 0;
+		virtual void SetDataImChar(ImWchar* data, u32 indexCount) = 0;
 
 		virtual u32 GetCount() const = 0;
 
