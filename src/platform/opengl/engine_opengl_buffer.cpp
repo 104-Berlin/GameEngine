@@ -133,7 +133,7 @@ namespace Engine {
 #endif
 	}
 	
-	void EOpenGLIndexBuffer::SetData(u32* data, u32 indexCount) 
+	void EOpenGLIndexBuffer::SetData32(u32* data, u32 indexCount) 
 	{
 		Bind();
 		IN_RENDER_S2(data, indexCount, {
@@ -141,7 +141,7 @@ namespace Engine {
 		})
 	}
 	
-	void EOpenGLIndexBuffer::SetData(u16* data, u32 indexCount) 
+	void EOpenGLIndexBuffer::SetData16(u16* data, u32 indexCount) 
 	{
 		Bind();
 		IN_RENDER_S2(data, indexCount, {

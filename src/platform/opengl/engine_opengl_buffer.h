@@ -61,8 +61,8 @@ namespace Engine {
 
 		virtual u32 GetCount() const override { return m_Count; }
 
-		virtual void SetData(u32* data, u32 indexCount) override;
-		virtual void SetData(u16* data, u32 indexCount) override;
+		virtual void SetData32(u32* data, u32 indexCount) override;
+		virtual void SetData16(u16* data, u32 indexCount) override;
 	private:
 		u32 m_RendererID = 0;
 		u32 m_Count;

@@ -202,7 +202,9 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
         ImVector<ImWchar>* indexData = new ImVector<ImWchar>(cmd_list->IdxBuffer);
 
         fVertexBuffer->SetData(vertexData->Data, vertexData->size_in_bytes());
-        fIndexBuffer->SetData(indexData->Data, indexData->Size);
+
+        if (sizeof(ImWchar) == 2) { fIndexBuffer->SetData32((u32*)indexData->Data, indexData->Size); }
+        else if (sizeof(ImWchar) == 1) { fIndexBuffer->SetData16((u16*)indexData->Data, indexData->Size); }
 
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
