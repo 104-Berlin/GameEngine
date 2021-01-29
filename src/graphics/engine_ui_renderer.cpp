@@ -4,19 +4,6 @@
 
 using namespace Engine;
 
-EVector<EMesh::EVertex> vertices_2 = {
-        {{-0.5f, -0.5f, 0.0f}, {0, 0, 0}, {0, 0}},
-        {{-0.5f,  0.5f, 0.0f}, {0, 0, 0}, {0, 1}},
-        {{ 0.5f,  0.5f, 0.0f}, {0, 0, 0}, {1, 1}},
-        {{ 0.5f, -0.5f, 0.0f}, {0, 0, 0}, {1, 0}},
-    };
-
-    EVector<u32> indices_2 = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-
 const char* vertex_shader =
         "#version 330 core\n"
         "layout (location = 0) in vec2 Position;\n"
