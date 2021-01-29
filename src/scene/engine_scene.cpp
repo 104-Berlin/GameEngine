@@ -99,6 +99,7 @@ void EScene::RenderUI()
             ImGui::Selectable("Unknown");
         }
     });
+
     if (ImGui::BeginPopupContextWindow())
     {
         if (ImGui::MenuItem("New Object"))
@@ -106,6 +107,18 @@ void EScene::RenderUI()
             CreateObject();
         }
         ImGui::EndPopup();
+    }
+    ImGui::End();
+    
+    ImGui::ShowDemoWindow();
+
+
+    ImGui::Begin("ALSKJD");
+    ImGui::Text("ALSKJDLASKJD");
+    ImGui::SameLine();
+    if (ImGui::Button("ASKDH"))
+    {
+
     }
     ImGui::End();
 

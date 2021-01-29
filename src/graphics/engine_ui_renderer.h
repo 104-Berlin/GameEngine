@@ -18,11 +18,12 @@ namespace Engine {
 
         void Begin();
         void Render();
+        void DrawData(ImDrawData* drawData);
         void End();
 
         bool IsInitialized() const { return fIsInitialized; }
     private:
-
+        void ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeight);
         void CreateRenderingStorage();
         void CreateFontAtlas();
         void RenderWindow(ImGuiViewport* viewport, void* data);

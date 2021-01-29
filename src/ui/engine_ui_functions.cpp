@@ -56,6 +56,7 @@ void UI::RenderInputField_Vec3(const EString& label, EProperty<EVec3>* value)
     {
         value->SetValue(val);
     }
+
 }
 
 
