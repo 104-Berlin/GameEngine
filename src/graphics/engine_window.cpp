@@ -2,14 +2,8 @@
 
 namespace Engine {
 
-	static bool gHasMainWndow = false;
-
 	EWindow::EWindow(const EWindowProp& prop)
 	{
-		// First created window is the main window
-		fIsMainWindow = !gHasMainWndow;
-		gHasMainWndow = true;
-
 		fData.title = prop.title;
 		fData.width = prop.width;
 		fData.height = prop.height;

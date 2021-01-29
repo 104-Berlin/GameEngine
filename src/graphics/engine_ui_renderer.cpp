@@ -138,17 +138,11 @@ void EUIRenderer::Begin()
     }
 }
 
-static bool draw = true;    
 void EUIRenderer::Render() 
 {
     ImGui::End();
     ImGui::Render();
 
-    if (draw)
-    {
-        std::cout << "DRAW\n";
-        draw = false;
-    }
     DrawData(ImGui::GetDrawData());
 
 

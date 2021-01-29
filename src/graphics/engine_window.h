@@ -39,7 +39,6 @@ namespace Engine {
 		bool IsAltPressed() { return fData.altPressed; }
 	private:
 		GLFWwindow* fWindow;
-		bool fIsMainWindow;
 
 		struct EWindowData
 		{

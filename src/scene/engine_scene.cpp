@@ -110,17 +110,6 @@ void EScene::RenderUI()
     }
     ImGui::End();
     
-    ImGui::ShowDemoWindow();
-
-
-    ImGui::Begin("ALSKJD");
-    ImGui::Text("ALSKJDLASKJD");
-    ImGui::SameLine();
-    if (ImGui::Button("ASKDH"))
-    {
-
-    }
-    ImGui::End();
 
     fComponentPanel->Render();
 }
