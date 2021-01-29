@@ -89,7 +89,8 @@ void EExtensionManager::LoadPluginFolder()
     IN_RENDER1(extensions, {
         for (EExtension* ext : extensions)
         {
-            ext->InitImGui(UI::GetContext());
+            // TODO: Make ui work for extensions again
+            //ext->InitImGui(UI::GetContext());
         }
     })
 }

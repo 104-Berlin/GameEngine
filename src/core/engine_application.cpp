@@ -29,6 +29,7 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     fExtensionManager.LoadPluginFolder();
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
+    fUIRenderer.Init(fWindow);
 
     SetUpMainMenuBar();
 
@@ -94,6 +95,7 @@ void EApplication::Render()
 
 void EApplication::RenderImGui()
 {
+    if (!fUIRenderer.IsInitialized()) { return; }
     int width = 0;
     int height = 0;
 
@@ -103,28 +105,20 @@ void EApplication::RenderImGui()
         glCall(glViewport(0, 0, width, height));
     })
 
+    
+    fUIRenderer.Begin();
+    //UI::NewFrame();
 
-    UI::NewFrame();
+    fMainMenuBar.Render();
+    RenderResourcePanel(fResourceManager);
 
-
-
-    IN_RENDER_S({
-        self->fMainMenuBar.Render();
-
-
-
-
-
-        RenderResourcePanel(self->fResourceManager);
-        
-
-        if (self->fActiveScene)
-        {
-            self->fActiveScene->RenderUI();
-        }
-    })
-
-    UI::Render();
+    if (fActiveScene)
+    {
+        fActiveScene->RenderUI();
+    }
+    
+    fUIRenderer.Render();
+    //UI::Render();
 }
 
 void EApplication::CleanUp() 

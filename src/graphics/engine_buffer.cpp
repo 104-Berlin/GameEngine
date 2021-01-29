@@ -2,6 +2,25 @@
 
 namespace Engine {
 
+	EVertexBuffer::EVertexBuffer(EBufferUsage usage) 
+		: fBufferUsage(usage)
+	{
+		
+	}
+	
+	ERef<EVertexBuffer> EVertexBuffer::Create(EBufferUsage usage)
+	{
+		//TODO: Add ASSERT
+		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
+		switch (ERenderContext::Renderer)
+		{
+		case ERenderingType::OpenGL:	return ERef<EOpenGLVertexBuffer>(new EOpenGLVertexBuffer(usage));
+		case ERenderingType::None:		break;
+		}
+		
+		return nullptr;
+	}
+	
 	ERef<EVertexBuffer> EVertexBuffer::Create(const void* data, u32 size)
 	{
 		//TODO: Add ASSERT
@@ -12,6 +31,24 @@ namespace Engine {
 		case ERenderingType::None:		break;
 		}
 		
+		return nullptr;
+	}
+	
+	EIndexBuffer::EIndexBuffer(EBufferUsage usage) 
+		: fBufferUsage(usage)
+	{
+		
+	}
+
+	ERef<EIndexBuffer> EIndexBuffer::Create(EBufferUsage usage)
+	{
+		//TODO: Add ASSERT
+		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
+		switch (ERenderContext::Renderer)
+		{
+		case ERenderingType::OpenGL:	return ERef<EOpenGLIndexBuffer>(new EOpenGLIndexBuffer(usage));
+		case ERenderingType::None:		break;
+		}
 		return nullptr;
 	}
 
@@ -46,6 +83,7 @@ namespace Engine {
 		case ERenderingType::OpenGL: return ERef<EOpenGLFrameBuffer>(new EOpenGLFrameBuffer(width, height, format));
 		case ERenderingType::None:	break;
 		}
+		
 		return nullptr;
 	}
 

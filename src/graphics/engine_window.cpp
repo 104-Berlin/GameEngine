@@ -16,9 +16,8 @@ namespace Engine {
 		glfwInit();
 
 
-		glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);	
-				// Decide GL+GLSL versions
 #if __APPLE__
+		glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_TRUE);	
 		// GL 3.2 + GLSL 150
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
@@ -44,7 +43,7 @@ namespace Engine {
 
 		ERenderer::Init();
 		ERenderContext::Create(*this);
-		UI::Init(*this);
+		//UI::Init(*this);
 		
 		glfwSetWindowUserPointer(fWindow, &fData);
 

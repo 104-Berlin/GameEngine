@@ -99,6 +99,7 @@ void EScene::RenderUI()
             ImGui::Selectable("Unknown");
         }
     });
+
     if (ImGui::BeginPopupContextWindow())
     {
         if (ImGui::MenuItem("New Object"))
@@ -108,6 +109,7 @@ void EScene::RenderUI()
         ImGui::EndPopup();
     }
     ImGui::End();
+    
 
     fComponentPanel->Render();
 }

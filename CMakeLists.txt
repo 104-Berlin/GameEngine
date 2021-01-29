@@ -65,3 +65,7 @@ endif(WIN32)
 
 add_executable(EngineRun main.cpp)
 target_link_libraries(EngineRun Engine)
+
+if (WIN32)
+set_target_properties(Engine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+endif(WIN32)

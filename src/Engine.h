@@ -46,6 +46,8 @@
 #include "graphics/engine_shader.h"
 #include "graphics/engine_texture.h"
 #include "graphics/engine_renderer.h"
+#include "graphics/engine_ui_renderer.h"
+
 
 
 
@@ -68,7 +70,6 @@
 
 
 
-#include "ui/engine_ui.h"
 #include "ui/engine_ui_functions.h"
 #include "ui/engine_ui_fields.h"
 #include "ui/engine_panels.h"

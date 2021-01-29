@@ -12,3 +12,4 @@ plugins/
 CMakeFiles/**
 .DS_Store
 EngineRun
+Debug/

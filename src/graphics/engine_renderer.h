@@ -8,6 +8,8 @@ namespace Engine {
 		static void Init();
 		static void CleanUp();
 
+		static void RenderVertexArray(const ERef<EVertexArray>& vertexArray);
+
 		static void Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lights);
 		static void Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform = EMat4(1.0f));
 		static void* Submit(ERenderCommandFn fn, u32 size) { return s_Instance->fCommandQueue.Allocate(fn, size); }

@@ -59,6 +59,7 @@ namespace Engine {
 			bool middlePress;
 		};
 		EWindowData fData;
+		
 	};
 
 }

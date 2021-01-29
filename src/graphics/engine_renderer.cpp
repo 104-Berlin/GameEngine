@@ -65,10 +65,20 @@ const char* fragment_shader_src = ""
 			s_Instance = nullptr;
 		}
 	}
+	
+	void ERenderer::RenderVertexArray(const ERef<EVertexArray>& vertexArray) 
+	{
+		vertexArray->Bind();
+
+		u32 indexCount = vertexArray->GetIndexBuffer()->GetCount();
+		IN_RENDER1(indexCount, {
+			glCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
+		})
+	}
 
 	void ERenderer::Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lightMap)
 	{
-		ERenderContext::s_Instance->SetClearColor({ 1.0f, 1.0f, 1.0f, 1.0f });
+		ERenderContext::s_Instance->SetClearColor({ 1.0f, 0.6f, 0.6f, 1.0f });
 		ERenderContext::s_Instance->Clear();
 
         s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix() * viewMatrix;
@@ -95,12 +105,7 @@ const char* fragment_shader_src = ""
 		s_Instance->fShader->SetUniformMat4("vp_matrix", s_Instance->fViewProjectionMatrix);
 		s_Instance->fShader->SetUniformMat4("ml_matrix", transform);
 
-		vertexArray->Bind();
-
-		u32 indexCount = vertexArray->GetIndexBuffer()->GetCount();
-		IN_RENDER1(indexCount, {
-			glCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, NULL));
-		})
+		RenderVertexArray(vertexArray);
 	}
 
 	void ERenderer::End()

@@ -17,6 +17,8 @@ namespace Engine {
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
 
+		virtual void SetTextureData(byte* pixels, u32 width, u32 height) override;
+
 		virtual bool OnLoad() override;
 	private:
 		u32 fRendererID;
