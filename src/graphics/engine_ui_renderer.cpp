@@ -1,7 +1,6 @@
 #include "Engine.h"
 #include "backends/imgui_impl_glfw.h"
 
-
 using namespace Engine;
 
 const char* vertex_shader =
