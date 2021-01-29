@@ -16,17 +16,6 @@ EVector<EMesh::EVertex> vertices_2 = {
         2, 3, 0
     };
 
-const char* fragment_shader =
-        "#version 330 core\n"
-        "in vec2 Frag_UV;\n"
-        "in vec4 Frag_Color;\n"
-        "uniform sampler2D Texture;\n"
-        "layout (location = 0) out vec4 Out_Color;\n"
-        "void main()\n"
-        "{\n"
-        "    Out_Color = Frag_Color * texture(Texture, Frag_UV);\n"
-        "    //Out_Color = vec4(Frag_UV, 0.0, 1.0);\n"
-        "}\n";
 
 const char* vertex_shader =
         "#version 330 core\n"
@@ -44,30 +33,19 @@ const char* vertex_shader =
         "}\n";
 
 
-// TEMP
-
-const char* fragment_shader2 =
+const char* fragment_shader =
         "#version 330 core\n"
         "in vec2 Frag_UV;\n"
+        "in vec4 Frag_Color;\n"
         "uniform sampler2D Texture;\n"
         "layout (location = 0) out vec4 Out_Color;\n"
         "void main()\n"
         "{\n"
-        "    Out_Color = texture(Texture, Frag_UV);\n"
+        "    Out_Color = Frag_Color * texture(Texture, Frag_UV.st);\n"
+        "    //Out_Color = vec4(Frag_UV, 0.0, 1.0);\n"
         "}\n";
 
-const char* vertex_shader2 =
-        "#version 330 core\n"
-        "layout (location = 0) in vec3 Position;\n"
-        "layout (location = 1) in vec3 Normal;\n"
-        "layout (location = 2) in vec2 UV;\n"
-        "out vec2 Frag_UV;\n"
-        "void main()\n"
-        "{\n"
-        "    Frag_UV = UV;\n"
-        "    gl_Position = vec4(Position,1);\n"
-        "}\n";
-    
+
 
 
 void Render_Window(ImGuiViewport* vp, void* data)
@@ -100,14 +78,14 @@ void EUIRenderer::Init(ERef<EWindow> window)
     ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 24.0f);
+    io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 20.0f);
 
     
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     io.BackendRendererName = "104-engine";
-    io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
+    //io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
     io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
 
     ImGui::StyleColorsDark();
@@ -128,27 +106,6 @@ void EUIRenderer::Init(ERef<EWindow> window)
     platform_io.Renderer_RenderWindow = &Render_Window;
 
     CreateRenderingStorage();
-
-
-    // TEMP
-
-    
-
-
-    fVertexQuatArray = EVertexArray::Create();
-    fVertexQuatBuffer = EVertexBuffer::Create(vertices_2.data(), vertices_2.size() * sizeof(EMesh::EVertex));
-    EBufferLayout layout({
-        EBufferElement(EShaderDataType::Float3, "POSITION"),
-        EBufferElement(EShaderDataType::Float3, "NORMAL"),
-        EBufferElement(EShaderDataType::Float2, "UV")
-    });
-    fVertexQuatBuffer->SetLayout(layout);
-    fIndexQuatBuffer = EIndexBuffer::Create(indices_2.data(), indices_2.size());
-
-    fVertexQuatArray->AddVertexBuffer(fVertexQuatBuffer);
-    fVertexQuatArray->SetIndexBuffer(fIndexQuatBuffer);
-
-    fQuatShader = EShader::Create(vertex_shader2, fragment_shader2);
 }
 
 void EUIRenderer::Begin() 
@@ -216,26 +173,6 @@ void EUIRenderer::Render()
         ImGui::RenderPlatformWindowsDefault(NULL,this);
         glfwMakeContextCurrent(backup_current_context);
     }
-
-    IN_RENDER_S({
-        //glfwMakeContextCurrent(self->fMainWindow);
-        glCall(glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT));
-
-        glCall(glEnable(GL_BLEND));
-        //glCall(glBlendEquation(GL_FUNC_ADD));
-        glCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-        glCall(glDisable(GL_CULL_FACE));
-        glCall(glDisable(GL_SCISSOR_TEST));
-
-        glCall(glBindSampler(0, 0));
-
-    })
-
-    fQuatShader->Bind();
-    fQuatShader->SetUniform1i("Texture", 0);
-    fFontTexture->Bind(0);
-
-    ERenderer::RenderVertexArray(fVertexQuatArray);
 }
 
 void EUIRenderer::DrawData(ImDrawData* drawData) 
@@ -255,13 +192,14 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
     ImVec2 clip_off = drawData->DisplayPos;         // (0,0) unless using multi-viewports
     ImVec2 clip_scale = drawData->FramebufferScale; // (1,1) unless using retina display which are often (2,2)
     
+    fVertexArray->Bind();
+
     for (int n = 0; n < drawData->CmdListsCount; n++)
     {
         const ImDrawList* cmd_list = drawData->CmdLists[n];
 
         ImVector<ImDrawVert>* vertexData = new ImVector<ImDrawVert>(cmd_list->VtxBuffer);
         ImVector<ImWchar>* indexData = new ImVector<ImWchar>(cmd_list->IdxBuffer);
-
 
         fVertexBuffer->SetData(vertexData->Data, vertexData->size_in_bytes());
         fIndexBuffer->SetData(indexData->Data, indexData->Size);
@@ -274,7 +212,7 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                 // User callback, registered via ImDrawList::AddCallback()
                 // (ImDrawCallback_ResetRenderState is a special callback value used by the user to request the renderer to reset render state.)
                 if (pcmd->UserCallback == ImDrawCallback_ResetRenderState)
-                    {//ImGui_ImplOpenGL3_SetupRenderState(draw_data, fb_width, fb_height, vertex_array_object);
+                    {
                         this->ResetRenderState(drawData, fb_width, fb_height);
                     }
                 else
@@ -296,12 +234,11 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                         // Apply scissor/clipping rectangle
                         glCall(glScissor((int)clip_rect.x, (int)(fb_height - clip_rect.w), (int)(clip_rect.z - clip_rect.x), (int)(clip_rect.w - clip_rect.y)));
                         // Bind texture, Draw
-                        printf("BInding texture %d\n", (u32)(intptr_t)textureId);
+                        
                         glCall(glActiveTexture(GL_TEXTURE0));
                         glCall(glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)textureId));
                     })
                     
-                    fVertexArray->Bind();
                     
                     u32 indexOffset = pcmd->IdxOffset;
                     u32 elementCount = pcmd->ElemCount;
@@ -339,8 +276,6 @@ void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeig
         glCall(glDisable(GL_CULL_FACE));
         glCall(glDisable(GL_DEPTH_TEST));
         glCall(glEnable(GL_SCISSOR_TEST));
-
-        //glCall(glBindSampler(0, 0));
     })
 
 
@@ -349,17 +284,7 @@ void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeig
     float R = drawData->DisplayPos.x + drawData->DisplaySize.x;
     float T = drawData->DisplayPos.y;
     float B = drawData->DisplayPos.y + drawData->DisplaySize.y;
-/*
-    {01, 02, 03, 04},
-    {05, 06, 07, 08},
-    {09, 10, 11, 12},
-    {13, 14, 15, 16},
 
-    {01, 05, 09, 13},
-    {02, 06, 10, 14},
-    {03, 07, 11, 15},
-    {04, 08, 12, 16},
-*/
     
     glm::mat4 mat = glm::ortho(L, R, B, T);
 

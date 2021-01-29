@@ -14,12 +14,6 @@ namespace Engine {
         bool                fIsInitialized;
         GLFWwindow*         fMainWindow;
 
-        // TEMP
-
-        ERef<EShader>       fQuatShader;
-        ERef<EVertexArray>  fVertexQuatArray;
-        ERef<EVertexBuffer> fVertexQuatBuffer;
-        ERef<EIndexBuffer>  fIndexQuatBuffer;
     public:
         EUIRenderer();
         void Init(ERef<EWindow> window);
