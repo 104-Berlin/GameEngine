@@ -131,6 +131,11 @@ EResourceManager& EApplication::GetResourceManager()
     return fResourceManager;
 }
 
+ImGuiContext* EApplication::GetMainImGuiContext() const
+{
+    return fUIRenderer.GetImGuiContext();
+}
+
 const ERef<EScene>& EApplication::GetActiveScene() const
 {
     return fActiveScene;

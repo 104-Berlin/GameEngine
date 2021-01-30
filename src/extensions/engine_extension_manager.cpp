@@ -86,13 +86,10 @@ void EExtensionManager::LoadPluginFolder()
     }
 
     EVector<EExtension*> extensions = GetLoadedExtensions();
-    IN_RENDER1(extensions, {
-        for (EExtension* ext : extensions)
-        {
-            // TODO: Make ui work for extensions again
-            //ext->InitImGui(UI::GetContext());
-        }
-    })
+    for (EExtension* ext : extensions)
+    {
+        ext->InitImGui(EApplication::gApp().GetMainImGuiContext());
+    }
 }
 
 void EExtensionManager::UnLoadExtensions() 

@@ -30,6 +30,9 @@ namespace Engine {
 
         EResourceManager& GetResourceManager();
 
+
+        ImGuiContext* GetMainImGuiContext() const;
+
         const ERef<EScene>& GetActiveScene() const;
     private:
         void Run();

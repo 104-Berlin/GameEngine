@@ -77,4 +77,6 @@
 
 #include "extensions/engine_extension_manager.h"
 
+
+#include "core/engine_ui_manager.h"
 #include "core/engine_application.h"

@@ -13,7 +13,7 @@ namespace Engine {
 
         bool                fIsInitialized;
         GLFWwindow*         fMainWindow;
-
+        ImGuiContext*       fImGuiContext;
     public:
         EUIRenderer();
         void Init(ERef<EWindow> window);
@@ -24,6 +24,8 @@ namespace Engine {
         void End();
 
         bool IsInitialized() const { return fIsInitialized; }
+
+        ImGuiContext* GetImGuiContext() const { return fImGuiContext; }
     private:
         void ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeight);
         void CreateRenderingStorage();
