@@ -95,7 +95,7 @@ void EUIRenderer::Init(GLFWwindow* window)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+    fImGuiContext = ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
     io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 20.0f);
