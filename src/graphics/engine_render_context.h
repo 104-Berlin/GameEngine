@@ -16,7 +16,7 @@ namespace Engine {
     ERenderContext(const ERenderContext& other) = delete;
     virtual ~ERenderContext() = default;
 
-    static void Create(EWindow& window);
+    static void Create(GLFWwindow* window);
     static void Destroy();
 
     virtual void SetClearColor(const EColor& color) = 0;

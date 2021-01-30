@@ -5,7 +5,7 @@ namespace Engine {
     ERenderingType ERenderContext::Renderer = ERenderingType::OpenGL;
     ERenderContext* ERenderContext::s_Instance = nullptr;
 
-    void ERenderContext::Create(EWindow& window)
+    void ERenderContext::Create(GLFWwindow* window)
     {
         // TODO: ASSERT
 		switch (ERenderContext::Renderer)
