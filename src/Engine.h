@@ -36,7 +36,6 @@
 #include "properties/engine_property.h"
 
 
-#include "graphics/engine_window.h"
 #include "graphics/engine_light.h"
 #include "graphics/engine_camera.h"
 #include "graphics/engine_render_context.h"

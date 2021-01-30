@@ -14,7 +14,7 @@ namespace Engine {
 	{
 	}
 
-	void ECamera::Update(const ERef<EWindow>& window)
+	void ECamera::Update(GLFWwindow* window)
 	{
 	}
 

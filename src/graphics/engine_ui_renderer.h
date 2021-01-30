@@ -16,7 +16,7 @@ namespace Engine {
         ImGuiContext*       fImGuiContext;
     public:
         EUIRenderer();
-        void Init(ERef<EWindow> window);
+        void Init(GLFWwindow* window);
 
         void Begin();
         void Render();

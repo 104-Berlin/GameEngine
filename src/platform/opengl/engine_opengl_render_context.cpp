@@ -2,9 +2,9 @@
 
 namespace Engine {
 
-    EOpenGLRenderContext::EOpenGLRenderContext(EWindow& window)
+    EOpenGLRenderContext::EOpenGLRenderContext(GLFWwindow* window)
     {
-		glfwMakeContextCurrent(window.GetNativeWindow());
+		glfwMakeContextCurrent(window);
 		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         //TODO: Add ASSERT
 		//IN_CORE_ASSERT(gladStatus, "Failed to initialize glad!");
@@ -13,9 +13,9 @@ namespace Engine {
         SetGLDefaults(window);
     }
 
-    void EOpenGLRenderContext::SetGLDefaults(EWindow& window)
+    void EOpenGLRenderContext::SetGLDefaults(GLFWwindow* window)
     {
-        GLFWwindow* win = window.GetNativeWindow();
+        GLFWwindow* win = window;
 
         IN_RENDER1(win, {
             glCall(glEnable(GL_DEPTH_TEST));

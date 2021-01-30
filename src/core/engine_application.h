@@ -5,7 +5,7 @@ namespace Engine {
     class EApplication
     {
     private:
-        ERef<EWindow>    fWindow;
+        GLFWwindow*      fMainWindow;
         ERef<EScene>     fActiveScene;
         bool             fRunning;
 
@@ -39,6 +39,8 @@ namespace Engine {
 
         void SetUpMainMenuBar();
         void RegisterInternComponents();
+
+        void CreateMainWindow();
 
         static void RenderResourcePanel(EResourceManager& resourceManager);
     public:

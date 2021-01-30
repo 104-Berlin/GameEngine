@@ -11,14 +11,17 @@ EApplication& EApplication::gApp()
 
 EApplication::EApplication()
 {
+    fMainWindow = nullptr;
     fCamera = EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f));
 
-    EWindowProp windowInit("ENGINE", 1270, 720);
-    fWindow = EMakeRef(EWindow, windowInit);
+    CreateMainWindow();
 }
 
 EApplication::~EApplication()
 {
+    ERenderer::CleanUp();
+    glfwDestroyWindow(fMainWindow);
+    glfwTerminate();
 }
 
 void EApplication::Start(const ERef<EScene>& scene)
@@ -29,7 +32,6 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     fExtensionManager.LoadPluginFolder();
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
-    fUIRenderer.Init(fWindow);
 
     SetUpMainMenuBar();
 
@@ -44,21 +46,29 @@ void EApplication::Start(const ERef<EScene>& scene)
 
 void EApplication::Run()
 {
+    if (!fMainWindow) 
+    {
+        std::cout << "No main windows created at starting!" << std::endl;
+        return;
+    }
     float delta = 0.0f;
     ETimer timer;
     while (fRunning)
     {
+        glfwPollEvents();
+
         delta = timer.Reset();
         Update(delta);
 
         Render();
 
         RenderImGui();
-
         ERenderer::WaitAndRender();
-        fWindow->Update();
 
-        fRunning = !fWindow->IsClosed();
+        glfwMakeContextCurrent(fMainWindow);
+        glfwSwapBuffers(fMainWindow);
+
+        fRunning = !(bool)glfwWindowShouldClose(fMainWindow);
     }
 }
 
@@ -75,6 +85,47 @@ void EApplication::RegisterInternComponents()
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
     EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
+}
+
+void EApplication::CreateMainWindow() 
+{
+    // Create window with graphics context
+    if (!glfwInit())
+    {
+        std::cout << "Could not init glfw" << std::endl;
+        return;
+    }
+
+#ifdef __APPLE__
+    // GL 3.2 + GLSL 150
+    const char* glsl_version = "#version 150";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+    // GL 3.0 + GLSL 130
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
+
+
+
+    fMainWindow = glfwCreateWindow(1280, 720, "ENGINE", NULL, NULL);
+    if (!fMainWindow)
+    {
+        std::cout << "Could not create main windows!" << std::endl;
+        return;
+    }
+    glfwMakeContextCurrent(fMainWindow);
+    glfwSwapInterval(1); // Enable vsync
+
+    ERenderer::Init();
+    ERenderContext::Create(fMainWindow);
+    fUIRenderer.Init(fMainWindow);
 }
 
 void EApplication::Update(float delta)
@@ -99,7 +150,7 @@ void EApplication::RenderImGui()
     int width = 0;
     int height = 0;
 
-    glfwGetFramebufferSize(fWindow->GetNativeWindow(), &width, &height);
+    glfwGetFramebufferSize(fMainWindow, &width, &height);
 
     IN_RENDER2(width, height, {
         glCall(glViewport(0, 0, width, height));
