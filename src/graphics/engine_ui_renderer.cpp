@@ -56,9 +56,8 @@ EUIRenderer::EUIRenderer()
     fIsInitialized = false;
 }
 
-void EUIRenderer::Init(ERef<EWindow> window) 
+void EUIRenderer::Init(GLFWwindow* window) 
 {
-    fMainWindow = window->GetNativeWindow();
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -68,7 +67,7 @@ void EUIRenderer::Init(ERef<EWindow> window)
 
     
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     io.BackendRendererName = "104-engine";
     //io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
@@ -84,7 +83,7 @@ void EUIRenderer::Init(ERef<EWindow> window)
     }
 
     // Setup glfw for imgui. using the impl from imgui, because it has everything i want
-    ImGui_ImplGlfw_InitForOpenGL(window->GetNativeWindow(), true);
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
 
 
 
