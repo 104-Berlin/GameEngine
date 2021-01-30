@@ -64,6 +64,8 @@ void EApplication::Run()
 
         RenderImGui();
         ERenderer::WaitAndRender();
+
+        glfwMakeContextCurrent(fMainWindow);
         glfwSwapBuffers(fMainWindow);
 
         fRunning = !(bool)glfwWindowShouldClose(fMainWindow);

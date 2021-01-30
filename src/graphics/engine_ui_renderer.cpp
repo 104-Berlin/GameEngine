@@ -33,6 +33,41 @@ const char* fragment_shader =
 
 
 
+// WARNING!!!
+// This struct is copied from imgui_impl_glfw.cpp
+// If the struct changes in the impl file the programm will crash
+struct ImGuiViewportDataGlfw
+{
+    GLFWwindow* Window;
+    bool        WindowOwned;
+    int         IgnoreWindowPosEventFrame;
+    int         IgnoreWindowSizeEventFrame;
+
+    ImGuiViewportDataGlfw()  { Window = NULL; WindowOwned = false; IgnoreWindowSizeEventFrame = IgnoreWindowPosEventFrame = -1; }
+};
+
+static void Glfw_RenderWindow(ImGuiViewport* viewport, void*)
+{
+    ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
+    if (ERenderContext::Renderer == ERenderingType::OpenGL)
+    {
+        IN_RENDER1(data, {
+            glfwMakeContextCurrent(data->Window);
+        })
+    }
+}
+
+static void Glfw_SwapBuffers(ImGuiViewport* viewport, void*)
+{
+    ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
+    if (ERenderContext::Renderer == ERenderingType::OpenGL)
+    {
+        IN_RENDER1(data, {
+            glfwMakeContextCurrent(data->Window);
+            glfwSwapBuffers(data->Window);
+        })
+    }
+}
 
 void Render_Window(ImGuiViewport* vp, void* data)
 {
@@ -84,10 +119,10 @@ void EUIRenderer::Init(GLFWwindow* window)
 
     // Setup glfw for imgui. using the impl from imgui, because it has everything i want
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-
-
-
     ImGuiPlatformIO& platform_io = ImGui::GetPlatformIO();
+
+    platform_io.Platform_RenderWindow = Glfw_RenderWindow;
+    platform_io.Platform_SwapBuffers = Glfw_SwapBuffers;
     platform_io.Renderer_RenderWindow = &Render_Window;
 
     CreateRenderingStorage();
@@ -147,10 +182,8 @@ void EUIRenderer::Render()
     ImGuiIO& io = ImGui::GetIO();
     if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
-        GLFWwindow* backup_current_context = glfwGetCurrentContext();
         ImGui::UpdatePlatformWindows();
         ImGui::RenderPlatformWindowsDefault(NULL,this);
-        glfwMakeContextCurrent(backup_current_context);
     }
 }
 
