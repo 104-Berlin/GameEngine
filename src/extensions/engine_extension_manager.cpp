@@ -17,7 +17,7 @@ EExtension::EExtension(const EString& pluginName)
     auto loadFunction = (void(*)(EExtensionInitializer&))GetFunction("LoadExtension");
     if (loadFunction)
     {
-        EExtensionInitializer init = { EPanelComponentData::data() };
+        EExtensionInitializer init = { EPanelComponentData::data(), EApplication::gApp().GetUIManager() };
         
         std::cout << "Running load function for plugin \"" << pluginName << "\"\n";
         loadFunction(init);

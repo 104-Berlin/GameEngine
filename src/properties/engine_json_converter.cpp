@@ -160,10 +160,18 @@ namespace Engine { namespace JSHelper {
         if (HasParam(ref, "Y")) { ConvertObject(ref["Y"], &y);}
         if (HasParam(ref, "Z")) { ConvertObject(ref["Z"], &z);}
         if (HasParam(ref, "Z")) { ConvertObject(ref["Z"], &w);}
+        
         value->x = x;
         value->y = y;
         value->z = z;
         value->w = w;
     }
     
+    void ConvertObject(const EJson& ref, EObject* value) 
+    {
+        if (value)
+        {
+            value->FromJsObject(ref);
+        }   
+    }
 } }

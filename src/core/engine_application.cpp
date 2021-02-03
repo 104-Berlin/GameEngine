@@ -10,6 +10,7 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
+    : fActiveScene("Active Scene", nullptr)
 {
     fMainWindow = nullptr;
     fCamera = EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f));
@@ -182,14 +183,19 @@ EResourceManager& EApplication::GetResourceManager()
     return fResourceManager;
 }
 
+EUIManager& EApplication::GetUIManager() 
+{
+    return fUIManager;
+}
+
 ImGuiContext* EApplication::GetMainImGuiContext() const
 {
     return fUIRenderer.GetImGuiContext();
 }
 
-const ERef<EScene>& EApplication::GetActiveScene() const
+ERef<EScene> EApplication::GetActiveScene() const
 {
-    return fActiveScene;
+    return fActiveScene.GetValue();
 }
 
 

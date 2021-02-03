@@ -27,8 +27,9 @@ add_library(Animation SHARED entry.cpp)
 if (WIN32)
 target_link_libraries(Animation ${CMAKE_CURRENT_SOURCE_DIR}/../../build/libEngine.lib)
 elseif(APPLE)
-target_link_libraries(Animation ${CMAKE_CURRENT_SOURCE_DIR}/../../build/libEngine.a)
+#target_link_libraries(Animation ${CMAKE_CURRENT_SOURCE_DIR}/../../build/libEngine.a)
 target_link_libraries(Animation "-framework CoreFoundation")
+target_link_options(Animation PRIVATE -undefined dynamic_lookup)
 endif()
 
 

@@ -11,6 +11,8 @@ namespace Engine {
         EString                             fName;
         EEntity                             fSelectionContext;
 
+        EProperty<EObject>                  fSelectedObject;
+
 
         // TEMP
         float                               fViewPortWidth;
@@ -29,6 +31,9 @@ namespace Engine {
         void Render();
         void RenderUI();
         void Update(float delta);
+
+
+        EProperty<EObject>& GetSelectedObject();
     public:
         friend class EObject;
     };

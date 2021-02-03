@@ -5,8 +5,11 @@ using namespace Engine;
 
 
 EScene::EScene(const EString& name)
-    : fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
-
+    : fName(name), 
+    fViewPortWidth(1270), 
+    fViewPortHeight(720), 
+    fSelectionContext(entt::null),
+    fSelectedObject("SelectedObject")
 {
     fComponentPanel = new EComponentPanel();
     //fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);		
@@ -116,6 +119,11 @@ void EScene::RenderUI()
 
 void EScene::Update(float delta)
 {
+}
+
+EProperty<EObject>& EScene::GetSelectedObject() 
+{
+    return fSelectedObject;
 }
 
 EObject EScene::CreateObject()
