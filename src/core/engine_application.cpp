@@ -119,21 +119,53 @@ void EApplication::RegisterInternComponents()
 
 void EApplication::RegisterInternPanels() 
 {
+    
+    // ---------------------------------------------------------------------------------
+    ERef<EUIPanel> componentsPanel = EMakeRef(EUIPanel, "Components");
+    auto updateComponentsPanel = [this, componentsPanel](){
+        componentsPanel->ClearChildren();
+        EObject object = this->GetActiveScene()->GetSelectedObject().GetValue();
+        for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+        {
+            if (compDsc->Has(object))
+            {
+                componentsPanel->AddChild(compDsc->CreateUIField(object));
+            }
+        }
+    };
+
+    fUIManager.RegisterPanel(componentsPanel);
+
     // ---------------------------------------------------------------------------------
     ERef<EUIPanel> sceneViewPanel = EMakeRef(EUIPanel, "Scene Tree");
     ERef<EUIField> objectContainer = sceneViewPanel->AddChild(EMakeRef(EUIContainer, "ObjectContainer"));
-    auto updateSceneViewPanel = [this, objectContainer](){
+
+    // Update function
+    std::function<void()> updateSceneViewPanel = [this, objectContainer, &updateComponentsPanel, &updateSceneViewPanel](){
         objectContainer->ClearChildren();
-        this->GetActiveScene()->ForEachObject([objectContainer](EObject object){
+        this->GetActiveScene()->ForEachObject([this, objectContainer, &updateComponentsPanel, &updateSceneViewPanel](EObject object){
             if (object.HasComponent<ENameComponent>())
             {
-                objectContainer->AddChild(EMakeRef(EUISelectable, object.GetComponent<ENameComponent>().Name));
+                ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
+                nameComponent.Name.AddEventAfterChange((intptr_t)this, [&updateSceneViewPanel](){
+                    updateSceneViewPanel();
+                });
+
+                ERef<EUISelectable> selectable = EMakeRef(EUISelectable, nameComponent.Name);
+                selectable->SetOnClick([this, object, &updateComponentsPanel](){
+                    this->fActiveScene->GetSelectedObject().SetValue(object); 
+                    updateComponentsPanel();
+                });
+                objectContainer->AddChild(selectable);
             }
         });
     };
-    fActiveScene.AddEventAfterChange([updateSceneViewPanel](){
+
+    fActiveScene.AddEventAfterChange((intptr_t)this, [updateSceneViewPanel](){
         updateSceneViewPanel();
     });
+
+    // Context Menu
     ERef<EUIField> contextMenu = sceneViewPanel->AddChild(EMakeRef(EUIContextMenu));
     ERef<EUIMenuItem> addObjectItem = EMakeRef(EUIMenuItem, "Add Object");
     addObjectItem->SetOnClick([this, updateSceneViewPanel](){
@@ -144,24 +176,7 @@ void EApplication::RegisterInternPanels()
 
     fUIManager.RegisterPanel(sceneViewPanel);
 
-    // ---------------------------------------------------------------------------------
-    ERef<EUIPanel> componentsPanel = EMakeRef(EUIPanel, "Components");
-    auto updateComponentsPanel = [this, componentsPanel](){
-        componentsPanel->ClearChildren();
-        EObject object = this->GetActiveScene()->GetSelectedObject().GetValue();
-        for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
-        {
-            componentsPanel->AddChild(compDsc->CreateUIField(object));
-        }
-    };
 
-    fActiveScene.AddEventAfterChange([this, updateComponentsPanel](){
-        this->fActiveScene->GetSelectedObject().AddEventAfterChange([updateComponentsPanel](){
-            updateComponentsPanel();
-        });
-    });
-    
-    fUIManager.RegisterPanel(componentsPanel);
 }
 
 void EApplication::CreateMainWindow() 

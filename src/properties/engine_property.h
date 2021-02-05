@@ -8,8 +8,8 @@ namespace Engine {
     {
     protected:
         EString                 fName;
-        EVector<EChangeFunc>    fBeforeChangeCallbacks;
-        EVector<EChangeFunc>    fAfterChangeCallbacks;
+        EUnorderedMap<intptr_t, EChangeFunc>    fBeforeChangeCallbacks;
+        EUnorderedMap<intptr_t, EChangeFunc>    fAfterChangeCallbacks;
     public:
         EBaseProperty(const EString& name);
 
@@ -23,9 +23,9 @@ namespace Engine {
         void SetPropertyName(const EString& name);
 
         // Maybe return some kind of pointer in array to be able to remove it
-        void AddEventBeforeChange(const EChangeFunc& func);
+        void AddEventBeforeChange(intptr_t key, const EChangeFunc& func);
         // void RemoveEventBeforeChange(EEventPosition p);
-        void AddEventAfterChange(const EChangeFunc& func);
+        void AddEventAfterChange(intptr_t key, const EChangeFunc& func);
         // void RemoveEventAfterChange(EEventPosition p);
     };
 
@@ -53,11 +53,11 @@ namespace Engine {
             
             std::cout << "Changing value \"" << GetPropertyName() << "\"" << std::endl;
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
             *fValue = value;
 
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         const Type& GetValue() const
@@ -105,20 +105,20 @@ namespace Engine {
         {
             if (fValue == value) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
             fValue = value;
 
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
         
         void AddValue(const ListType& value)
         {
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
             fValue.push_back(value);
 
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         void RemoveValue(const ListType& value)
@@ -129,11 +129,11 @@ namespace Engine {
             /*EVector<ListType>::iterator it = std::find(fValue.begin(), fValue.end(), value);
             if (it != fValue.end())
             {
-                for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+                for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
                 fValue.erase(it);
 
-                for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+                for (const auto& f : fAfterChangeCallbacks) {f.second();}
             }*/
         }
 
@@ -141,18 +141,18 @@ namespace Engine {
         {
             if (index >= fValue.size()) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
             fValue.erase(fValue.begin() + index);
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         void ClearValue()
         {
             if (fValue.size() == 0) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
             fValue.clear();
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         virtual void OnFromJsObject(const EJson& ref) override
@@ -187,7 +187,7 @@ namespace Engine {
 
             for (auto func : fBeforeChangeCallbacks)
             {
-                func();
+                func.second();
             }
 
             fObjectValue = object;
@@ -195,7 +195,7 @@ namespace Engine {
             
             for (auto func : fAfterChangeCallbacks)
             {
-                func();
+                func.second();
             }
         }
 
@@ -259,20 +259,20 @@ namespace Engine {
         {
             if (fValue == value) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
             fValue = value;
 
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
         
         void AddValue(ObjectType* value)
         {
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
             fValue.push_back(value);
 
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         void RemoveValue(ObjectType* value)
@@ -284,18 +284,18 @@ namespace Engine {
         {
             if (index >= fValue.size()) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
             fValue.erase(fValue.begin() + index);
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         void ClearValue()
         {
             if (fValue.size() == 0) { return; }
 
-            for (const EChangeFunc& f : fBeforeChangeCallbacks) {f();}
+            for (const auto& f : fBeforeChangeCallbacks) {f.second();}
             fValue.clear();
-            for (const EChangeFunc& f : fAfterChangeCallbacks) {f();}
+            for (const auto& f : fAfterChangeCallbacks) {f.second();}
         }
 
         virtual void OnFromJsObject(const EJson& ref) override
