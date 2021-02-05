@@ -2,6 +2,12 @@
 
 namespace Engine
 {
+    struct EDragData
+    {
+        EString Type;
+        void*   Buffer;
+        size_t  Size;
+    };
 
     static i32 next_ui_id()
     {
@@ -11,18 +17,24 @@ namespace Engine
 
     typedef std::function<void()> EUICallbackFn;
 
-    class EUIField
+    class EUIField : public std::enable_shared_from_this<EUIField>
     {
+        using UpdateFunction = std::function<void(ERef<EUIField>)>;
+        using DropFunction = std::function<void(EDragData)>;
     protected:
         EVector<ERef<EUIField>>         fChildren;
         i32                             fId;
         EUICallbackFn                   fOnClickCallback;
         bool                            fVisible;
+        UpdateFunction                  fCustomUpdateFunction;
+        EDragData                       fDragData;
+        std::pair<EString, DropFunction>fDropFunction;
     public:
         EUIField();
 
         virtual const EString& GetDisplayName() const = 0;
 
+        void Update();
         void Render();
 
         /**
@@ -31,12 +43,19 @@ namespace Engine
         virtual bool OnRender();
         virtual void OnRenderEnd();
 
+        virtual void OnUpdate();
+        void SetUpdateFunction(UpdateFunction function);
+
         ERef<EUIField> AddChild(const ERef<EUIField>& child);
         void ClearChildren();
 
         void SetOnClick(EUICallbackFn fn);
-
         void SetVisible(bool visible);
+
+
+        // Drag and drop
+        void SetDragData(EDragData data);
+        void OnDrop(const EString& type, DropFunction dropFunction);
     };
 
     class EUILabel : public EUIField

@@ -13,6 +13,19 @@ EUIField::EUIField()
     fId = next_ui_id();
 }
 
+void EUIField::Update() 
+{
+    OnUpdate();
+    if (fCustomUpdateFunction)
+    {
+        fCustomUpdateFunction(this->shared_from_this());
+    }
+    for (ERef<EUIField> child : fChildren)
+    {
+        child->Update();
+    }
+}
+
 void EUIField::Render() 
 {
     if (!fVisible) { return; }
@@ -22,6 +35,29 @@ void EUIField::Render()
         for (ERef<EUIField> field : fChildren)
         {
             field->Render();
+        }
+    }
+    if (!fDragData.Type.empty())
+    {
+        if (ImGui::BeginDragDropSource())
+        {
+            ImGui::SetDragDropPayload(fDragData.Type.c_str(), fDragData.Buffer, fDragData.Size);
+            ImGui::EndDragDropSource();
+        }
+    }
+    if (fDropFunction.second)
+    {
+        if (ImGui::BeginDragDropTarget())
+        {
+            if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(fDropFunction.first.c_str()))
+            {
+                EDragData data;
+                data.Type = fDropFunction.first;
+                data.Buffer = payload->Data;
+                data.Size = payload->DataSize;
+                fDropFunction.second(data);
+            }
+            ImGui::EndDragDropTarget();
         }
     }
     OnRenderEnd();
@@ -40,6 +76,17 @@ bool EUIField::OnRender()
 void EUIField::OnRenderEnd() 
 {
     if (ImGui::IsItemClicked() && fOnClickCallback) { fOnClickCallback(); }
+}
+
+
+void EUIField::OnUpdate() 
+{
+    
+}
+
+void EUIField::SetUpdateFunction(UpdateFunction function) 
+{
+    fCustomUpdateFunction = function;   
 }
 
 ERef<EUIField> EUIField::AddChild(const ERef<EUIField>& child) 
@@ -61,6 +108,20 @@ void EUIField::SetOnClick(EUICallbackFn fn)
 void EUIField::SetVisible(bool visible) 
 {
     fVisible = visible;
+}
+
+void EUIField::SetDragData(EDragData data) 
+{
+    fDragData = {};
+    fDragData.Type = data.Type;
+    fDragData.Size = data.Size;
+    fDragData.Buffer = malloc(data.Size);
+    memcpy(fDragData.Buffer, data.Buffer, data.Size);    
+}
+
+void EUIField::OnDrop(const EString& type, DropFunction dropFunction) 
+{
+    fDropFunction = {type, dropFunction};
 }
 
 // --------------------------------
@@ -177,6 +238,7 @@ EMainMenuBar::EMainMenuBar()
 {
 
 }
+
 
 const EString& EMainMenuBar::GetDisplayName() const 
 {

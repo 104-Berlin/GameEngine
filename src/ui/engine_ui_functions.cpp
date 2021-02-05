@@ -71,7 +71,7 @@ void UI::RenderInputField_Vec4(const EString& label, EProperty<EVec4>* value)
 
 void UI::RenderInputField_String(const EString& label, EProperty<EString>* value)
 {
-    size_t bufferSize = value->GetValue().length() * sizeof(char) + 1;
+    size_t bufferSize = 255;
     char* buffer = new char[bufferSize];
     memset(buffer, 0, bufferSize);
     strcpy(buffer, value->GetValue().c_str());

@@ -1,0 +1,4 @@
+clang++
+-I src/
+-I deps/imgui
+-std=c++17

@@ -2,6 +2,13 @@
 
 using namespace Engine;
 
+
+#define PANEL_NAME_COMPONENT "Components"
+#define PANEL_NAME_SCENETREE "Scene Tree"
+#define PANEL_NAME_RESOURCES "Resources"
+
+
+
 EApplication& EApplication::gApp()
 {
     static EApplication app;
@@ -10,7 +17,7 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
-    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr)
+    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr), fResourceManager(nullptr), fExtensionManager(nullptr), fUIManager(nullptr)
 {
     fMainWindow = nullptr;
     fCamera = EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f));
@@ -24,6 +31,18 @@ EApplication::~EApplication()
     {
         delete fUIRenderer;
     }
+    if (fResourceManager)
+    {
+        delete fResourceManager;
+    }
+    if (fExtensionManager)
+    {
+        delete fExtensionManager;
+    }
+    if (fUIManager)
+    {
+        delete fUIManager;
+    }
     ERenderer::CleanUp();
     glfwDestroyWindow(fMainWindow);
     glfwTerminate();
@@ -34,8 +53,8 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     RegisterInternComponents();
 
-    fExtensionManager.LoadPluginFolder();
-    fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
+    fExtensionManager->LoadPluginFolder();
+    fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
 
     // First register intern panels bevore set up main menu, so the view menu is up to data
     RegisterInternPanels();
@@ -91,7 +110,7 @@ void EApplication::SetUpMainMenuBar()
     
     // View Menu
     ERef<EUIMenu> viewMenu = std::dynamic_pointer_cast<EUIMenu>(fMainMenuBar.AddChild(EMakeRef(EUIMenu, "View")));
-    for (ERef<EUIPanel> panel : fUIManager.GetPanels())
+    for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
         ERef<EUIMenuItem> menuItem = ERef<EUIMenuItem>(new EUIMenuItem(panel->GetDisplayName()));
         menuItem->SetOnClick([panel](){
@@ -121,61 +140,119 @@ void EApplication::RegisterInternPanels()
 {
     
     // ---------------------------------------------------------------------------------
-    ERef<EUIPanel> componentsPanel = EMakeRef(EUIPanel, "Components");
-    auto updateComponentsPanel = [this, componentsPanel](){
-        componentsPanel->ClearChildren();
+    ERef<EUIPanel> componentsPanel = EMakeRef(EUIPanel, PANEL_NAME_COMPONENT);
+    ERef<EUIField> panelsContainer = componentsPanel->AddChild(EMakeRef(EUIContainer, "Components Container"));
+    panelsContainer->SetUpdateFunction([this](ERef<EUIField> panel){
+        panel->ClearChildren();
         EObject object = this->GetActiveScene()->GetSelectedObject().GetValue();
+        if (!object) { return; }
         for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
         {
             if (compDsc->Has(object))
             {
-                componentsPanel->AddChild(compDsc->CreateUIField(object));
+                panel->AddChild(compDsc->CreateUIField(object));
             }
-        }
-    };
+        }}
+    );
 
-    fUIManager.RegisterPanel(componentsPanel);
+    ERef<EUIField> componentsContextMenu = componentsPanel->AddChild(EMakeRef(EUIContextMenu));
+    for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+    {
+        ERef<EUIMenuItem> menuItem = EMakeRef(EUIMenuItem, compDsc->Name);
+        menuItem->SetOnClick([this, compDsc](){
+            EObject object = this->GetActiveScene()->GetSelectedObject().GetValue();
+            if (object)
+            {
+                compDsc->Create(object);
+                ERef<EUIPanel> componentPanel = this->GetPanelByName(PANEL_NAME_COMPONENT);
+                if (componentPanel)
+                {
+                    componentPanel->Update();
+                }
+            }
+        });
+        componentsContextMenu->AddChild(menuItem);
+    }
+
+    fUIManager->RegisterPanel(componentsPanel);
 
     // ---------------------------------------------------------------------------------
-    ERef<EUIPanel> sceneViewPanel = EMakeRef(EUIPanel, "Scene Tree");
+    ERef<EUIPanel> sceneViewPanel = EMakeRef(EUIPanel, PANEL_NAME_SCENETREE);
     ERef<EUIField> objectContainer = sceneViewPanel->AddChild(EMakeRef(EUIContainer, "ObjectContainer"));
 
-    // Update function
-    std::function<void()> updateSceneViewPanel = [this, objectContainer, &updateComponentsPanel, &updateSceneViewPanel](){
-        objectContainer->ClearChildren();
-        this->GetActiveScene()->ForEachObject([this, objectContainer, &updateComponentsPanel, &updateSceneViewPanel](EObject object){
+    objectContainer->SetUpdateFunction([this](ERef<EUIField> sceneList){
+        sceneList->ClearChildren();
+        this->GetActiveScene()->ForEachObject([this, sceneList](EObject object){
             if (object.HasComponent<ENameComponent>())
             {
                 ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
-                nameComponent.Name.AddEventAfterChange((intptr_t)this, [&updateSceneViewPanel](){
-                    updateSceneViewPanel();
+                nameComponent.Name.AddEventAfterChange((intptr_t)this, [sceneList](){
+                    sceneList->Update();
                 });
 
                 ERef<EUISelectable> selectable = EMakeRef(EUISelectable, nameComponent.Name);
-                selectable->SetOnClick([this, object, &updateComponentsPanel](){
+                selectable->SetOnClick([this, object](){
                     this->fActiveScene->GetSelectedObject().SetValue(object); 
-                    updateComponentsPanel();
+                    ERef<EUIPanel> componentsPanel = this->GetPanelByName(PANEL_NAME_COMPONENT);
+                    if (componentsPanel)
+                    {
+                        componentsPanel->Update();
+                    }
                 });
-                objectContainer->AddChild(selectable);
+                sceneList->AddChild(selectable);
             }
         });
-    };
+    });
 
-    fActiveScene.AddEventAfterChange((intptr_t)this, [updateSceneViewPanel](){
-        updateSceneViewPanel();
+    fActiveScene.AddEventAfterChange((intptr_t)this, [this](){
+        ERef<EUIPanel> componentPanel = this->GetPanelByName(PANEL_NAME_COMPONENT);
+        ERef<EUIPanel> sceneTreePanel = this->GetPanelByName(PANEL_NAME_SCENETREE);
+        if (componentPanel) { componentPanel->Update(); }
+        if (sceneTreePanel) { sceneTreePanel->Update(); }
     });
 
     // Context Menu
     ERef<EUIField> contextMenu = sceneViewPanel->AddChild(EMakeRef(EUIContextMenu));
     ERef<EUIMenuItem> addObjectItem = EMakeRef(EUIMenuItem, "Add Object");
-    addObjectItem->SetOnClick([this, updateSceneViewPanel](){
+    addObjectItem->SetOnClick([this](){
         this->fActiveScene->CreateObject();
-        updateSceneViewPanel();
+        ERef<EUIPanel> sceneTreePanel = this->GetPanelByName(PANEL_NAME_SCENETREE);
+        if (sceneTreePanel) { sceneTreePanel->Update(); }
     });
     contextMenu->AddChild(addObjectItem);
 
-    fUIManager.RegisterPanel(sceneViewPanel);
+    fUIManager->RegisterPanel(sceneViewPanel);
 
+
+
+    // ------------------------------------
+    // Resource Panel
+
+    ERef<EUIPanel> resourcePanel = EMakeRef(EUIPanel, PANEL_NAME_RESOURCES);
+    resourcePanel->SetUpdateFunction([this](ERef<EUIField> uiField){
+        uiField->ClearChildren();
+        for (auto& res : *fResourceManager)
+        {
+            ERef<EUISelectable> selectable = EMakeRef(EUISelectable, res.first);
+            EDragData data;
+            data.Type = "_RESOURCEDRAG";
+            data.Buffer = (void*)res.first.c_str();
+            data.Size = res.first.length() + 1;
+            selectable->SetDragData(data);
+            uiField->AddChild(selectable);
+        }
+    });
+    
+
+    fResourceManager->SetOnWorkFinished([this](){
+        ERef<EUIPanel> resourcePanel = this->GetPanelByName(PANEL_NAME_RESOURCES);
+        if (resourcePanel)
+        {
+            resourcePanel->Update();
+        }
+    });
+
+    fUIManager->RegisterPanel(resourcePanel);
 
 }
 
@@ -219,6 +296,10 @@ void EApplication::CreateMainWindow()
     ERenderContext::Create(fMainWindow);
     fUIRenderer = new EUIRenderer();
     fUIRenderer->Init(fMainWindow);
+
+    fResourceManager = new EResourceManager();
+    fExtensionManager = new EExtensionManager();
+    fUIManager = new EUIManager();
 }
 
 void EApplication::Update(float delta)
@@ -254,9 +335,9 @@ void EApplication::RenderImGui()
     //UI::NewFrame();
 
     fMainMenuBar.Render();
-    RenderResourcePanel(fResourceManager);
+    //RenderResourcePanel(*fResourceManager);
 
-    for (ERef<EUIPanel> panel : fUIManager.GetPanels())
+    for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
         panel->Render();
     }
@@ -280,12 +361,25 @@ void EApplication::CleanUp()
 
 EResourceManager& EApplication::GetResourceManager() 
 {
-    return fResourceManager;
+    return *fResourceManager;
 }
 
 EUIManager& EApplication::GetUIManager() 
 {
-    return fUIManager;
+    return *fUIManager;
+}
+
+ERef<EUIPanel> EApplication::GetPanelByName(const EString& name) 
+{
+    EVector<ERef<EUIPanel>> panels = fUIManager->GetPanels();
+    for (size_t i = 0; i < panels.size(); i++)
+    {
+        if (panels[i]->GetDisplayName().compare(name) == 0)
+        {
+            return panels[i];
+        }
+    }
+    return nullptr;
 }
 
 ImGuiContext* EApplication::GetMainImGuiContext() const
@@ -296,29 +390,4 @@ ImGuiContext* EApplication::GetMainImGuiContext() const
 ERef<EScene> EApplication::GetActiveScene() const
 {
     return fActiveScene.GetValue();
-}
-
-void EApplication::RenderResourcePanel(EResourceManager& resourceManager)
-{
-    ImGui::Begin("Resource Manager##RESOURCEMANAGER");
-    for (auto& res : resourceManager)
-    {
-        ImGui::Selectable(res.first.c_str(), false);
-        if (ImGui::BeginDragDropSource())
-        {
-            ImGui::SetDragDropPayload("_RESOURCEDRAG", res.first.c_str(), res.first.length() + 1);
-
-            EString resourceType = EResourceManager::GetResourceTypeFromFile(res.first);
-            if (resourceType == typeid(ETexture2D).name())
-            {
-                ERef<ETexture2D> texture = std::static_pointer_cast<ETexture2D>(res.second);
-                // This should not be here
-                //glBindTexture(GL_TEXTURE_2D, );
-                ImGui::Image((void*)(u64)texture->GetRendererID(), ImVec2(100, 100));
-            }
-            
-            ImGui::EndDragDropSource();
-        }
-    }
-    ImGui::End();
 }

@@ -9,9 +9,9 @@ namespace Engine {
         EObjectProperty<EScene>     fActiveScene;
         bool                        fRunning;
 
-        EExtensionManager           fExtensionManager;
-        EResourceManager            fResourceManager;
-        EUIManager                  fUIManager;
+        EExtensionManager*           fExtensionManager;
+        EResourceManager*            fResourceManager;
+        EUIManager*                  fUIManager;
 
         EUIRenderer*                fUIRenderer;
 
@@ -32,6 +32,8 @@ namespace Engine {
         EResourceManager&   GetResourceManager();
         EUIManager&         GetUIManager();
 
+        ERef<EUIPanel>      GetPanelByName(const EString& name);
+
         ImGuiContext* GetMainImGuiContext() const;
 
         ERef<EScene> GetActiveScene() const;
@@ -43,9 +45,6 @@ namespace Engine {
         void RegisterInternPanels();
 
         void CreateMainWindow();
-        
-
-        static void RenderResourcePanel(EResourceManager& resourceManager);
     public:
         static EApplication& gApp();
     };

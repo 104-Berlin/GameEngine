@@ -63,6 +63,10 @@ void EResourceManager::LoadingFunc()
                 AddLoadedResource(newResource);
             }
         }
+        if (fWorkFinishedFunction)
+        {
+            fWorkFinishedFunction();
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
@@ -92,6 +96,11 @@ EResourceManager::ResourceMap::iterator EResourceManager::end()
 EResourceManager::ResourceMap::const_iterator EResourceManager::end() const
 {
     return fLoadedResources.end();
+}
+
+void EResourceManager::SetOnWorkFinished(WorkFinishedFunction function) 
+{
+    fWorkFinishedFunction = function;
 }
 
 EString EResourceManager::GetResourceTypeFromFile(const EString& filePath) 
