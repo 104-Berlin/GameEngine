@@ -8,6 +8,7 @@ namespace Engine {
         EVector<ERef<EUIPanel>>     fRegisteredPanels;
     public:
 
+        EVector<ERef<EUIPanel>>     GetPanels() const;
         void RegisterPanel(ERef<EUIPanel> panel);
     };
 

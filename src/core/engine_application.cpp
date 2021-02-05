@@ -10,7 +10,7 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
-    : fActiveScene("Active Scene", nullptr)
+    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr)
 {
     fMainWindow = nullptr;
     fCamera = EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.1f, 1000000.0f));
@@ -20,6 +20,10 @@ EApplication::EApplication()
 
 EApplication::~EApplication()
 {
+    if (fUIRenderer)
+    {
+        delete fUIRenderer;
+    }
     ERenderer::CleanUp();
     glfwDestroyWindow(fMainWindow);
     glfwTerminate();
@@ -27,14 +31,20 @@ EApplication::~EApplication()
 
 void EApplication::Start(const ERef<EScene>& scene)
 {
-    fActiveScene = scene;
 
     RegisterInternComponents();
 
     fExtensionManager.LoadPluginFolder();
     fResourceManager.LoadAllFromFolder(EFolder(EBaseFolder::RES));
 
+    // First register intern panels bevore set up main menu, so the view menu is up to data
+    RegisterInternPanels();
+
+    // After regsiter intern panels
     SetUpMainMenuBar();
+
+
+    fActiveScene = scene;
 
     if (!fActiveScene)
     {
@@ -75,8 +85,27 @@ void EApplication::Run()
 
 void EApplication::SetUpMainMenuBar() 
 {
-    ERef<EUIField> fileMenu = fMainMenuBar.AddChild(EMakeRef(EMenu, "File"));
-    ERef<EUIField> editMenu = fMainMenuBar.AddChild(EMakeRef(EMenu, "Edit"));
+    ERef<EUIField> fileMenu = fMainMenuBar.AddChild(EMakeRef(EUIMenu, "File"));
+    ERef<EUIField> editMenu = fMainMenuBar.AddChild(EMakeRef(EUIMenu, "Edit"));
+    
+    
+    // View Menu
+    ERef<EUIMenu> viewMenu = std::dynamic_pointer_cast<EUIMenu>(fMainMenuBar.AddChild(EMakeRef(EUIMenu, "View")));
+    for (ERef<EUIPanel> panel : fUIManager.GetPanels())
+    {
+        ERef<EUIMenuItem> menuItem = ERef<EUIMenuItem>(new EUIMenuItem(panel->GetDisplayName()));
+        menuItem->SetOnClick([panel](){
+            if (panel->IsOpen())
+            {
+                ImGui::SetWindowFocus(panel->GetDisplayName().c_str());
+            }
+            else
+            {
+                panel->Open();
+            }
+        });
+        viewMenu->AddChild(menuItem);
+    }
 }
 
 void EApplication::RegisterInternComponents() 
@@ -86,6 +115,53 @@ void EApplication::RegisterInternComponents()
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
     EPanelComponentData::data().RegisterComponent<ECameraComponent>("Camera Component");
+}
+
+void EApplication::RegisterInternPanels() 
+{
+    // ---------------------------------------------------------------------------------
+    ERef<EUIPanel> sceneViewPanel = EMakeRef(EUIPanel, "Scene Tree");
+    ERef<EUIField> objectContainer = sceneViewPanel->AddChild(EMakeRef(EUIContainer, "ObjectContainer"));
+    auto updateSceneViewPanel = [this, objectContainer](){
+        objectContainer->ClearChildren();
+        this->GetActiveScene()->ForEachObject([objectContainer](EObject object){
+            if (object.HasComponent<ENameComponent>())
+            {
+                objectContainer->AddChild(EMakeRef(EUISelectable, object.GetComponent<ENameComponent>().Name));
+            }
+        });
+    };
+    fActiveScene.AddEventAfterChange([updateSceneViewPanel](){
+        updateSceneViewPanel();
+    });
+    ERef<EUIField> contextMenu = sceneViewPanel->AddChild(EMakeRef(EUIContextMenu));
+    ERef<EUIMenuItem> addObjectItem = EMakeRef(EUIMenuItem, "Add Object");
+    addObjectItem->SetOnClick([this, updateSceneViewPanel](){
+        this->fActiveScene->CreateObject();
+        updateSceneViewPanel();
+    });
+    contextMenu->AddChild(addObjectItem);
+
+    fUIManager.RegisterPanel(sceneViewPanel);
+
+    // ---------------------------------------------------------------------------------
+    ERef<EUIPanel> componentsPanel = EMakeRef(EUIPanel, "Components");
+    auto updateComponentsPanel = [this, componentsPanel](){
+        componentsPanel->ClearChildren();
+        EObject object = this->GetActiveScene()->GetSelectedObject().GetValue();
+        for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+        {
+            componentsPanel->AddChild(compDsc->CreateUIField(object));
+        }
+    };
+
+    fActiveScene.AddEventAfterChange([this, updateComponentsPanel](){
+        this->fActiveScene->GetSelectedObject().AddEventAfterChange([updateComponentsPanel](){
+            updateComponentsPanel();
+        });
+    });
+    
+    fUIManager.RegisterPanel(componentsPanel);
 }
 
 void EApplication::CreateMainWindow() 
@@ -126,7 +202,8 @@ void EApplication::CreateMainWindow()
 
     ERenderer::Init();
     ERenderContext::Create(fMainWindow);
-    fUIRenderer.Init(fMainWindow);
+    fUIRenderer = new EUIRenderer();
+    fUIRenderer->Init(fMainWindow);
 }
 
 void EApplication::Update(float delta)
@@ -147,7 +224,7 @@ void EApplication::Render()
 
 void EApplication::RenderImGui()
 {
-    if (!fUIRenderer.IsInitialized()) { return; }
+    if (!fUIRenderer->IsInitialized()) { return; }
     int width = 0;
     int height = 0;
 
@@ -158,18 +235,26 @@ void EApplication::RenderImGui()
     })
 
     
-    fUIRenderer.Begin();
+    fUIRenderer->Begin();
     //UI::NewFrame();
 
     fMainMenuBar.Render();
     RenderResourcePanel(fResourceManager);
+
+    for (ERef<EUIPanel> panel : fUIManager.GetPanels())
+    {
+        panel->Render();
+    }
+
+
+
 
     if (fActiveScene)
     {
         fActiveScene->RenderUI();
     }
     
-    fUIRenderer.Render();
+    fUIRenderer->Render();
     //UI::Render();
 }
 
@@ -190,16 +275,13 @@ EUIManager& EApplication::GetUIManager()
 
 ImGuiContext* EApplication::GetMainImGuiContext() const
 {
-    return fUIRenderer.GetImGuiContext();
+    return fUIRenderer->GetImGuiContext();
 }
 
 ERef<EScene> EApplication::GetActiveScene() const
 {
     return fActiveScene.GetValue();
 }
-
-
-
 
 void EApplication::RenderResourcePanel(EResourceManager& resourceManager)
 {

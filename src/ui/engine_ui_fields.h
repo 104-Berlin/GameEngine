@@ -17,6 +17,7 @@ namespace Engine
         EVector<ERef<EUIField>>         fChildren;
         i32                             fId;
         EUICallbackFn                   fOnClickCallback;
+        bool                            fVisible;
     public:
         EUIField();
 
@@ -34,6 +35,32 @@ namespace Engine
         void ClearChildren();
 
         void SetOnClick(EUICallbackFn fn);
+
+        void SetVisible(bool visible);
+    };
+
+    class EUILabel : public EUIField
+    {
+    private:
+        EString fLabel;
+    public:
+        EUILabel(const EString& label);
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
+    };
+
+    class EUIContainer : public EUIField
+    {
+    private:
+        EString     fStringId;
+    public:
+        EUIContainer(const EString& identifier = "EMPTY");
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
     };
 
     class EUIPanel : public EUIField
@@ -41,6 +68,7 @@ namespace Engine
     private:
         EString         fName;
         bool            fOpen;
+        bool            fWasJustClosed; // This is used to remove a ImGui bug when we have to call ImGui::End once when we closed the panel
     public:
         EUIPanel(const EString& panelName);
 
@@ -48,6 +76,9 @@ namespace Engine
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
+
+        void Open();
+        bool IsOpen() const;
     protected:
     };
 
@@ -103,13 +134,13 @@ namespace Engine
         
     };
 
-    class EMenu : public EUIField
+    class EUIMenu : public EUIField
     {
     private:
         EString fDisplayName;
         bool    fOpen;
     public:
-        EMenu(const EString& displayName = "MenuBar");
+        EUIMenu(const EString& displayName = "MenuBar");
 
 
         virtual const EString& GetDisplayName() const override;
@@ -118,17 +149,44 @@ namespace Engine
         virtual void OnRenderEnd() override;
     };
 
-    class EMenuItem : public EUIField
+    class EUIContextMenu : public EUIField
+    {
+    private:
+        EString     fDisplayName;
+        bool        fOpen;
+    public:
+        EUIContextMenu(const EString& displayName = "ContextMenu");
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
+        virtual void OnRenderEnd() override;
+    };
+
+    class EUIMenuItem : public EUIField
     {
     private:
         EString fLabel;
     public:
-        EMenuItem(const EString& label);
+        EUIMenuItem(const EString& label);
 
         virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
 
+
+
+    class EUISelectable : public EUIField
+    {
+    private:
+        EString fLabel;
+    public:
+        EUISelectable(const EString& label);
+
+        virtual const EString& GetDisplayName() const override;
+
+        virtual bool OnRender() override;
+    };
 
 }

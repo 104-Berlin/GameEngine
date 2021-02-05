@@ -28,7 +28,6 @@ if (APPLE)
 target_link_libraries(Animation "-framework CoreFoundation")
 endif()
 
-target_link_options(Animation PRIVATE -undefined dynamic_lookup)
 
 
 SET_TARGET_PROPERTIES(Animation PROPERTIES PREFIX "")

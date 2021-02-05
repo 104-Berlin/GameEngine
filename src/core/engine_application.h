@@ -13,7 +13,7 @@ namespace Engine {
         EResourceManager            fResourceManager;
         EUIManager                  fUIManager;
 
-        EUIRenderer                 fUIRenderer;
+        EUIRenderer*                fUIRenderer;
 
         // TEMP
         EMainMenuBar      fMainMenuBar;
@@ -40,8 +40,10 @@ namespace Engine {
 
         void SetUpMainMenuBar();
         void RegisterInternComponents();
+        void RegisterInternPanels();
 
         void CreateMainWindow();
+        
 
         static void RenderResourcePanel(EResourceManager& resourceManager);
     public:
