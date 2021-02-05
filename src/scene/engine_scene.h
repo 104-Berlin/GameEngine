@@ -7,15 +7,17 @@ namespace Engine {
 
     class EScene
     {
+        using ObjectCallback = std::function<void(EObject)>;
     private:
         EString                             fName;
         EEntity                             fSelectionContext;
+
+        EProperty<EObject>                  fSelectedObject;
 
 
         // TEMP
         float                               fViewPortWidth;
         float                               fViewPortHeight;
-        EComponentPanel*                    fComponentPanel;
         //ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
         // Entities
@@ -29,6 +31,12 @@ namespace Engine {
         void Render();
         void RenderUI();
         void Update(float delta);
+
+        EProperty<EObject>& GetSelectedObject();
+
+
+        // Looping functions
+        void ForEachObject(ObjectCallback fn);
     public:
         friend class EObject;
     };

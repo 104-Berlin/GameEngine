@@ -55,6 +55,7 @@ template <typename T>
 using ERef = std::shared_ptr<T>;
 #define EMakeRef(Type, ...) std::make_shared<Type>(__VA_ARGS__)
 
+
 template <typename T>
 using EWeakRef = std::weak_ptr<T>;
 

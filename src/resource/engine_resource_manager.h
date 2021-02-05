@@ -5,6 +5,7 @@ namespace Engine {
     class EResourceManager
     {
         using ResourceMap = EUnorderedMap<EString, ERef<EResource>>;
+        using WorkFinishedFunction = std::function<void()>;
     private:
         ResourceMap                 fLoadedResources;
         std::mutex                  fLoadedMutex;
@@ -14,6 +15,8 @@ namespace Engine {
         std::thread                 fLoadingThread;
 
         std::atomic<bool>           fIsRunning;
+
+        WorkFinishedFunction        fWorkFinishedFunction;
     public:
         EResourceManager();
         ~EResourceManager();
@@ -34,6 +37,8 @@ namespace Engine {
         ResourceMap::const_iterator begin() const;
         ResourceMap::iterator end();
         ResourceMap::const_iterator end() const;
+
+        void SetOnWorkFinished(WorkFinishedFunction function);
 
         static EString GetResourceTypeFromFile(const EString& filePath);
     };

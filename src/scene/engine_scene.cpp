@@ -5,16 +5,16 @@ using namespace Engine;
 
 
 EScene::EScene(const EString& name)
-    : fName(name), fViewPortWidth(1270), fViewPortHeight(720), fSelectionContext(entt::null)
-
+    : fName(name), 
+    fViewPortWidth(1270), 
+    fViewPortHeight(720), 
+    fSelectedObject("SelectedObject")
 {
-    fComponentPanel = new EComponentPanel();
     //fSceneFrameBuffer = EFrameBuffer::Create(fViewPortWidth, fViewPortHeight, EFramebufferFormat::RGBA8);		
 }
 
 EScene::~EScene()
 {
-    delete fComponentPanel;
 }
 
 void EScene::Render()
@@ -55,67 +55,23 @@ void EScene::Render()
 
 void EScene::RenderUI()
 {
-    ImGui::Begin("SceneView##SCENEVIEW");
-    // Render frame buffer
-    auto viewportSize = ImGui::GetContentRegionAvail();
-    fViewPortWidth = viewportSize.x;
-    fViewPortHeight = viewportSize.y;
     
-    
-
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, fSceneFrameBuffer->GetColorAttachment());
-    //ImGui::Image((void*)(u64)fSceneFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
-
-    for (EEntity handle : fRegistry.view<ECameraComponent>())
-    {
-        ECameraComponent& cameraComponent = fRegistry.get<ECameraComponent>(handle);
-        if (cameraComponent.Active)
-        {
-            ((ERef<ECamera>) cameraComponent.Camera)->UpdateImGui();
-        }
-    }
-
-    ImGui::End();
-
-    // Render all objects for now
-    ImGui::Begin("SceneTree");
-    fRegistry.each([this](EEntity handle)
-    {
-        EObject object(handle, this);
-        if (object.HasComponent<ENameComponent>())
-        {
-            ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
-            ImGui::PushID((int)handle);
-            if (ImGui::Selectable(nameComponent.Name.GetValue().c_str()))
-            {
-                this->fSelectionContext = handle;
-                this->fComponentPanel->SetObjectToDisplay(EObject(handle, this));
-            }
-            ImGui::PopID();
-        }
-        else
-        {
-            ImGui::Selectable("Unknown");
-        }
-    });
-
-    if (ImGui::BeginPopupContextWindow())
-    {
-        if (ImGui::MenuItem("New Object"))
-        {
-            CreateObject();
-        }
-        ImGui::EndPopup();
-    }
-    ImGui::End();
-    
-
-    fComponentPanel->Render();
 }
 
 void EScene::Update(float delta)
 {
+}
+
+EProperty<EObject>& EScene::GetSelectedObject() 
+{
+    return fSelectedObject;
+}
+
+void EScene::ForEachObject(ObjectCallback fn) 
+{
+    fRegistry.each([this, fn](EEntity entity){
+        fn(EObject(entity, this));
+    });
 }
 
 EObject EScene::CreateObject()

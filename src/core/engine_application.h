@@ -5,14 +5,15 @@ namespace Engine {
     class EApplication
     {
     private:
-        GLFWwindow*      fMainWindow;
-        ERef<EScene>     fActiveScene;
-        bool             fRunning;
+        GLFWwindow*                 fMainWindow;
+        EObjectProperty<EScene>     fActiveScene;
+        bool                        fRunning;
 
-        EExtensionManager   fExtensionManager;
-        EResourceManager    fResourceManager;
+        EExtensionManager*           fExtensionManager;
+        EResourceManager*            fResourceManager;
+        EUIManager*                  fUIManager;
 
-        EUIRenderer         fUIRenderer;
+        EUIRenderer*                fUIRenderer;
 
         // TEMP
         EMainMenuBar      fMainMenuBar;
@@ -28,18 +29,22 @@ namespace Engine {
         void RenderImGui();
         void CleanUp();
 
-        EResourceManager& GetResourceManager();
+        EResourceManager&   GetResourceManager();
+        EUIManager&         GetUIManager();
 
-        const ERef<EScene>& GetActiveScene() const;
+        ERef<EUIPanel>      GetPanelByName(const EString& name);
+
+        ImGuiContext* GetMainImGuiContext() const;
+
+        ERef<EScene> GetActiveScene() const;
     private:
         void Run();
 
         void SetUpMainMenuBar();
         void RegisterInternComponents();
+        void RegisterInternPanels();
 
         void CreateMainWindow();
-
-        static void RenderResourcePanel(EResourceManager& resourceManager);
     public:
         static EApplication& gApp();
     };

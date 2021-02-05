@@ -5,6 +5,7 @@ namespace Engine {
     {
         // A registry of funtions to call to register components or something
         EPanelComponentData& componentData;
+        EUIManager&          uiManager;
     };
 
     class EExtension

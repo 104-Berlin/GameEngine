@@ -37,12 +37,12 @@ void EBaseProperty::SetPropertyName(const EString& name)
     fName = name;
 }
 
-void EBaseProperty::AddEventBeforeChange(const EChangeFunc& func)
+void EBaseProperty::AddEventBeforeChange(intptr_t key, const EChangeFunc& func)
 {
-    fBeforeChangeCallbacks.push_back(func);
+    fBeforeChangeCallbacks[key] = func;
 }
 
-void EBaseProperty::AddEventAfterChange(const EChangeFunc& func)
+void EBaseProperty::AddEventAfterChange(intptr_t key, const EChangeFunc& func)
 {
-    fAfterChangeCallbacks.push_back(func);
+    fAfterChangeCallbacks[key] = func;
 }

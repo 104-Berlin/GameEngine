@@ -60,19 +60,4 @@ namespace Engine {
         static EPanelComponentData& data();
 
     };
-
-    class EComponentPanel : public EUIPanel
-    {
-    private:
-        EObject fActiveObject;
-    public:
-        EComponentPanel();
-
-        void SetObjectToDisplay(EObject object);
-
-        virtual bool OnRender() override;
-    private:
-        void UpdateComponents();
-    };
-
 }

@@ -72,8 +72,10 @@
 #include "ui/engine_ui_functions.h"
 #include "ui/engine_ui_fields.h"
 #include "ui/engine_panels.h"
+#include "ui/engine_ui_manager.h"
 
 
 #include "extensions/engine_extension_manager.h"
+
 
 #include "core/engine_application.h"
