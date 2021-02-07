@@ -104,7 +104,17 @@ void EApplication::Run()
 
 void EApplication::SetUpMainMenuBar() 
 {
+    // File Menu
     ERef<EUIField> fileMenu = fMainMenuBar.AddChild(EMakeRef(EUIMenu, "File"));
+    ERef<EUIMenuItem> fileSaveItem = EMakeRef(EUIMenuItem, "Save");
+    fileSaveItem->SetOnClick([this](){
+        EFileWriter::WriteScene(this->GetActiveScene(), EFile("Test.esc"));
+    });
+    fileMenu->AddChild(fileSaveItem);
+
+
+
+    // Edit Menu
     ERef<EUIField> editMenu = fMainMenuBar.AddChild(EMakeRef(EUIMenu, "Edit"));
     
     

@@ -31,9 +31,6 @@ namespace Engine {
             return fScene->fRegistry.get<T>(fHandle);   
         }
 
-
-
-
         void Delete()
         {
             fScene->fRegistry.destroy(fHandle);
@@ -44,6 +41,19 @@ namespace Engine {
             return fHandle != entt::null && fScene;
         }
 
+        bool operator==(const EObject& other) const
+        {
+            return other.fScene == fScene && other.fHandle == fHandle;
+        }
+
+        bool operator!=(const EObject& other) const
+        {
+            return !((*this) == other);
+        }
+
+        void Set(EEntity entity, EScene* scene);
+        void Set(EObject object);
+
         void FromJsObject(const EJson& ref);
         void SetJsObject(EJson& ref) const;  
 
@@ -51,4 +61,7 @@ namespace Engine {
         virtual void OnSetJsObject(EJson& ref) const;
     };
 
+
+
+    
 }

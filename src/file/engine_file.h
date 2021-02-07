@@ -50,7 +50,8 @@ namespace Engine {
             return false;
         }
 
-        EString GetFileAsString();
+        EString GetFileAsString() const;
+        void SetFileAsString(const EString& string) const;
     private:
         void CreatePathStrings();
     };
