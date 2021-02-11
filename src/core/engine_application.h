@@ -8,13 +8,15 @@ namespace Engine {
         GLFWwindow*                 fMainWindow;
         EObjectProperty<EScene>     fActiveScene;
         bool                        fRunning;
+        double                      fFrameTime;
 
-        EExtensionManager*           fExtensionManager;
-        EResourceManager*            fResourceManager;
-        EUIManager*                  fUIManager;
+        EExtensionManager*          fExtensionManager;
+        EResourceManager*           fResourceManager;
+        EUIManager*                 fUIManager;
 
         EUIRenderer*                fUIRenderer;
 
+        EEventDispatcher            fEventDispatcher;
         // TEMP
         EMainMenuBar      fMainMenuBar;
         ERef<ECamera>     fCamera;
@@ -28,15 +30,21 @@ namespace Engine {
         void Render();
         void RenderImGui();
         void CleanUp();
+        
+        double                      GetFrameTime() const;
+        EResourceManager&           GetResourceManager();
+        EUIManager&                 GetUIManager();
+        EMainMenuBar&               GetMainMenuBar();
+        ERef<EUIPanel>              GetPanelByName(const EString& name);
+        EObjectProperty<EScene>&    GetActiveScene();
 
-        EResourceManager&   GetResourceManager();
-        EUIManager&         GetUIManager();
+        ImGuiContext*       GetMainImGuiContext() const;
 
-        ERef<EUIPanel>      GetPanelByName(const EString& name);
-
-        ImGuiContext* GetMainImGuiContext() const;
-
-        ERef<EScene> GetActiveScene() const;
+        template <typename T, typename... Args>
+        void QueueEvent(Args &&... args)
+        {
+            fEventDispatcher.enqueue<T>(std::forward<Args>(args)...);
+        }
     private:
         void Run();
 

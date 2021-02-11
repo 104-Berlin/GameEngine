@@ -26,6 +26,15 @@ void EUIField::Update()
     }
 }
 
+void EUIField::UpdateEvents() 
+{
+    fEventDispatcher.update<EUIClickEvent>();
+    for (ERef<EUIField> child : fChildren)
+    {
+        child->UpdateEvents();
+    }
+}
+
 void EUIField::Render() 
 {
     if (!fVisible) { return; }
@@ -75,7 +84,10 @@ bool EUIField::OnRender()
 
 void EUIField::OnRenderEnd() 
 {
-    if (ImGui::IsItemClicked() && fOnClickCallback) { fOnClickCallback(); }
+    if (ImGui::IsItemClicked()) 
+    { 
+        fEventDispatcher.enqueue<EUIClickEvent>();
+    }
 }
 
 
@@ -100,11 +112,6 @@ void EUIField::ClearChildren()
     fChildren.clear();
 }
 
-void EUIField::SetOnClick(EUICallbackFn fn) 
-{
-    fOnClickCallback = fn;
-}
-
 void EUIField::SetVisible(bool visible) 
 {
     fVisible = visible;
@@ -122,6 +129,11 @@ void EUIField::SetDragData(EDragData data)
 void EUIField::OnDrop(const EString& type, DropFunction dropFunction) 
 {
     fDropFunction = {type, dropFunction};
+}
+
+EEventDispatcher& EUIField::GetEventDispatcher() 
+{
+    return fEventDispatcher;
 }
 
 // --------------------------------
@@ -333,6 +345,8 @@ bool EUIMenuItem::OnRender()
     return true;
 }
 
+// ----------------------------------------
+// Selectable
 EUISelectable::EUISelectable(const EString& label) 
     : fLabel(label)
 {

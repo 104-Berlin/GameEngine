@@ -1,5 +1,12 @@
 #pragma once
 
+
+
+
+#define PANEL_NAME_COMPONENT "Components"
+#define PANEL_NAME_SCENETREE "Scene Tree"
+#define PANEL_NAME_RESOURCES "Resources"
+
 namespace Engine {
 
     struct ComponentDescription
@@ -13,8 +20,7 @@ namespace Engine {
         HasFn Has;
         Callback Create;
     };
- 
-
+    
 
     class EPanelComponentData
     {
@@ -60,4 +66,10 @@ namespace Engine {
         static EPanelComponentData& data();
 
     };
+
+
+    namespace ApplicationPanels {
+        void CreateDefaultApplicationPanels();
+        void CreateDefaultMainMenuBar();
+    }
 }

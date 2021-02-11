@@ -31,7 +31,10 @@ namespace Engine {
             return fScene->fRegistry.get<T>(fHandle);   
         }
 
-
+        EEntity GetHandle() const
+        {
+            return fHandle;
+        }
 
 
         void Delete()

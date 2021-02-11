@@ -17,6 +17,12 @@ namespace Engine
 
     typedef std::function<void()> EUICallbackFn;
 
+
+    struct EUIClickEvent
+    {
+        u32 NOTHING = 0;
+    };
+
     class EUIField : public std::enable_shared_from_this<EUIField>
     {
         using UpdateFunction = std::function<void(ERef<EUIField>)>;
@@ -29,12 +35,14 @@ namespace Engine
         UpdateFunction                  fCustomUpdateFunction;
         EDragData                       fDragData;
         std::pair<EString, DropFunction>fDropFunction;
+        EEventDispatcher                fEventDispatcher;
     public:
         EUIField();
 
         virtual const EString& GetDisplayName() const = 0;
 
         void Update();
+        void UpdateEvents();
         void Render();
 
         /**
@@ -49,13 +57,32 @@ namespace Engine
         ERef<EUIField> AddChild(const ERef<EUIField>& child);
         void ClearChildren();
 
-        void SetOnClick(EUICallbackFn fn);
         void SetVisible(bool visible);
 
 
         // Drag and drop
         void SetDragData(EDragData data);
+
         void OnDrop(const EString& type, DropFunction dropFunction);
+
+        // Add event listeners
+        EEventDispatcher& GetEventDispatcher();
+
+        /*template <typename Candidate>
+        void SetOnClick()
+        {
+            fEventDispatcher.sink<EUIClickEvent>().connect<Candidate>();
+        }*/
+
+
+
+        /*template <typename Condidate, typename Type>
+        void SetOnClick(Type&& args)
+        {
+            fEventDispatcher.sink<EUIClickEvent>().connect<Condidate>(args);
+        }*/
+
+
     };
 
     class EUILabel : public EUIField
