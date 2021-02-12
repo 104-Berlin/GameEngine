@@ -245,7 +245,7 @@ EUIInputFieldString::EUIInputFieldString(const EString& label)
 
 bool EUIInputFieldString::OnRender() 
 {
-    if (ImGui::InputText(GetDisplayName().c_str(), fValue, STRING_BUFFER_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputText(GetDisplayName().c_str(), fValue, STRING_BUFFER_SIZE))
     {
         fEventDispatcher.Enqueue<EStringChangeEvent>({GetValue()});
     }
@@ -273,7 +273,7 @@ EUIInputFieldInteger::EUIInputFieldInteger(const EString& label)
 
 bool EUIInputFieldInteger::OnRender() 
 {
-    if (ImGui::InputInt(GetDisplayName().c_str(), &fValue, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputInt(GetDisplayName().c_str(), &fValue, 1, 100))
     {
         fEventDispatcher.Enqueue<EIntegerChangeEvent>({GetValue()});
     }
@@ -300,7 +300,7 @@ EUIInputFieldFloat::EUIInputFieldFloat(const EString& label)
 
 bool EUIInputFieldFloat::OnRender() 
 {
-    if (ImGui::InputFloat(GetDisplayName().c_str(), &fValue, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputFloat(GetDisplayName().c_str(), &fValue, 0.0f, 0.0f, "%.3f"))
     {
         fEventDispatcher.Enqueue<EFloatChangeEvent>({GetValue()});
     }
@@ -327,7 +327,7 @@ EUIInputFieldFloat2::EUIInputFieldFloat2(const EString& label)
 
 bool EUIInputFieldFloat2::OnRender() 
 {
-    if (ImGui::InputFloat2(GetDisplayName().c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputFloat2(GetDisplayName().c_str(), &fValue.x, "%.3f"))
     {
         fEventDispatcher.Enqueue<EFloat2ChangeEvent>({GetValue()});
     }
@@ -355,7 +355,7 @@ EUIInputFieldFloat3::EUIInputFieldFloat3(const EString& label)
 
 bool EUIInputFieldFloat3::OnRender() 
 {
-    if (ImGui::InputFloat3(GetDisplayName().c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputFloat3(GetDisplayName().c_str(), &fValue.x, "%.3f"))
     {
         fEventDispatcher.Enqueue<EFloat3ChangeEvent>({GetValue()});
     }
@@ -382,7 +382,7 @@ EUIInputFieldFloat4::EUIInputFieldFloat4(const EString& label)
 
 bool EUIInputFieldFloat4::OnRender() 
 {
-    if (ImGui::InputFloat4(GetDisplayName().c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    if (ImGui::InputFloat4(GetDisplayName().c_str(), &fValue.x, "%.3f"))
     {
         fEventDispatcher.Enqueue<EFloat4ChangeEvent>({GetValue()});
     }

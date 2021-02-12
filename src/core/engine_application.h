@@ -28,7 +28,6 @@ namespace Engine {
 
         void Update(float delta);
         void Render();
-        void RenderImGui();
         void CleanUp();
         
         double                      GetFrameTime() const;

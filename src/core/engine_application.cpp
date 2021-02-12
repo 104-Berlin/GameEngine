@@ -98,13 +98,17 @@ void EApplication::Run()
         }
         fMainMenuBar.UpdateEvents();
         
+        // This is not used atm
         Update(fFrameTime);
 
+        // Render all panels
+        // If extra 3d scene these will be rendered as well here
         Render();
 
-        RenderImGui();
+        // Put it all to opengl
         ERenderer::WaitAndRender();
 
+        // Put it all on the screen
         glfwMakeContextCurrent(fMainWindow);
         glfwSwapBuffers(fMainWindow);
 
@@ -189,14 +193,6 @@ void EApplication::Update(float delta)
 
 void EApplication::Render()
 {
-    if (fActiveScene)
-    {
-        fActiveScene->Render();
-    }
-}
-
-void EApplication::RenderImGui()
-{
     if (!fUIRenderer->IsInitialized()) { return; }
     int width = 0;
     int height = 0;
@@ -207,28 +203,18 @@ void EApplication::RenderImGui()
         glCall(glViewport(0, 0, width, height));
     })
 
-    
     fUIRenderer->Begin();
-    //UI::NewFrame();
-
+    
+    // Render main menu
     fMainMenuBar.Render();
-    //RenderResourcePanel(*fResourceManager);
 
+    // Render all panels. Here you can render custom 3d scenes
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
         panel->Render();
     }
-
-
-
-
-    if (fActiveScene)
-    {
-        fActiveScene->RenderUI();
-    }
     
     fUIRenderer->Render();
-    //UI::Render();
 }
 
 void EApplication::CleanUp() 
