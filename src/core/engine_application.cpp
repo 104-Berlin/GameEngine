@@ -261,7 +261,7 @@ ERef<EUIPanel> EApplication::GetPanelByName(const EString& name)
     EVector<ERef<EUIPanel>> panels = fUIManager->GetPanels();
     for (size_t i = 0; i < panels.size(); i++)
     {
-        if (panels[i]->GetDisplayName().compare(name) == 0)
+        if (panels[i]->GetPanelTitle().compare(name) == 0)
         {
             return panels[i];
         }

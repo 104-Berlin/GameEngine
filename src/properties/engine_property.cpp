@@ -46,3 +46,37 @@ void EBaseProperty::AddEventAfterChange(intptr_t key, const EChangeFunc& func)
 {
     fAfterChangeCallbacks[key] = func;
 }
+
+EObjectRef::EObjectRef(const EString& propertyName) 
+    : EBaseProperty(propertyName)
+{
+    fObject = new EObject();
+}
+
+EObjectRef::~EObjectRef() 
+{
+    delete fObject;
+}
+
+void EObjectRef::SetValue(const EObject& value) 
+{
+    if (*fObject == value) { return; }
+
+    std::cout << "Changing ObjectRef \"" << GetPropertyName() << "\"" << " from handle " << (u32)fObject->GetHandle() << " TO " << value.GetHandle() << std::endl;
+    *fObject = value;
+}
+
+EObject& EObjectRef::GetValue() const
+{
+    return *fObject;
+}
+
+void EObjectRef::OnFromJsObject(const EJson& ref) 
+{
+    // TODO: impl
+}
+
+void EObjectRef::OnSetJsObject(EJson& ref) const
+{
+    // TODO: impl
+}

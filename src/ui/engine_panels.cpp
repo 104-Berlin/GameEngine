@@ -103,6 +103,7 @@ namespace ApplicationPanels {
 
                     ERef<EUISelectable> selectable = EMakeRef(EUISelectable, nameComponent.Name);
                     selectable->GetEventDispatcher().Connect<EUIClickEvent>([object](EUIClickEvent){
+                        std::cout << (u32) object.GetHandle() << std::endl;
                         EApplication::gApp().GetActiveScene()->GetSelectedObject().SetValue(object);
                     });
                     sceneList->AddChild(selectable);

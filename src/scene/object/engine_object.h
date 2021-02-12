@@ -10,6 +10,9 @@ namespace Engine {
     public:
         EObject() = default;
         EObject(EEntity handle, EScene* scene);
+        EObject(const EObject& other)
+            : fScene(other.fScene), fHandle(other.fHandle)
+        {}
         virtual ~EObject() = default;
 
         // Wrapper functions
@@ -45,6 +48,16 @@ namespace Engine {
         operator bool () const
         {
             return fHandle != entt::null && fScene;
+        }
+
+        bool operator==(const EObject& other)
+        {
+            return fScene == other.fScene && fHandle == other.fHandle;
+        }
+
+        bool operator!=(const EObject& other)
+        {
+            return !((*this) == other);
         }
 
         void FromJsObject(const EJson& ref);

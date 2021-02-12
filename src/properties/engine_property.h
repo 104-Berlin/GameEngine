@@ -1,6 +1,7 @@
 #pragma once
 
 namespace Engine {
+    class EObject;
 
     typedef std::function<void()> EChangeFunc;
 
@@ -27,6 +28,21 @@ namespace Engine {
         // void RemoveEventBeforeChange(EEventPosition p);
         void AddEventAfterChange(intptr_t key, const EChangeFunc& func);
         // void RemoveEventAfterChange(EEventPosition p);
+    };
+
+    class EObjectRef : public EBaseProperty
+    {
+    private:
+        EObject* fObject;
+    public:
+        EObjectRef(const EString& propertyName);
+        ~EObjectRef();
+
+        void SetValue(const EObject& value);
+        EObject& GetValue() const;
+
+        virtual void OnFromJsObject(const EJson& ref) override;
+        virtual void OnSetJsObject(EJson& ref) const;
     };
 
     template <typename Type>
@@ -312,4 +328,4 @@ namespace Engine {
         }
     };
 
-}
+}   

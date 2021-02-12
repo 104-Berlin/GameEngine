@@ -37,10 +37,11 @@ namespace Engine
         std::pair<EString, DropFunction>fDropFunction;
         EEventDispatcher                fEventDispatcher;
         bool                            fIsDirty;
+        EString                         fLabel;
     public:
-        EUIField();
+        EUIField(const EString& label);
 
-        virtual const EString& GetDisplayName() const = 0;
+        EString GetDisplayName() const;
 
         void UpdateEvents();
         void Render();
@@ -87,24 +88,16 @@ namespace Engine
 
     class EUILabel : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUILabel(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
 
     class EUIContainer : public EUIField
     {
-    private:
-        EString     fStringId;
     public:
         EUIContainer(const EString& identifier = "EMPTY");
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
@@ -112,13 +105,12 @@ namespace Engine
     class EUIPanel : public EUIField
     {
     private:
-        EString         fName;
         bool            fOpen;
         bool            fWasJustClosed; // This is used to remove a ImGui bug when we have to call ImGui::End once when we closed the panel
     public:
         EUIPanel(const EString& panelName);
 
-        virtual const EString& GetDisplayName() const override;
+        const EString& GetPanelTitle() const;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -129,29 +121,6 @@ namespace Engine
     };
 
 
-    template <typename Renderable>
-    class EInputField : public EUIField
-    {
-    private:
-        Renderable fProperty;
-    public:
-        EInputField(Renderable property)
-            : fProperty(property)
-        {
-
-        }
-
-        virtual const EString& GetDisplayName() const override
-        {
-            return fProperty->GetPropertyName();
-        }
-
-        virtual bool OnRender() override
-        {
-            UI::RenderInputField(fProperty->GetPropertyName(), fProperty);
-            return true; // ?
-        }
-    };
 
     struct EStringChangeEvent
     {
@@ -161,13 +130,9 @@ namespace Engine
     class EUIInputFieldString : public EUIField
     {
     private:
-        EString     fLabel;
-
         char        fValue[STRING_BUFFER_SIZE];
     public:
         EUIInputFieldString(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -190,13 +155,9 @@ namespace Engine
     class EUIInputFieldInteger : public EUIField
     {
     private:
-        EString fLabel;
-
         i32     fValue;
     public:
         EUIInputFieldInteger(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -219,13 +180,9 @@ namespace Engine
     class EUIInputFieldFloat : public EUIField
     {
     private:
-        EString fLabel;
-
         float   fValue;
     public:
         EUIInputFieldFloat(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -246,13 +203,9 @@ namespace Engine
     class EUIInputFieldFloat2 : public EUIField
     {
     private:
-        EString fLabel;
-
         EVec2   fValue;
     public:
         EUIInputFieldFloat2(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -274,13 +227,9 @@ namespace Engine
     class EUIInputFieldFloat3 : public EUIField
     {
     private:
-        EString fLabel;
-
         EVec3   fValue;
     public:
         EUIInputFieldFloat3(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -302,13 +251,9 @@ namespace Engine
     class EUIInputFieldFloat4 : public EUIField
     {
     private:
-        EString fLabel;
-
         EVec4   fValue;
     public:
         EUIInputFieldFloat4(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -329,12 +274,9 @@ namespace Engine
     class EUICheckbox : public EUIField
     {
     private:
-        EString fLabel;
         bool    fValue;
     public:
         EUICheckbox(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
 
@@ -350,12 +292,8 @@ namespace Engine
 
     class EUIComponentContainer : public EUIField
     {
-    private:
-        EString     fComponentName;
     public:
         EUIComponentContainer(const EString& componentName);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -368,8 +306,6 @@ namespace Engine
     public:
         EUIMainMenuBar();
 
-        virtual const EString& GetDisplayName() const override;
-
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
         
@@ -378,13 +314,9 @@ namespace Engine
     class EUIMenu : public EUIField
     {
     private:
-        EString fDisplayName;
         bool    fOpen;
     public:
         EUIMenu(const EString& displayName = "MenuBar");
-
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -393,12 +325,9 @@ namespace Engine
     class EUIContextMenu : public EUIField
     {
     private:
-        EString     fDisplayName;
         bool        fOpen;
     public:
         EUIContextMenu(const EString& displayName = "ContextMenu");
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -406,12 +335,8 @@ namespace Engine
 
     class EUIMenuItem : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUIMenuItem(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
@@ -420,12 +345,8 @@ namespace Engine
 
     class EUISelectable : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUISelectable(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
