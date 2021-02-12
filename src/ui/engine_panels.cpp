@@ -5,7 +5,7 @@ using namespace Engine;
 
 EPanelComponentData::~EPanelComponentData() 
 {
-    //ClearComponentData();    
+    ClearComponentData();    
 }
 
 void EPanelComponentData::AddComponentDescription(ComponentDescription* dsc) 
@@ -32,20 +32,6 @@ EPanelComponentData& EPanelComponentData::data()
     static EPanelComponentData data;
     return data;
 }
-
-void OpenPanel(EUIPanel* panelToOpen, const EUIClickEvent& event)
-{
-    if (panelToOpen->IsOpen())
-    {
-        ImGui::SetWindowFocus(panelToOpen->GetDisplayName().c_str());
-    }
-    else
-    {
-        panelToOpen->Open();
-    }
-}
-
-
 namespace Engine {
 namespace ApplicationPanels {
     void CreateDefaultApplicationPanels() 
@@ -124,12 +110,12 @@ namespace ApplicationPanels {
             }
         });
 
-        /*EApplication::gApp().GetActiveScene().AddEventAfterChange((intptr_t)0, [](){
+        EApplication::gApp().GetActiveScene().AddEventAfterChange((intptr_t)0, [](){
             ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
             ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
-            if (componentPanel) { componentPanel->Update(); }
-            if (sceneTreePanel) { sceneTreePanel->Update(); }
-        });*/
+            if (componentPanel) { componentPanel->SetDirty(); }
+            if (sceneTreePanel) { sceneTreePanel->SetDirty(); }
+        });
 
         // Context Menu
         ERef<EUIField> contextMenu = sceneViewPanel->AddChild(EMakeRef(EUIContextMenu));
@@ -187,7 +173,6 @@ namespace ApplicationPanels {
         for (ERef<EUIPanel> panel : EApplication::gApp().GetUIManager().GetPanels())
         {
             ERef<EUIMenuItem> menuItem = ERef<EUIMenuItem>(new EUIMenuItem(panel->GetDisplayName()));
-            //menuItem->SetOnClick<&OpenPanel>();
             menuItem->GetEventDispatcher().Connect<EUIClickEvent>([panel](){
                 if (panel->IsOpen())
                 {
@@ -198,16 +183,6 @@ namespace ApplicationPanels {
                     panel->Open();
                 }
             });
-            /*menuItem->SetOnClick([panel](){
-                if (panel->IsOpen())
-                {
-                    ImGui::SetWindowFocus(panel->GetDisplayName().c_str());
-                }
-                else
-                {
-                    panel->Open();
-                }
-            });*/
             viewMenu->AddChild(menuItem);
         }     
     }
