@@ -167,14 +167,23 @@ bool EUILabel::OnRender()
 // --------------------------------
 // UI Container just to manage children
 EUIContainer::EUIContainer(const EString& identifier) 
-    : EUIField(identifier)
+    : EUIField(identifier), fShow(false)
 {
     
 }
 
 bool EUIContainer::OnRender() 
 {
+    if (fShow)
+    {
+        return ImGui::CollapsingHeader(GetDisplayName().c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+    }
     return true;
+}
+
+void EUIContainer::SetShow(bool value) 
+{
+    fShow = value;
 }
 
 
@@ -415,24 +424,6 @@ void EUICheckbox::SetValue(bool value)
 bool EUICheckbox::GetValue() const
 {
     return fValue;
-}
-
-// --------------------------------------------------------------------
-// Component Container
-EUIComponentContainer::EUIComponentContainer(const EString& componentName) 
-    : EUIField(componentName)
-{
-    
-}
-
-bool EUIComponentContainer::OnRender() 
-{
-    return ImGui::CollapsingHeader(GetDisplayName().c_str());
-}
-
-void EUIComponentContainer::OnRenderEnd() 
-{
-    EUIField::OnRenderEnd();
 }
 
 

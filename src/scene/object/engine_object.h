@@ -60,6 +60,9 @@ namespace Engine {
             return !((*this) == other);
         }
 
+        void Set(EEntity entity, EScene* scene);
+        void Set(EObject object);
+
         void FromJsObject(const EJson& ref);
         void SetJsObject(EJson& ref) const;  
 

@@ -4,8 +4,18 @@ using namespace Engine;
 
 EObject::EObject(EEntity handle, EScene* scene)
 {
+    Set(handle, scene);
+}
+
+void EObject::Set(EEntity entity, EScene* scene) 
+{
     fScene = scene;
-    fHandle = handle;
+    fHandle = entity;
+}
+
+void EObject::Set(EObject object) 
+{
+    Set(object.fHandle, object.fScene);
 }
 
 void EObject::FromJsObject(const EJson& ref)

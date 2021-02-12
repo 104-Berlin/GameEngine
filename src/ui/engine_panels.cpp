@@ -70,7 +70,8 @@ namespace ApplicationPanels {
         for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
         {
             ERef<EUIMenuItem> menuItem = EMakeRef(EUIMenuItem, compDsc->Name);
-            /*menuItem->SetOnClick([compDsc](){
+            
+            menuItem->SetOnClick([compDsc](){
                 EObject object = EApplication::gApp().GetActiveScene()->GetSelectedObject().GetValue();
                 if (object)
                 {
@@ -78,10 +79,10 @@ namespace ApplicationPanels {
                     ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
                     if (componentPanel)
                     {
-                        componentPanel->Update();
+                        componentPanel->SetDirty();
                     }
                 }
-            });*/
+            });
             componentsContextMenu->AddChild(menuItem);
         }
 
@@ -103,7 +104,6 @@ namespace ApplicationPanels {
 
                     ERef<EUISelectable> selectable = EMakeRef(EUISelectable, nameComponent.Name);
                     selectable->GetEventDispatcher().Connect<EUIClickEvent>([object](EUIClickEvent){
-                        std::cout << (u32) object.GetHandle() << std::endl;
                         EApplication::gApp().GetActiveScene()->GetSelectedObject().SetValue(object);
                     });
                     sceneList->AddChild(selectable);

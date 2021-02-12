@@ -38,8 +38,9 @@ namespace Engine {
             ComponentDescription* newComponentDsc = new ComponentDescription();
             newComponentDsc->Name = componentName;
             
-            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EUIComponentContainer> {
-                ERef<EUIComponentContainer> result = EMakeRef(EUIComponentContainer, newComponentDsc->Name);
+            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EUIField> {
+                ERef<EUIContainer> result = EMakeRef(EUIContainer, newComponentDsc->Name);
+                result->SetShow();
                 if (object.HasComponent<T>())
                 {
                     object.GetComponent<T>()._reflect([result](const char* name, auto property){

@@ -25,63 +25,70 @@ void UI::RenderInputField_Bool(const EString& label, EProperty<bool>* value)
 ERef<EUIField> UI::CreateInputField_Bool(const EString& label, EProperty<bool>* property) 
 {
     ERef<EUICheckbox> result = EMakeRef(EUICheckbox, label);
-    result->OnValueChange([&property](ECheckboxChangeEvent event){
+    result->OnValueChange([property](ECheckboxChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_Float(const EString& label, EProperty<float>* property) 
 {
     ERef<EUIInputFieldFloat> result = EMakeRef(EUIInputFieldFloat, label);
-    result->OnValueChange([&property](EFloatChangeEvent event){
+    result->OnValueChange([property](EFloatChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_Double(const EString& label, EProperty<double>* property) 
 {
     ERef<EUIInputFieldFloat> result = EMakeRef(EUIInputFieldFloat, label);
-    result->OnValueChange([&property](EFloatChangeEvent event){
+    result->OnValueChange([property](EFloatChangeEvent event){
         property->SetValue((double)event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_I32(const EString& label, EProperty<i32>* property) 
 {
     ERef<EUIInputFieldInteger> result = EMakeRef(EUIInputFieldInteger, label);
-    result->OnValueChange([&property](EIntegerChangeEvent event){
+    result->OnValueChange([property](EIntegerChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_Vec3(const EString& label, EProperty<EVec3>* property) 
 {
     ERef<EUIInputFieldFloat3> result = EMakeRef(EUIInputFieldFloat3, label);
-    result->OnValueChange([&property](EFloat3ChangeEvent event){
+    result->OnValueChange([property](EFloat3ChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_Vec4(const EString& label, EProperty<EVec4>* property)
 {
     ERef<EUIInputFieldFloat4> result = EMakeRef(EUIInputFieldFloat4, label);
-    result->OnValueChange([&property](EFloat4ChangeEvent event){
+    result->OnValueChange([property](EFloat4ChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 
 ERef<EUIField> UI::CreateInputField_String(const EString& label, EProperty<EString>* property)
 {
     ERef<EUIInputFieldString> result = EMakeRef(EUIInputFieldString, label);
-    result->OnValueChange([&property](EStringChangeEvent event){
+    result->OnValueChange([property](EStringChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetValue(property->GetValue());
     return result;
 }
 

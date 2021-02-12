@@ -42,7 +42,7 @@ namespace Engine {
         EObject& GetValue() const;
 
         virtual void OnFromJsObject(const EJson& ref) override;
-        virtual void OnSetJsObject(EJson& ref) const;
+        virtual void OnSetJsObject(EJson& ref) const override;
     };
 
     template <typename Type>

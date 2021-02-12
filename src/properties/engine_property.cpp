@@ -62,8 +62,12 @@ void EObjectRef::SetValue(const EObject& value)
 {
     if (*fObject == value) { return; }
 
-    std::cout << "Changing ObjectRef \"" << GetPropertyName() << "\"" << " from handle " << (u32)fObject->GetHandle() << " TO " << value.GetHandle() << std::endl;
-    *fObject = value;
+    for (const auto& f : fBeforeChangeCallbacks) {f.second();}
+
+    std::cout << "Changing ObjectRef \"" << GetPropertyName() << "\"" << " from handle " << (u32)fObject->GetHandle() << " TO " << (u32)value.GetHandle() << std::endl;
+    fObject->Set(value);
+
+    for (const auto& f : fAfterChangeCallbacks) {f.second();}
 }
 
 EObject& EObjectRef::GetValue() const

@@ -62,7 +62,7 @@ void EScene::Update(float delta)
 {
 }
 
-EProperty<EObject>& EScene::GetSelectedObject() 
+EObjectRef& EScene::GetSelectedObject() 
 {
     return fSelectedObject;
 }

@@ -12,7 +12,7 @@ namespace Engine {
         EString                             fName;
         EEntity                             fSelectionContext;
 
-        EProperty<EObject>                  fSelectedObject;
+        EObjectRef                          fSelectedObject;
 
 
         // TEMP
@@ -32,7 +32,7 @@ namespace Engine {
         void RenderUI();
         void Update(float delta);
 
-        EProperty<EObject>& GetSelectedObject();
+        EObjectRef& GetSelectedObject();
 
 
         // Looping functions

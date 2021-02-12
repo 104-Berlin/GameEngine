@@ -69,11 +69,11 @@ namespace Engine
         // Add event listeners
         EEventDispatcher& GetEventDispatcher();
 
-        /*template <typename Candidate>
-        void SetOnClick()
+        template <typename Candidate>
+        void SetOnClick(Candidate&& cb)
         {
-            fEventDispatcher.sink<EUIClickEvent>().connect<Candidate>();
-        }*/
+            fEventDispatcher.Connect<EUIClickEvent>(cb);
+        }
 
 
 
@@ -96,10 +96,14 @@ namespace Engine
 
     class EUIContainer : public EUIField
     {
+    private:
+        bool    fShow;
     public:
         EUIContainer(const EString& identifier = "EMPTY");
 
         virtual bool OnRender() override;
+
+        void SetShow(bool value = true);
     };
 
     class EUIPanel : public EUIField
@@ -288,15 +292,6 @@ namespace Engine
         {
             fEventDispatcher.Connect<ECheckboxChangeEvent>(cb);
         }
-    };
-
-    class EUIComponentContainer : public EUIField
-    {
-    public:
-        EUIComponentContainer(const EString& componentName);
-
-        virtual bool OnRender() override;
-        virtual void OnRenderEnd() override;
     };
 
     class EUIMainMenuBar : public EUIField
