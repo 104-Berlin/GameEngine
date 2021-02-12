@@ -17,6 +17,12 @@ namespace Engine
 
     typedef std::function<void()> EUICallbackFn;
 
+
+    struct EUIClickEvent
+    {
+        u32 NOTHING = 0;
+    };
+
     class EUIField : public std::enable_shared_from_this<EUIField>
     {
         using UpdateFunction = std::function<void(ERef<EUIField>)>;
@@ -29,12 +35,15 @@ namespace Engine
         UpdateFunction                  fCustomUpdateFunction;
         EDragData                       fDragData;
         std::pair<EString, DropFunction>fDropFunction;
+        EEventDispatcher                fEventDispatcher;
+        bool                            fIsDirty;
+        EString                         fLabel;
     public:
-        EUIField();
+        EUIField(const EString& label);
 
-        virtual const EString& GetDisplayName() const = 0;
+        EString GetDisplayName() const;
 
-        void Update();
+        void UpdateEvents();
         void Render();
 
         /**
@@ -43,29 +52,44 @@ namespace Engine
         virtual bool OnRender();
         virtual void OnRenderEnd();
 
-        virtual void OnUpdate();
         void SetUpdateFunction(UpdateFunction function);
 
         ERef<EUIField> AddChild(const ERef<EUIField>& child);
         void ClearChildren();
 
-        void SetOnClick(EUICallbackFn fn);
         void SetVisible(bool visible);
-
+        void SetDirty(bool value = true);
+        bool IsDirty() const;
 
         // Drag and drop
         void SetDragData(EDragData data);
+
         void OnDrop(const EString& type, DropFunction dropFunction);
+
+        // Add event listeners
+        EEventDispatcher& GetEventDispatcher();
+
+        template <typename Candidate>
+        void SetOnClick(Candidate&& cb)
+        {
+            fEventDispatcher.Connect<EUIClickEvent>(cb);
+        }
+
+
+
+        /*template <typename Condidate, typename Type>
+        void SetOnClick(Type&& args)
+        {
+            fEventDispatcher.sink<EUIClickEvent>().connect<Condidate>(args);
+        }*/
+
+
     };
 
     class EUILabel : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUILabel(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
@@ -73,25 +97,24 @@ namespace Engine
     class EUIContainer : public EUIField
     {
     private:
-        EString     fStringId;
+        bool    fShow;
     public:
         EUIContainer(const EString& identifier = "EMPTY");
 
-        virtual const EString& GetDisplayName() const override;
-
         virtual bool OnRender() override;
+
+        void SetShow(bool value = true);
     };
 
     class EUIPanel : public EUIField
     {
     private:
-        EString         fName;
         bool            fOpen;
         bool            fWasJustClosed; // This is used to remove a ImGui bug when we have to call ImGui::End once when we closed the panel
     public:
         EUIPanel(const EString& panelName);
 
-        virtual const EString& GetDisplayName() const override;
+        const EString& GetPanelTitle() const;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -102,51 +125,181 @@ namespace Engine
     };
 
 
-    template <typename Renderable>
-    class EInputField : public EUIField
+
+    struct EStringChangeEvent
     {
-    private:
-        Renderable fProperty;
-    public:
-        EInputField(Renderable property)
-            : fProperty(property)
-        {
-
-        }
-
-        virtual const EString& GetDisplayName() const override
-        {
-            return fProperty->GetPropertyName();
-        }
-
-        virtual bool OnRender() override
-        {
-            UI::RenderInputField(fProperty->GetPropertyName(), fProperty);
-            return true; // ?
-        }
+        EString Value;
     };
-
-    class EComponentContainer : public EUIField
+    #define STRING_BUFFER_SIZE 255
+    class EUIInputFieldString : public EUIField
     {
     private:
-        EString     fComponentName;
+        char        fValue[STRING_BUFFER_SIZE];
     public:
-        EComponentContainer(const EString& componentName);
-
-        virtual const EString& GetDisplayName() const override;
+        EUIInputFieldString(const EString& label);
 
         virtual bool OnRender() override;
-        virtual void OnRenderEnd() override;
+
+        void SetValue(const EString& value);
+        EString GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EStringChangeEvent>(cb);
+        }
     };
 
-    class EMainMenuBar : public EUIField
+    
+    struct EIntegerChangeEvent
+    {
+        i32 Value;
+    };
+
+    class EUIInputFieldInteger : public EUIField
+    {
+    private:
+        i32     fValue;
+    public:
+        EUIInputFieldInteger(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(i32 value);
+        i32 GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EIntegerChangeEvent>(cb);
+        }
+    };
+
+
+    struct EFloatChangeEvent
+    {
+        float Value;
+    };
+
+    class EUIInputFieldFloat : public EUIField
+    {
+    private:
+        float   fValue;
+    public:
+        EUIInputFieldFloat(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(float value);
+        float GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EFloatChangeEvent>(cb);
+        }
+    };
+
+    struct EFloat2ChangeEvent
+    {
+        EVec2 Value;
+    };
+    class EUIInputFieldFloat2 : public EUIField
+    {
+    private:
+        EVec2   fValue;
+    public:
+        EUIInputFieldFloat2(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(const EVec2& value);
+        EVec2 GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EFloat2ChangeEvent>(cb);
+        }
+    };
+
+    struct EFloat3ChangeEvent
+    {
+        EVec3 Value;
+    };
+
+    class EUIInputFieldFloat3 : public EUIField
+    {
+    private:
+        EVec3   fValue;
+    public:
+        EUIInputFieldFloat3(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(const EVec3& value);
+        EVec3 GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EFloat3ChangeEvent>(cb);
+        }
+    };
+
+    struct EFloat4ChangeEvent
+    {
+        EVec4 Value;
+    };
+
+    class EUIInputFieldFloat4 : public EUIField
+    {
+    private:
+        EVec4   fValue;
+    public:
+        EUIInputFieldFloat4(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(const EVec4& value);
+        EVec4 GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EFloat4ChangeEvent>(cb);
+        }
+    };
+
+    struct ECheckboxChangeEvent
+    {
+        bool Value;
+    };
+    class EUICheckbox : public EUIField
+    {
+    private:
+        bool    fValue;
+    public:
+        EUICheckbox(const EString& label);
+
+        virtual bool OnRender() override;
+
+        void SetValue(bool value);
+        bool GetValue() const;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<ECheckboxChangeEvent>(cb);
+        }
+    };
+
+    class EUIMainMenuBar : public EUIField
     {
     private:
         bool fOpen;
     public:
-        EMainMenuBar();
-
-        virtual const EString& GetDisplayName() const override;
+        EUIMainMenuBar();
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -156,13 +309,9 @@ namespace Engine
     class EUIMenu : public EUIField
     {
     private:
-        EString fDisplayName;
         bool    fOpen;
     public:
         EUIMenu(const EString& displayName = "MenuBar");
-
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -171,12 +320,9 @@ namespace Engine
     class EUIContextMenu : public EUIField
     {
     private:
-        EString     fDisplayName;
         bool        fOpen;
     public:
         EUIContextMenu(const EString& displayName = "ContextMenu");
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
         virtual void OnRenderEnd() override;
@@ -184,12 +330,8 @@ namespace Engine
 
     class EUIMenuItem : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUIMenuItem(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };
@@ -198,12 +340,8 @@ namespace Engine
 
     class EUISelectable : public EUIField
     {
-    private:
-        EString fLabel;
     public:
         EUISelectable(const EString& label);
-
-        virtual const EString& GetDisplayName() const override;
 
         virtual bool OnRender() override;
     };

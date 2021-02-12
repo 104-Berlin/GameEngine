@@ -10,15 +10,8 @@ namespace Engine {
         using ObjectCallback = std::function<void(EObject)>;
     private:
         EString                             fName;
-        EEntity                             fSelectionContext;
+        EObjectRef                          fSelectedObject;
 
-        EProperty<EObject>                  fSelectedObject;
-
-
-        // TEMP
-        float                               fViewPortWidth;
-        float                               fViewPortHeight;
-        //ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
         // Entities
         entt::registry                      fRegistry;
@@ -28,11 +21,9 @@ namespace Engine {
 
         EObject CreateObject();
 
-        void Render();
-        void RenderUI();
         void Update(float delta);
 
-        EProperty<EObject>& GetSelectedObject();
+        EObjectRef& GetSelectedObject();
 
 
         // Looping functions
