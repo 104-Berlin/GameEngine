@@ -53,11 +53,6 @@ void EApplication::Start(const ERef<EScene>& scene)
     fExtensionManager->LoadPluginFolder();
     fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
 
-    // First register intern panels bevore set up main menu, so the view menu is up to data
-    RegisterInternPanels();
-
-    // After regsiter intern panels
-    SetUpMainMenuBar();
 
 
     fActiveScene = scene;
@@ -66,6 +61,16 @@ void EApplication::Start(const ERef<EScene>& scene)
     {
         fActiveScene = EMakeRef(EScene, "Scene 1");
     }
+
+
+    // First register intern panels bevore set up main menu, so the view menu is up to data
+    RegisterInternPanels();
+
+    // After regsiter intern panels
+    SetUpMainMenuBar();
+
+
+    
     
     fRunning = true;
     Run();
@@ -86,7 +91,7 @@ void EApplication::Run()
 
         // Store this global in the app i think
         fFrameTime = timer.Reset();
-        fEventDispatcher.update();
+        fEventDispatcher.Update();
         for (ERef<EUIPanel> panel : fUIManager->GetPanels())
         {
             panel->UpdateEvents();
@@ -246,7 +251,7 @@ EUIManager& EApplication::GetUIManager()
     return *fUIManager;
 }
 
-EMainMenuBar& EApplication::GetMainMenuBar() 
+EUIMainMenuBar& EApplication::GetMainMenuBar() 
 {
     return fMainMenuBar;
 }

@@ -18,7 +18,7 @@ namespace Engine {
 
         EEventDispatcher            fEventDispatcher;
         // TEMP
-        EMainMenuBar      fMainMenuBar;
+        EUIMainMenuBar      fMainMenuBar;
         ERef<ECamera>     fCamera;
     public:
         EApplication();
@@ -34,7 +34,7 @@ namespace Engine {
         double                      GetFrameTime() const;
         EResourceManager&           GetResourceManager();
         EUIManager&                 GetUIManager();
-        EMainMenuBar&               GetMainMenuBar();
+        EUIMainMenuBar&               GetMainMenuBar();
         ERef<EUIPanel>              GetPanelByName(const EString& name);
         EObjectProperty<EScene>&    GetActiveScene();
 
@@ -43,7 +43,7 @@ namespace Engine {
         template <typename T, typename... Args>
         void QueueEvent(Args &&... args)
         {
-            fEventDispatcher.enqueue<T>(std::forward<Args>(args)...);
+            fEventDispatcher.Enqueue<T>(std::forward<Args>(args)...);
         }
     private:
         void Run();

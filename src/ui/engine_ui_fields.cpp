@@ -13,22 +13,9 @@ EUIField::EUIField()
     fId = next_ui_id();
 }
 
-void EUIField::Update() 
-{
-    OnUpdate();
-    if (fCustomUpdateFunction)
-    {
-        fCustomUpdateFunction(this->shared_from_this());
-    }
-    for (ERef<EUIField> child : fChildren)
-    {
-        child->Update();
-    }
-}
-
 void EUIField::UpdateEvents() 
 {
-    fEventDispatcher.update<EUIClickEvent>();
+    fEventDispatcher.Update();
     for (ERef<EUIField> child : fChildren)
     {
         child->UpdateEvents();
@@ -38,6 +25,11 @@ void EUIField::UpdateEvents()
 void EUIField::Render() 
 {
     if (!fVisible) { return; }
+    if (fIsDirty && fCustomUpdateFunction)
+    {
+        fCustomUpdateFunction(shared_from_this());
+    }
+    fIsDirty = false;
     ImGui::PushID(fId);
     if (OnRender())
     {
@@ -86,14 +78,8 @@ void EUIField::OnRenderEnd()
 {
     if (ImGui::IsItemClicked()) 
     { 
-        fEventDispatcher.enqueue<EUIClickEvent>();
+        fEventDispatcher.Enqueue<EUIClickEvent>(EUIClickEvent());
     }
-}
-
-
-void EUIField::OnUpdate() 
-{
-    
 }
 
 void EUIField::SetUpdateFunction(UpdateFunction function) 
@@ -103,6 +89,7 @@ void EUIField::SetUpdateFunction(UpdateFunction function)
 
 ERef<EUIField> EUIField::AddChild(const ERef<EUIField>& child) 
 {
+    if (!child) { return nullptr; }
     fChildren.push_back(child);
     return fChildren.back();
 }
@@ -115,6 +102,25 @@ void EUIField::ClearChildren()
 void EUIField::SetVisible(bool visible) 
 {
     fVisible = visible;
+}
+
+void EUIField::SetDirty(bool value) 
+{
+    fIsDirty = value;
+    for (ERef<EUIField> child : fChildren)
+    {
+        child->SetDirty(value);
+    }
+}
+
+bool EUIField::IsDirty() const
+{
+    if (fIsDirty) { return true; }
+    for (ERef<EUIField> child : fChildren)
+    {
+        if (child->IsDirty()) { return true; }
+    }
+    return false;
 }
 
 void EUIField::SetDragData(EDragData data) 
@@ -175,7 +181,7 @@ bool EUIContainer::OnRender()
 }
 
 
-// ----------------------------------
+// ----------------------------------------------------------------------------------------------------
 // UI Panel
 
 EUIPanel::EUIPanel(const EString& panelName) 
@@ -220,25 +226,252 @@ bool EUIPanel::IsOpen() const
     return fOpen;
 }
 
-// ----------------------------------
+
+
+// ----------------------------------------------------------------------------------------------------
+// UI Input Field String
+EUIInputFieldString::EUIInputFieldString(const EString& label) 
+    : fLabel(label)
+{
+    memset(fValue, 0, STRING_BUFFER_SIZE);
+}
+
+const EString& EUIInputFieldString::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldString::OnRender() 
+{
+    if (ImGui::InputText(fLabel.c_str(), fValue, STRING_BUFFER_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EStringChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldString::SetValue(const EString& value) 
+{
+    if (value.length() > STRING_BUFFER_SIZE) { std::cout << "String is to big to be displayed in input field string" << std::endl; return; }
+    strcpy(fValue, value.c_str());
+}
+
+EString EUIInputFieldString::GetValue() const
+{
+    return EString(fValue);
+}
+
+// --------------------------------------------------------------------
+// Integer Input Field
+EUIInputFieldInteger::EUIInputFieldInteger(const EString& label) 
+    : fLabel(label), fValue(0)
+{
+    
+}
+
+const EString& EUIInputFieldInteger::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldInteger::OnRender() 
+{
+    if (ImGui::InputInt(fLabel.c_str(), &fValue, 1, 100, ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EIntegerChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldInteger::SetValue(i32 value) 
+{
+    fValue = value;
+}
+
+i32 EUIInputFieldInteger::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
+// Float Input Field
+EUIInputFieldFloat::EUIInputFieldFloat(const EString& label) 
+    : fLabel(label), fValue(0)
+{
+    
+}
+
+const EString& EUIInputFieldFloat::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldFloat::OnRender() 
+{
+    if (ImGui::InputFloat(fLabel.c_str(), &fValue, 0.0f, 0.0f, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EFloatChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldFloat::SetValue(float value) 
+{
+    fValue = value;
+}
+
+float EUIInputFieldFloat::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
+// Float Input2 Field
+EUIInputFieldFloat2::EUIInputFieldFloat2(const EString& label) 
+    : fLabel(label), fValue(0.0f)
+{
+    
+}
+
+const EString& EUIInputFieldFloat2::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldFloat2::OnRender() 
+{
+    if (ImGui::InputFloat2(fLabel.c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EFloat2ChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldFloat2::SetValue(const EVec2& value) 
+{
+    fValue = value;
+}
+
+EVec2 EUIInputFieldFloat2::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
+// Input Field Float3
+EUIInputFieldFloat3::EUIInputFieldFloat3(const EString& label) 
+    : fLabel(label), fValue(0.0f)
+{
+    
+}
+
+const EString& EUIInputFieldFloat3::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldFloat3::OnRender() 
+{
+    if (ImGui::InputFloat3(fLabel.c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EFloat3ChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldFloat3::SetValue(const EVec3& value) 
+{
+    fValue = value;
+}
+
+EVec3 EUIInputFieldFloat3::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
+// Input Field Float4
+EUIInputFieldFloat4::EUIInputFieldFloat4(const EString& label) 
+    : fLabel(label), fValue(0.0f)
+{
+    
+}
+
+const EString& EUIInputFieldFloat4::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUIInputFieldFloat4::OnRender() 
+{
+    if (ImGui::InputFloat4(fLabel.c_str(), &fValue.x, "%.3f", ImGuiInputTextFlags_EnterReturnsTrue))
+    {
+        fEventDispatcher.Enqueue<EFloat4ChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUIInputFieldFloat4::SetValue(const EVec4& value) 
+{
+    fValue = value;
+}
+
+EVec4 EUIInputFieldFloat4::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
+// Checkbox
+EUICheckbox::EUICheckbox(const EString& label) 
+    : fLabel(label), fValue(false)
+{
+    
+}
+
+const EString& EUICheckbox::GetDisplayName() const 
+{
+    return fLabel;
+}
+
+bool EUICheckbox::OnRender() 
+{
+    if (ImGui::Checkbox(fLabel.c_str(), &fValue))
+    {
+        fEventDispatcher.Enqueue<ECheckboxChangeEvent>({GetValue()});
+    }
+    return true;
+}
+
+void EUICheckbox::SetValue(bool value) 
+{
+    fValue = value;
+}
+
+bool EUICheckbox::GetValue() const
+{
+    return fValue;
+}
+
+// --------------------------------------------------------------------
 // Component Container
-EComponentContainer::EComponentContainer(const EString& componentName) 
+EUIComponentContainer::EUIComponentContainer(const EString& componentName) 
     : fComponentName(componentName)
 {
     
 }
 
-const EString& EComponentContainer::GetDisplayName() const 
+const EString& EUIComponentContainer::GetDisplayName() const 
 {
     return fComponentName;
 }
 
-bool EComponentContainer::OnRender() 
+bool EUIComponentContainer::OnRender() 
 {
     return ImGui::CollapsingHeader(fComponentName.c_str());
 }
 
-void EComponentContainer::OnRenderEnd() 
+void EUIComponentContainer::OnRenderEnd() 
 {
     EUIField::OnRenderEnd();
 }
@@ -246,24 +479,24 @@ void EComponentContainer::OnRenderEnd()
 
 // ----------------------------------------
 // Main Menu Bar
-EMainMenuBar::EMainMenuBar() 
+EUIMainMenuBar::EUIMainMenuBar() 
 {
 
 }
 
 
-const EString& EMainMenuBar::GetDisplayName() const 
+const EString& EUIMainMenuBar::GetDisplayName() const 
 {
     static const EString mainMenuDisplayName = "MainMenu";
     return mainMenuDisplayName;
 }
 
-bool EMainMenuBar::OnRender() 
+bool EUIMainMenuBar::OnRender() 
 {
     return fOpen = ImGui::BeginMainMenuBar();
 }
 
-void EMainMenuBar::OnRenderEnd() 
+void EUIMainMenuBar::OnRenderEnd() 
 {
     if (fOpen)
     {

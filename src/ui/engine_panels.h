@@ -38,13 +38,12 @@ namespace Engine {
             ComponentDescription* newComponentDsc = new ComponentDescription();
             newComponentDsc->Name = componentName;
             
-            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EComponentContainer> {
-                ERef<EComponentContainer> result = EMakeRef(EComponentContainer, newComponentDsc->Name);
+            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EUIComponentContainer> {
+                ERef<EUIComponentContainer> result = EMakeRef(EUIComponentContainer, newComponentDsc->Name);
                 if (object.HasComponent<T>())
                 {
                     object.GetComponent<T>()._reflect([result](const char* name, auto property){
-                        ERef<EInputField<decltype(property)>> inputField = EMakeRef(EInputField<decltype(property)>, property);
-                        result->AddChild(inputField);
+                        result->AddChild(UI::CreateInputField<decltype(property)>(name, property));
                     });
                 }
                 return result;

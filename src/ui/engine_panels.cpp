@@ -45,29 +45,6 @@ void OpenPanel(EUIPanel* panelToOpen, const EUIClickEvent& event)
     }
 }
 
-void AddObjectClicked(const EUIClickEvent& event)
-{
-    EApplication::gApp().GetActiveScene()->CreateObject();
-    ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
-    if (sceneTreePanel) { sceneTreePanel->Update(); }
-}
-
-struct SelectListener
-{
-    EObject fObject;
-
-    void SelectObject(const EUIClickEvent& event)
-    {
-        std::cout << "Selecting object " << fObject << std::endl;
-        EApplication::gApp().GetActiveScene()->GetSelectedObject().SetValue(fObject); 
-        ERef<EUIPanel> componentsPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
-        if (componentsPanel)
-        {
-            componentsPanel->Update();
-        }
-    }
-} globSelectListener;
-
 
 namespace Engine {
 namespace ApplicationPanels {
@@ -111,9 +88,9 @@ namespace ApplicationPanels {
         EApplication::gApp().GetUIManager().RegisterPanel(componentsPanel);
 
         // ---------------------------------------------------------------------------------
+        // Scene Tree
         ERef<EUIPanel> sceneViewPanel = EMakeRef(EUIPanel, PANEL_NAME_SCENETREE);
         ERef<EUIField> objectContainer = sceneViewPanel->AddChild(EMakeRef(EUIContainer, "ObjectContainer"));
-
         objectContainer->SetUpdateFunction([](ERef<EUIField> sceneList){
             sceneList->ClearChildren();
             EApplication::gApp().GetActiveScene()->ForEachObject([sceneList](EObject object){
@@ -121,16 +98,29 @@ namespace ApplicationPanels {
                 {
                     ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
                     nameComponent.Name.AddEventAfterChange((intptr_t)object.GetHandle(), [sceneList](){
-                        sceneList->Update();
+                        sceneList->SetDirty();
                     });
 
                     ERef<EUISelectable> selectable = EMakeRef(EUISelectable, nameComponent.Name);
-                    selectable->GetEventDispatcher().sink<EUIClickEvent>().disconnect<&SelectListener::SelectObject>(globSelectListener);
-                    globSelectListener.fObject = object;
-                    selectable->GetEventDispatcher().sink<EUIClickEvent>().connect<&SelectListener::SelectObject>(globSelectListener);
+                    selectable->GetEventDispatcher().Connect<EUIClickEvent>([object](EUIClickEvent){
+                        EApplication::gApp().GetActiveScene()->GetSelectedObject().SetValue(object);
+                    });
                     sceneList->AddChild(selectable);
                 }
             });
+        });
+
+        EApplication::gApp().GetActiveScene()->GetSelectedObject().AddEventAfterChange(0, [](){
+            ERef<EUIPanel> panelComp = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
+            ERef<EUIPanel> panelScen = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
+            if (panelScen)
+            {
+                panelScen->SetDirty();
+            }
+            if (panelComp)
+            {
+                panelComp->SetDirty();
+            }
         });
 
         /*EApplication::gApp().GetActiveScene().AddEventAfterChange((intptr_t)0, [](){
@@ -143,14 +133,18 @@ namespace ApplicationPanels {
         // Context Menu
         ERef<EUIField> contextMenu = sceneViewPanel->AddChild(EMakeRef(EUIContextMenu));
         ERef<EUIMenuItem> addObjectItem = EMakeRef(EUIMenuItem, "Add Object");
-        addObjectItem->GetEventDispatcher().sink<EUIClickEvent>().connect<&AddObjectClicked>();
+        addObjectItem->GetEventDispatcher().Connect<EUIClickEvent>([](){
+            EApplication::gApp().GetActiveScene()->CreateObject();
+            ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
+            if (sceneTreePanel) { sceneTreePanel->SetDirty(); }
+        });
         contextMenu->AddChild(addObjectItem);
 
         EApplication::gApp().GetUIManager().RegisterPanel(sceneViewPanel);
 
 
 
-        // ------------------------------------
+        // ------------------------------------------------------------------------------------------------------------
         // Resource Panel
 
         ERef<EUIPanel> resourcePanel = EMakeRef(EUIPanel, PANEL_NAME_RESOURCES);
@@ -173,7 +167,7 @@ namespace ApplicationPanels {
             ERef<EUIPanel> resourcePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_RESOURCES);
             if (resourcePanel)
             {
-                resourcePanel->Update();
+                resourcePanel->SetDirty();
             }
         });
 
@@ -182,7 +176,7 @@ namespace ApplicationPanels {
 
     void CreateDefaultMainMenuBar() 
     {
-        EMainMenuBar& mainMenuBar = EApplication::gApp().GetMainMenuBar();
+        EUIMainMenuBar& mainMenuBar = EApplication::gApp().GetMainMenuBar();
         ERef<EUIField> fileMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> editMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "Edit"));
         
@@ -193,7 +187,16 @@ namespace ApplicationPanels {
         {
             ERef<EUIMenuItem> menuItem = ERef<EUIMenuItem>(new EUIMenuItem(panel->GetDisplayName()));
             //menuItem->SetOnClick<&OpenPanel>();
-            menuItem->GetEventDispatcher().sink<EUIClickEvent>().connect<&OpenPanel>(panel.get());
+            menuItem->GetEventDispatcher().Connect<EUIClickEvent>([panel](){
+                if (panel->IsOpen())
+                {
+                    ImGui::SetWindowFocus(panel->GetDisplayName().c_str());
+                }
+                else
+                {
+                    panel->Open();
+                }
+            });
             /*menuItem->SetOnClick([panel](){
                 if (panel->IsOpen())
                 {
