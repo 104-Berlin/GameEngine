@@ -2,6 +2,7 @@
 
 using namespace Engine;
 
+#ifdef EWIN
 EVector<EString> Platform::OpenFileDialog(const EString& title, const EString& defaultPath, const EVector<EString>& filters)
 {
     EString filter;
@@ -31,3 +32,4 @@ EVector<EString> Platform::OpenFileDialog(const EString& title, const EString& d
     }
     return {};
 }
+#endif
