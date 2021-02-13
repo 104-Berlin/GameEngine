@@ -183,6 +183,85 @@ void EApplication::CreateMainWindow()
     fResourceManager = new EResourceManager();
     fExtensionManager = new EExtensionManager();
     fUIManager = new EUIManager();
+
+    LoadDefaultMeshes();
+}
+
+
+static EVector<EMesh::EVertex> vertices = {
+    { {-1,  1, 1},         {0.0f, 0.0f, 1.0f}, {0, 1}},
+    {{-1, -1, 1},         {0.0f, 0.0f, 1.0f}, {0, 0}},
+    {{ 1, -1, 1},         {0.0f, 0.0f, 1.0f}, {1, 0}},
+    {{ 1,  1, 1},         {0.0f, 0.0f, 1.0f}, {1, 1}},
+    
+    {{-1,  1, -1},        {0.0f, 0.0f, -1.0f}, {0, 1}},
+    {{-1, -1, -1},        {0.0f, 0.0f, -1.0f}, {0, 0}},
+    {{ 1, -1, -1},        {0.0f, 0.0f, -1.0f}, {1, 0}},
+    {{ 1,  1, -1},        {0.0f, 0.0f, -1.0f}, {1, 1}},
+    
+    
+    
+    {{1, -1,  1},          {1.0f, 0.0f, 0.0f}, {0, 1}},
+    {{1, -1, -1},          {1.0f, 0.0f, 0.0f}, {0, 0}},
+    {{1,  1, -1},          {1.0f, 0.0f, 0.0f}, {1, 0}},
+    {{1,  1,  1},          {1.0f, 0.0f, 0.0f}, {1, 1}},
+
+    {{-1, -1,  1},         {-1.0f, 0.0f, 1.0f}, {0, 1}},
+    {{-1, -1, -1},         {-1.0f, 0.0f, 1.0f}, {0, 0}},
+    {{-1,  1, -1},         {-1.0f, 0.0f, 1.0f}, {1, 0}},
+    {{-1,  1,  1},         {-1.0f, 0.0f, 1.0f}, {1, 1}},
+
+
+    {{-1,  1,  1},         {0.0f, 1.0f, 0.0f}, {0, 1}},
+    {{-1,  1, -1},         {0.0f, 1.0f, 0.0f}, {0, 0}},
+    {{ 1,  1, -1},         {0.0f, 1.0f, 0.0f}, {1, 0}},
+    {{ 1,  1,  1},         {0.0f, 1.0f, 0.0f}, {1, 1}},
+
+    {{-1, -1,  1},         {0.0f, -1.0f, 0.0f}, {0, 1}},
+    {{-1, -1, -1},         {0.0f, -1.0f, 0.0f}, {0, 0}},
+    {{ 1, -1, -1},         {0.0f, -1.0f, 0.0f}, {1, 0}},
+    {{ 1, -1,  1},         {0.0f, -1.0f, 0.0f}, {1, 1}},
+};
+
+static EVector<u32> indices = {
+    0, 1, 2,
+    2, 3, 0,
+
+    4, 5, 6,
+    6, 7, 4,
+
+    8, 9, 10,
+    10, 11, 8,
+
+    12, 13, 14,
+    14, 15, 12,
+
+    16, 17, 18,
+    18, 19, 16,
+
+    20, 21, 22,
+    22, 23, 20        
+};
+
+static EVector<EMesh::EVertex> vertices_2 = {
+    {{-0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{-0.5f,  0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.5f,  0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+};
+
+static EVector<u32> indices_2 = {
+    0, 1, 2,
+    2, 3, 0
+};
+
+void EApplication::LoadDefaultMeshes() 
+{
+    ERef<EMesh> cubeMesh = EMakeRef(EMesh, "Cube", vertices, indices);
+    ERef<EMesh> planeMesh = EMakeRef(EMesh, "Plane", vertices_2, indices_2);
+
+    fResourceManager->AddLoadedResource(cubeMesh);
+    fResourceManager->AddLoadedResource(planeMesh);
 }
 
 void EApplication::Update(float delta)

@@ -336,8 +336,6 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
-
-
     class EUISelectable : public EUIField
     {
     public:
@@ -346,4 +344,44 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
+
+    class EUIViewport : public EUIField
+    {
+        using RenderFunction = std::function<void(u32 screenWidth, u32 screenHeight)>;
+    private:
+        ERef<EFrameBuffer>  fFrameBuffer;
+        RenderFunction      fRenderFunction;
+        u32                 fViewportWidth;
+        u32                 fViewportHeight;
+    public:
+        EUIViewport();
+
+        void SetRenderFunc(RenderFunction function);
+
+        virtual bool OnRender() override;
+    };
+
+    struct EMeshChangeEvent
+    {
+        ERef<EMesh> Value;
+    };
+
+    class EUIMeshInput : public EUIField
+    {
+    private:
+        ERef<EFrameBuffer>  fFrameBuffer;
+        ERef<EMesh>         fMesh;
+    public:
+        EUIMeshInput();
+
+        void SetMesh(ERef<EMesh> mesh);
+
+        virtual bool OnRender() override;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<EMeshChangeEvent>(cb);
+        }
+    };
 }

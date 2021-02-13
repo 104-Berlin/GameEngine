@@ -52,14 +52,19 @@ void EScene::FromJsObject(const EJson& json)
             EObject newObject = CreateObject();
             newObject.FromJsObject(objectJson);
         }
-    }
+    } 
 }
 
 void EScene::ForEachObject(ObjectCallback fn)
 {
     fRegistry.each([this, fn](EEntity entity){
-        fn(EObject(entity, this));
+        this->CallObjectFunc(entity, fn);
     }); 
+}
+
+void EScene::CallObjectFunc(EEntity entity, ObjectCallback fn) 
+{
+    fn(EObject(entity, this));
 }
 
 EObject EScene::CreateObject()

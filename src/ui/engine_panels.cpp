@@ -172,6 +172,41 @@ namespace ApplicationPanels {
         });
 
         EApplication::gApp().GetUIManager().RegisterPanel(resourcePanel);
+
+
+        // ------------------------------------------------------------------------------------------------------------
+        // Test Viewport
+
+        ERef<EUIPanel> viewportPanel = EMakeRef(EUIPanel, PANEL_NAME_VIEWPORT);
+        ERef<EUIViewport> viewport = EMakeRef(EUIViewport);
+        viewport->SetRenderFunc([](u32 width, u32 height){
+            for (EEntity entity : EApplication::gApp().GetActiveScene()->view<ECameraComponent, ETransformComponent>())
+            {
+                EObject object(entity, EApplication::gApp().GetActiveScene().GetValue().get());
+                ECameraComponent& cameraComponent = object.GetComponent<ECameraComponent>();
+                ETransformComponent& cameraTransformComponent = object.GetComponent<ETransformComponent>();
+                if (cameraComponent.Active)
+                {
+                    ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {});
+                    for (EEntity entity : EApplication::gApp().GetActiveScene()->view<EMeshComponent, ETransformComponent>())
+                    {
+                        EObject object(entity, EApplication::gApp().GetActiveScene().GetValue().get());
+                        EMeshComponent& meshComponent = object.GetComponent<EMeshComponent>();
+                        ETransformComponent& transformComponent = object.GetComponent<ETransformComponent>();
+                        if (meshComponent.Mesh)
+                        {
+                            ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
+                        }
+                    }
+                }
+
+                ERenderer::End();
+                break;
+            }
+        });
+        viewportPanel->AddChild(viewport);
+
+        EApplication::gApp().GetUIManager().RegisterPanel(viewportPanel);
     }
 
     void CreateDefaultMainMenuBar() 

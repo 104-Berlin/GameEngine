@@ -7,10 +7,10 @@ namespace Engine {
         EString Join(const T&... args)
         {
             EString result;
-            std::vector<const char*> strings = {args...};
+            std::vector<EString> strings = {args...};
             for (size_t i = 0; i < strings.size() - 1; i++)
             {
-                result += EString(strings[i]) + kPathSeparator;
+                result += strings[i] + kPathSeparator;
             }
             result += strings[strings.size() - 1];
             return result;

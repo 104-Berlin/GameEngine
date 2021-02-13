@@ -56,6 +56,8 @@ namespace Engine {
         void RegisterInternPanels();
 
         void CreateMainWindow();
+
+        void LoadDefaultMeshes();
     public:
         static EApplication& gApp();
     };

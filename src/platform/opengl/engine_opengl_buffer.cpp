@@ -242,12 +242,19 @@ void EOpenGLVertexArray::SetIndexBuffer(const ERef<EIndexBuffer>& indexBuffer)
 EOpenGLFrameBuffer::EOpenGLFrameBuffer(u32 width, u32 height, EFramebufferFormat format)
 	: m_Format(format), m_Width(0), m_Height(0), m_RendererID(0), m_DepthAttachment(0), m_ColorAttachment(0)
 {
+	IN_RENDER_S({
+		
+	})
 	Resize(width, height);
 }
 
 EOpenGLFrameBuffer::~EOpenGLFrameBuffer()
 {
-
+	IN_RENDER_S({
+		glCall(glDeleteFramebuffers(1, &self->m_RendererID));
+		glCall(glDeleteTextures(1, &self->m_DepthAttachment));
+		glCall(glDeleteTextures(1, &self->m_ColorAttachment));
+	})
 }
 
 void EOpenGLFrameBuffer::Resize(u32 width, u32 height)
@@ -259,24 +266,27 @@ void EOpenGLFrameBuffer::Resize(u32 width, u32 height)
 
 
 	IN_RENDER_S({
+
 		if (self->m_RendererID)
 		{
 			glCall(glDeleteFramebuffers(1, &self->m_RendererID));
-			self->m_RendererID = 0;
 		}
+		
 		if (self->m_DepthAttachment)
 		{
 			glCall(glDeleteTextures(1, &self->m_DepthAttachment));
-			self->m_DepthAttachment = 0;
 		}
-		if (self->m_ColorAttachment)
+		
+		if (self->m_ColorAttachment) 
 		{
 			glCall(glDeleteTextures(1, &self->m_ColorAttachment));
-			self->m_ColorAttachment = 0;
 		}
+
 
 		glCall(glGenFramebuffers(1, &self->m_RendererID));
 		glCall(glBindFramebuffer(GL_FRAMEBUFFER, self->m_RendererID));
+
+		
 
 		glCall(glGenTextures(1, &self->m_ColorAttachment));
 		glCall(glBindTexture(GL_TEXTURE_2D, self->m_ColorAttachment));

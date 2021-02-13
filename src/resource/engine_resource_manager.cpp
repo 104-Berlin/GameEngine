@@ -76,6 +76,10 @@ void EResourceManager::AddLoadedResource(ERef<EResource> resource)
     std::lock_guard<std::mutex> guard(fLoadedMutex);
     std::cout << "Finished loading resource \"" << resource->GetNameIdent() << "\"" << std::endl;
     fLoadedResources[resource->GetNameIdent()] = resource;
+    if (fWorkFinishedFunction)
+    {
+        fWorkFinishedFunction();
+    }
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 
