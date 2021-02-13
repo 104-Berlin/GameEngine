@@ -41,7 +41,7 @@ static GLenum glob_err;
     x;                                                 \
     while ((glob_err = glGetError()) != GL_NO_ERROR)        \
     {                                                  \
-        std::cout << "GL_ERROR calling \"" << #x << "\": " << gl_error_string(glob_err) << __FILE__ << std::endl; \
+        std::cout << "GL_ERROR calling \"" << #x << "\": " << gl_error_string(glob_err) << __FILE__ << __LINE__ << std::endl; \
     }
 
 namespace Engine

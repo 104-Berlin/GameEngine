@@ -297,7 +297,7 @@ void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeig
         glCall(glDisable(GL_DEPTH_TEST));
         glCall(glEnable(GL_SCISSOR_TEST));
     })
-
+    CreateRenderingStorage();
 
     fShader->Bind();
     float L = drawData->DisplayPos.x;
