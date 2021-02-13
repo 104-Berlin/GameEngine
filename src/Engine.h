@@ -32,6 +32,7 @@
 #include "resource/engine_resource_manager.h"
 #include "properties/engine_json_converter.h"
 #include "properties/engine_property.h"
+#include "event/engine_event_dispatcher.h"
 
 
 

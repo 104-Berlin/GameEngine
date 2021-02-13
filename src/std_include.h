@@ -82,7 +82,7 @@ const char kPathSeparator =
 
 
 // Entities are saved in a registry and can have components attached to
-typedef entt::entity    EEntity;
+typedef entt::entity        EEntity;
 
 typedef glm::vec2       EVec2;
 typedef glm::vec3       EVec3;

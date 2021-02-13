@@ -1,5 +1,12 @@
 #pragma once
 
+
+
+
+#define PANEL_NAME_COMPONENT "Components"
+#define PANEL_NAME_SCENETREE "Scene Tree"
+#define PANEL_NAME_RESOURCES "Resources"
+
 namespace Engine {
 
     struct ComponentDescription
@@ -17,8 +24,7 @@ namespace Engine {
         SetJsFn     SetJsObject;
         FromJsFn    FromJsObject;
     };
- 
-
+    
 
     class EPanelComponentData
     {
@@ -36,13 +42,13 @@ namespace Engine {
             ComponentDescription* newComponentDsc = new ComponentDescription();
             newComponentDsc->Name = componentName;
             
-            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EComponentContainer> {
-                ERef<EComponentContainer> result = EMakeRef(EComponentContainer, newComponentDsc->Name);
+            newComponentDsc->CreateUIField = [newComponentDsc](EObject object) -> ERef<EUIField> {
+                ERef<EUIContainer> result = EMakeRef(EUIContainer, newComponentDsc->Name);
+                result->SetShow();
                 if (object.HasComponent<T>())
                 {
                     object.GetComponent<T>()._reflect([result](const char* name, auto property){
-                        ERef<EInputField<decltype(property)>> inputField = EMakeRef(EInputField<decltype(property)>, property);
-                        result->AddChild(inputField);
+                        result->AddChild(UI::CreateInputField<decltype(property)>(name, property));
                     });
                 }
                 return result;
@@ -87,4 +93,10 @@ namespace Engine {
         static EPanelComponentData& data();
 
     };
+
+
+    namespace ApplicationPanels {
+        void CreateDefaultApplicationPanels();
+        void CreateDefaultMainMenuBar();
+    }
 }

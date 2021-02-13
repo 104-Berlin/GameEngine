@@ -10,6 +10,9 @@ namespace Engine {
     public:
         EObject() = default;
         EObject(EEntity handle, EScene* scene);
+        EObject(const EObject& other)
+            : fScene(other.fScene), fHandle(other.fHandle)
+        {}
         virtual ~EObject() = default;
 
         // Wrapper functions
@@ -31,6 +34,12 @@ namespace Engine {
             return fScene->fRegistry.get<T>(fHandle);   
         }
 
+        EEntity GetHandle() const
+        {
+            return fHandle;
+        }
+
+
         void Delete()
         {
             fScene->fRegistry.destroy(fHandle);
@@ -41,12 +50,12 @@ namespace Engine {
             return fHandle != entt::null && fScene;
         }
 
-        bool operator==(const EObject& other) const
+        bool operator==(const EObject& other)
         {
-            return other.fScene == fScene && other.fHandle == fHandle;
+            return fScene == other.fScene && fHandle == other.fHandle;
         }
 
-        bool operator!=(const EObject& other) const
+        bool operator!=(const EObject& other)
         {
             return !((*this) == other);
         }

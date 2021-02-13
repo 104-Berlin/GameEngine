@@ -25,14 +25,8 @@ namespace Engine {
         using ObjectCallback = std::function<void(EObject)>;
     private:
         EProperty<EString>                  fName;
+        EObjectRef                          fSelectedObject;
 
-        EObjectReference                    fSelectedObject;
-
-
-        // TEMP
-        float                               fViewPortWidth;
-        float                               fViewPortHeight;
-        //ERef<EFrameBuffer>                  fSceneFrameBuffer;
 
         // Entities
         entt::registry                      fRegistry;
@@ -42,11 +36,9 @@ namespace Engine {
 
         EObject CreateObject();
 
-        void Render();
-        void RenderUI();
         void Update(float delta);
 
-        EObjectReference& GetSelectedObject();
+        EObjectRef& GetSelectedObject();
 
         void SetJsObject(EJson& json);
         void FromJsObject(const EJson& json);
