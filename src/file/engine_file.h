@@ -25,6 +25,7 @@ namespace Engine {
         EString fFileName;
     public:
         EFile(const EString& path);
+        EFile(EBaseFolder baseFolder, const EString& path);
         ~EFile();
 
         bool Exist() const;
@@ -50,7 +51,8 @@ namespace Engine {
             return false;
         }
 
-        EString GetFileAsString();
+        EString GetFileAsString() const;
+        void SetFileAsString(const EString& string) const;
     private:
         void CreatePathStrings();
     };

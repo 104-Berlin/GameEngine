@@ -11,6 +11,11 @@ EFile::EFile(const EString& path)
     CreatePathStrings();
 }
 
+EFile::EFile(EBaseFolder baseFolder, const EString& path)
+    : EFile(EFolder::GetBaseFolderPath(baseFolder) + path)
+{
+}
+
 void EFile::CreatePathStrings()
 {
     size_t dot_index = fFilePath.find_last_of(".");
@@ -53,11 +58,20 @@ const EString& EFile::GetFileExtension() const
     return fFileExtension;
 }
 
-EString EFile::GetFileAsString() 
+EString EFile::GetFileAsString() const
 {
     std::ifstream t(GetFullPath());
-    return EString((std::istreambuf_iterator<char>(t)),
+    EString result((std::istreambuf_iterator<char>(t)),
                  std::istreambuf_iterator<char>());
+    t.close();
+    return result;
+}
+
+void EFile::SetFileAsString(const EString& string) const
+{
+    std::ofstream o(GetFullPath());
+    o << string;
+    o.close();
 }
 
 const EString& EFile::GetFileName() const

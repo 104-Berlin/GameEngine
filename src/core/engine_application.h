@@ -35,9 +35,13 @@ namespace Engine {
         EUIManager&                 GetUIManager();
         EUIMainMenuBar&               GetMainMenuBar();
         ERef<EUIPanel>              GetPanelByName(const EString& name);
+
+
         EObjectProperty<EScene>&    GetActiveScene();
+        void                        SetActiveScene(ERef<EScene> scene);
 
         ImGuiContext*       GetMainImGuiContext() const;
+        GLFWwindow*         GetMainWindow() const;
 
         template <typename T, typename... Args>
         void QueueEvent(Args &&... args)

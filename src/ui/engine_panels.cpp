@@ -81,9 +81,9 @@ namespace ApplicationPanels {
         objectContainer->SetUpdateFunction([](ERef<EUIField> sceneList){
             sceneList->ClearChildren();
             EApplication::gApp().GetActiveScene()->ForEachObject([sceneList](EObject object){
-                if (object.HasComponent<ENameComponent>())
+                if (object.HasComponent<ETagComponent>())
                 {
-                    ENameComponent& nameComponent = object.GetComponent<ENameComponent>();
+                    ETagComponent& nameComponent = object.GetComponent<ETagComponent>();
                     nameComponent.Name.AddEventAfterChange((intptr_t)object.GetHandle(), [sceneList](){
                         sceneList->SetDirty();
                     });
@@ -115,6 +115,19 @@ namespace ApplicationPanels {
             ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
             if (componentPanel) { componentPanel->SetDirty(); }
             if (sceneTreePanel) { sceneTreePanel->SetDirty(); }
+
+            EApplication::gApp().GetActiveScene()->GetSelectedObject().AddEventAfterChange(0, [](){
+                ERef<EUIPanel> panelComp = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
+                ERef<EUIPanel> panelScen = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
+                if (panelScen)
+                {
+                    panelScen->SetDirty();
+                }
+                if (panelComp)
+                {
+                    panelComp->SetDirty();
+                }
+            });
         });
 
         // Context Menu
@@ -165,6 +178,25 @@ namespace ApplicationPanels {
     {
         EUIMainMenuBar& mainMenuBar = EApplication::gApp().GetMainMenuBar();
         ERef<EUIField> fileMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "File"));
+        ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
+        saveFile->SetOnClick([](){
+            EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
+        });
+        fileMenu->AddChild(EMakeRef(EUIMenuItem, "Open"))->SetOnClick([](){
+            EVector<EString> results = Platform::OpenFileDialog("Test", "", {});
+            for (const EString& str : results)
+            {
+                EFile file(str);
+                if (file.Exist())
+                {
+                    EApplication::gApp().SetActiveScene(EFileReader::ReadScene(file));
+                }
+                break; // For now we can only load one scene. This will be fixed in the future
+            }
+        });
+
+
+
         ERef<EUIField> editMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "Edit"));
         
         

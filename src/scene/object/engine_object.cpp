@@ -9,8 +9,8 @@ EObject::EObject(EEntity handle, EScene* scene)
 
 void EObject::Set(EEntity entity, EScene* scene) 
 {
-    fScene = scene;
     fHandle = entity;
+    fScene = scene;
 }
 
 void EObject::Set(EObject object) 
@@ -20,11 +20,29 @@ void EObject::Set(EObject object)
 
 void EObject::FromJsObject(const EJson& ref)
 {
+    for (ComponentDescription* dsc : EPanelComponentData::data().GetComponentDescription())
+    {
+        if (JSHelper::HasParam(ref, dsc->Name))
+        {
+            if (!dsc->Has(*this)) 
+            { 
+                dsc->Create(*this); 
+            }
+            dsc->FromJsObject(*this, ref[dsc->Name]);
+        }
+    }
     OnFromJsObject(ref);
 }
 
 void EObject::SetJsObject(EJson& ref) const
 {
+    for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+    {
+        if (compDsc->Has(*this))
+        {
+            compDsc->SetJsObject(*this, ref[compDsc->Name]);
+        }   
+    }
     OnSetJsObject(ref);
 }
 
@@ -37,3 +55,5 @@ void EObject::OnSetJsObject(EJson& ref) const
 {
     
 }
+
+

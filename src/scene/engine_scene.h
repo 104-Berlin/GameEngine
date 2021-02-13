@@ -9,12 +9,13 @@ namespace Engine {
     {
         using ObjectCallback = std::function<void(EObject)>;
     private:
-        EString                             fName;
+        EProperty<EString>                  fName;
         EObjectRef                          fSelectedObject;
 
 
         // Entities
         entt::registry                      fRegistry;
+        EUnorderedMap<EUUID, EObject, UuidHash>       fEntityMap;
     public:
         EScene(const EString& name);
         ~EScene();
@@ -25,6 +26,10 @@ namespace Engine {
 
         EObjectRef& GetSelectedObject();
 
+        EObject GetObjectByUuid(const EUUID& uuid);
+
+        void SetJsObject(EJson& json);
+        void FromJsObject(const EJson& json);
 
         // Looping functions
         void ForEachObject(ObjectCallback fn);

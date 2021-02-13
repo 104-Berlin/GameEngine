@@ -51,6 +51,7 @@ EObjectRef::EObjectRef(const EString& propertyName)
     : EBaseProperty(propertyName)
 {
     fObject = new EObject();
+    fObjectUuid = EUUID();
 }
 
 EObjectRef::~EObjectRef() 
@@ -66,12 +67,17 @@ void EObjectRef::SetValue(const EObject& value)
 
     std::cout << "Changing ObjectRef \"" << GetPropertyName() << "\"" << " from handle " << (u32)fObject->GetHandle() << " TO " << (u32)value.GetHandle() << std::endl;
     fObject->Set(value);
+    fObjectUuid = fObject->GetUuid();
 
     for (const auto& f : fAfterChangeCallbacks) {f.second();}
 }
 
 EObject& EObjectRef::GetValue() const
 {
+    if (!fObject && fObjectUuid.IsValid())
+    {
+        fObject->Set(EApplication::gApp().GetActiveScene()->GetObjectByUuid(fObjectUuid));
+    }
     return *fObject;
 }
 

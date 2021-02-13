@@ -4,7 +4,7 @@ namespace Engine { namespace JSHelper {
 
     bool HasParam(const EJson& ref, const EString& param)
     {
-        return std::find(ref.begin(), ref.end(), param) != ref.end();
+        return ref.find(param) != ref.end();
     }
 
     EJson ConvertValue(const bool value)

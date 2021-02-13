@@ -14,11 +14,15 @@ namespace Engine {
         using Callback = std::function<void(EObject)>;
         using FieldsUIFn = std::function<ERef<EUIField>(EObject)>;
         using HasFn = std::function<bool(EObject)>;
+        using SetJsFn = std::function<void(EObject, EJson&)>;
+        using FromJsFn = std::function<void(EObject, const EJson&)>;
 
-        EString Name;
-        FieldsUIFn CreateUIField;
-        HasFn Has;
-        Callback Create;
+        EString     Name;
+        FieldsUIFn  CreateUIField;
+        HasFn       Has;
+        Callback    Create;
+        SetJsFn     SetJsObject;
+        FromJsFn    FromJsObject;
     };
     
 
@@ -56,6 +60,25 @@ namespace Engine {
 
             newComponentDsc->Create = [](EObject object) {
                 object.AddComponent<T>();
+            };
+
+            newComponentDsc->SetJsObject = [componentName](EObject object, EJson& json){
+                if (object.HasComponent<T>())
+                {
+                    object.GetComponent<T>()._reflect([&json](const char* name,auto property){
+                        property->SetJsObject(json);
+                    });
+                }
+            };
+
+            newComponentDsc->FromJsObject = [componentName](EObject object, const EJson& json){
+                if (object.HasComponent<T>())
+                {
+                    T& component = object.GetComponent<T>();
+                    component._reflect([&json](const char* name,auto property){
+                        property->FromJsObject(json);
+                    });
+                }
             };
 
             sComponentDescriptions.push_back(newComponentDsc);

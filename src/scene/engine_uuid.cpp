@@ -12,47 +12,26 @@ namespace Engine {
 
 	EUUID::EUUID()
 	{
-		fData[0] = (u8)0;
-		fData[1] = (u8)0;
-		fData[2] = (u8)0;
-		fData[3] = (u8)0;
-		fData[4] = (u8)0;
-		fData[5] = (u8)0;
-		fData[6] = (u8)0;
-		fData[7] = (u8)0;
-		fData[8] = (u8)0;
-		fData[9] = (u8)0;
-		fData[10] = (u8)0;
-		fData[11] = (u8)0;
-		fData[12] = (u8)0;
-		fData[13] = (u8)0;
-		fData[14] = (u8)0;
-		fData[15] = (u8)0;
+		f64[0] = 0;
+		f64[1] = 0;
 	}
 	EUUID::EUUID(u32 a, u32 b, u32 c, u32 d)
 	{
-		fData[0] = (u8)(a & 0xFF);
-		fData[1] = (u8)((a >> 8) & 0xFF);
-		fData[2] = (u8)((a >> 16) & 0xFF);
-		fData[3] = (u8)((a >> 24) & 0xFF);
-		fData[4] = (u8)(b & 0xFF);
-		fData[5] = (u8)((b >> 8) & 0xFF);
-		fData[6] = (u8)((b >> 16) & 0xFF);
-		fData[7] = (u8)((b >> 24) & 0xFF);
-		fData[8] = (u8)(c & 0xFF);
-		fData[9] = (u8)((c >> 8) & 0xFF);
-		fData[10] = (u8)((c >> 16) & 0xFF);
-		fData[11] = (u8)((c >> 24) & 0xFF);
-		fData[12] = (u8)(d & 0xFF);
-		fData[13] = (u8)((d >> 8) & 0xFF);
-		fData[14] = (u8)((d >> 16) & 0xFF);
-		fData[15] = (u8)((d >> 24) & 0xFF);
+		f32[0] = a;
+		f32[1] = b;
+		f32[2] = c;
+		f32[3] = d;
 	}
 
 	EUUID::EUUID(const EUUID& src)
 	{
 		for (int i = 0; i < 16; i++)
 			fData[i] = src.fData[i];
+	}
+	
+	EUUID::EUUID(const u8 data [16]) 
+	{
+		memcpy(fData, data, sizeof(u8) * 16);
 	}
 
 	EUUID::~EUUID()
@@ -62,18 +41,14 @@ namespace Engine {
 
 	EUUID& EUUID::operator=(const EUUID& src)
 	{
-		for (int i = 0; i < 16; i++)
-			fData[i] = src.fData[i];
+		f64[0] = src.f64[0];
+		f64[1] = src.f64[1];
 		return *this;
 	}
 
 	bool EUUID::operator==(const EUUID& id) const
 	{
-		for (int i = 0; i < 16; i++) {
-			if (fData[i] != id.fData[i])
-				return false;
-		}
-		return true;
+		return f64[0] == id.f64[0] && f64[1] == id.f64[1];
 	}
 
 	bool EUUID::operator!=(const EUUID& id) const
@@ -139,53 +114,32 @@ namespace Engine {
 
 	void EUUID::GetUUID(u32& out1, u32& out2, u32& out3, u32& out4) const
 	{
-		out1 = (u32)(fData[0] + fData[1] * 256 + fData[2] * 65536 + fData[3] * 16777216);
-		out2 = (u32)(fData[4] + fData[5] * 256 + fData[6] * 65536 + fData[7] * 16777216);
-		out3 = (u32)(fData[8] + fData[9] * 256 + fData[10] * 65536 + fData[11] * 16777216);
-		out4 = (u32)(fData[12] + fData[13] * 256 + fData[14] * 65536 + fData[15] * 16777216);
+		out1 = f32[0];
+		out2 = f32[1];
+		out3 = f32[2];
+		out4 = f32[3];
 	}
 
 	bool EUUID::operator < (const EUUID& iid) const
 	{
-		bool	isLess = true;
-		bool	isEqual = true;
+		bool	isLess	= true;
+		bool	isEqual	= true;
 
-		u32 a, b, c, d;
-		GetUUID(a, b, c, d);
-
-		u32 iida, iidb, iidc, iidd;
-		iid.GetUUID(iida, iidb, iidc, iidd);
-
-		// a
-		if (isEqual)
+		if ( isEqual ) 
 		{
-			isEqual = isEqual && a == iida;
-			if (!isEqual) { isLess = (a < iida); }
-
-			// b
-			if (isEqual)
+			isEqual		= isEqual && f64[0] ==  iid.f64[0];
+			if ( ! isEqual ) { isLess	= (f64[0] < iid.f64[0]); }
+	
+			if( isEqual )
 			{
-				isEqual = isEqual && c == iidb;
-				if (!isEqual) { isLess = (c < iidc); }
+				isEqual		= isEqual && f64[1] == iid.f64[1];
+				if ( ! isEqual ) { isLess	= (f64[1] < iid.f64[1]); }
+			}
+		}
 
-				// c
-				if (isEqual)
-				{
-					isEqual = isEqual && c == iidc;
-					if (!isEqual) { isLess = (c < iidc); }
+		return isLess && ! isEqual;
+	}
 
-					// d
-					if (isEqual)
-					{
-						isEqual = isEqual && d == iidd;
-						if (!isEqual) { isLess = (d < iidd); }
-					} //d
-				} //c
-			} //b
-		} //a
-
-		return isLess && !isEqual;
-	};
 	static char GetPieceAsChar(u8 piece)
 	{
 		//IR_ASSERT(piece <= 0x0F, "Failed to get piece of EUUID");

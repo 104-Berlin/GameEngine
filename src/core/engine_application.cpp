@@ -55,11 +55,13 @@ void EApplication::Start(const ERef<EScene>& scene)
 
 
 
-    fActiveScene = scene;
-
-    if (!fActiveScene)
+    if (!scene)
     {
-        fActiveScene = EMakeRef(EScene, "Scene 1");
+        SetActiveScene(EMakeRef(EScene, "Scene 1"));
+    }
+    else
+    {
+        SetActiveScene(scene);
     }
 
 
@@ -123,7 +125,7 @@ void EApplication::SetUpMainMenuBar()
 
 void EApplication::RegisterInternComponents() 
 {
-    EPanelComponentData::data().RegisterComponent<ENameComponent>("Name");
+    EPanelComponentData::data().RegisterComponent<ETagComponent>("Tag Component");
     EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
@@ -260,7 +262,18 @@ ImGuiContext* EApplication::GetMainImGuiContext() const
     return fUIRenderer->GetImGuiContext();
 }
 
+GLFWwindow* EApplication::GetMainWindow() const
+{
+    return fMainWindow;
+}
+
 EObjectProperty<EScene>& EApplication::GetActiveScene()
 {
     return fActiveScene;
+}
+
+void EApplication::SetActiveScene(ERef<EScene> scene) 
+{
+    if (!scene) { return; }
+    fActiveScene = scene;
 }
