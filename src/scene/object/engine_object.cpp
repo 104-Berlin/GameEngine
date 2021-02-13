@@ -9,17 +9,6 @@ EObject::EObject(EEntity handle, EScene* scene)
 
 void EObject::Set(EEntity entity, EScene* scene) 
 {
-    fScene = scene;
-    fHandle = entity;
-}
-
-void EObject::Set(EObject object) 
-{
-    Set(object.fHandle, object.fScene);
-}
-
-void EObject::Set(EEntity entity, EScene* scene) 
-{
     fHandle = entity;
     fScene = scene;
 }
