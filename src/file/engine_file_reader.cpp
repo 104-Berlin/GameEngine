@@ -1,9 +1,8 @@
 #include "Engine.h"
 
 using namespace Engine;
-using namespace EFileReader;
 
-ERef<EScene> ReadScene(const EFile& file) 
+ERef<EScene> EFileReader::ReadScene(const EFile& file) 
 {
     if (!file.Exist())
     {   

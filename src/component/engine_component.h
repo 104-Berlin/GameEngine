@@ -19,15 +19,16 @@ namespace Engine {
         TestComponent(const TestComponent&) = default;
     };
 
-    struct EUUIDComponent
+    struct ETagComponent
     {
         REFLACTABLE(
-            (EProperty<EUUID>, UUID)
+            (EProperty<EUUID>, UUID),
+            (EProperty<EString>, Name)
         )
         
-        EUUIDComponent(const EUUIDComponent&) = default;
-        EUUIDComponent(const EUUID& uuid)
-            : UUID("UUID", uuid)
+        ETagComponent(const ETagComponent&) = default;
+        ETagComponent(const EString& name = "Empty", const EUUID& uuid = EUUID())
+            : Name("Name", name), UUID("UUID", uuid)
         {}
         
     };
@@ -55,22 +56,6 @@ namespace Engine {
             result *= glm::toMat4(glm::conjugate(quat));
             return result;
         }
-    };
-
-    struct ENameComponent
-    {
-        REFLACTABLE(
-            (EProperty<EString>, Name)
-        )
-        
-        ENameComponent()
-            : Name("Name", "Unknown")
-        {}
-        ENameComponent(const ENameComponent&) = default;
-
-        ENameComponent(const EString& name)
-            : Name("Name", name)
-        {}
     };
 
     struct EMeshComponent

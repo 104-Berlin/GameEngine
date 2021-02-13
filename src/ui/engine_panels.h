@@ -72,12 +72,8 @@ namespace Engine {
             };
 
             newComponentDsc->FromJsObject = [componentName](EObject object, const EJson& json){
-                if (JSHelper::HasParam(json, componentName))
+                if (object.HasComponent<T>())
                 {
-                    if (!object.HasComponent<T>())
-                    {
-                        object.AddComponent<T>();
-                    }
                     T& component = object.GetComponent<T>();
                     component._reflect([&json](const char* name,auto property){
                         property->FromJsObject(json);

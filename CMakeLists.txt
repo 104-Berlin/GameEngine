@@ -31,6 +31,10 @@ if (APPLE)
 include_directories( /System/Library/Frameworks )
 find_library(OpenGL_LIBRARY OpenGL )
 find_library(COCOA_LIBRARY Cocoa)
+
+file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/*.mm)
+
+
 set(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
 elseif(WIN32)
 set(EXTRA_LIBS ${EXTRA_LIBS} Rpcrt4.lib)
@@ -49,7 +53,8 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
 
 
 # Maybe just compile a single folder in wich all symbols are that the extensions need
-add_library(Engine     ${ENGINE_SRC_FILES})
+add_library(Engine     ${ENGINE_SRC_FILES}
+                       ${ENGINE_MAC_SRC_FILES})
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)

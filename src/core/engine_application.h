@@ -7,6 +7,7 @@ namespace Engine {
     private:
         GLFWwindow*                 fMainWindow;
         EObjectProperty<EScene>     fActiveScene;
+        EVector<ERef<EScene>>       fLoadedScenes;
         bool                        fRunning;
         double                      fFrameTime;
 
@@ -35,9 +36,14 @@ namespace Engine {
         EUIManager&                 GetUIManager();
         EUIMainMenuBar&               GetMainMenuBar();
         ERef<EUIPanel>              GetPanelByName(const EString& name);
+
+
         EObjectProperty<EScene>&    GetActiveScene();
+        void                        SetActiveScene(ERef<EScene> scene);
+        ERef<EScene>                LoadScene(ERef<EScene> scene);
 
         ImGuiContext*       GetMainImGuiContext() const;
+        GLFWwindow*         GetMainWindow() const;
 
         template <typename T, typename... Args>
         void QueueEvent(Args &&... args)

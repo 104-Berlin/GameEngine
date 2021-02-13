@@ -55,12 +55,12 @@ void EApplication::Start(const ERef<EScene>& scene)
 
 
 
-    fActiveScene = scene;
-
-    if (!fActiveScene)
+    ERef<EScene> startScene = scene;
+    if (!startScene)
     {
-        fActiveScene = EMakeRef(EScene, "Scene 1");
+        startScene = EMakeRef(EScene, "Scene 1");
     }
+    SetActiveScene(LoadScene(startScene));
 
 
     // First register intern panels bevore set up main menu, so the view menu is up to data
@@ -123,7 +123,7 @@ void EApplication::SetUpMainMenuBar()
 
 void EApplication::RegisterInternComponents() 
 {
-    EPanelComponentData::data().RegisterComponent<ENameComponent>("Name");
+    EPanelComponentData::data().RegisterComponent<ETagComponent>("Tag Component");
     EPanelComponentData::data().RegisterComponent<ETransformComponent>("Transform Component");
     EPanelComponentData::data().RegisterComponent<EMeshComponent>("Mesh");
     EPanelComponentData::data().RegisterComponent<TestComponent>("Test Component");
@@ -260,7 +260,30 @@ ImGuiContext* EApplication::GetMainImGuiContext() const
     return fUIRenderer->GetImGuiContext();
 }
 
+GLFWwindow* EApplication::GetMainWindow() const
+{
+    return fMainWindow;
+}
+
 EObjectProperty<EScene>& EApplication::GetActiveScene()
 {
     return fActiveScene;
+}
+
+void EApplication::SetActiveScene(ERef<EScene> scene) 
+{
+    if (!scene) { return; }
+    fActiveScene = scene;
+}
+
+ERef<EScene> EApplication::LoadScene(ERef<EScene> scene) 
+{
+    if (!scene) { return nullptr; }
+    EVector<ERef<EScene>>::iterator it = std::find(fLoadedScenes.begin(), fLoadedScenes.end(), scene);
+    if (it != fLoadedScenes.end())
+    {
+        return *it;
+    }
+    fLoadedScenes.push_back(scene);
+    return fLoadedScenes.back();
 }

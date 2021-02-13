@@ -2,21 +2,66 @@
     "Name": "Scene 1",
     "Objects": [
         {
-            "Name": "Empty Object",
-            "Position": {
-                "X": 0.0,
-                "Y": 0.0,
-                "Z": 0.0
+            "Tag Component": {
+                "Name": "Empty Object 1",
+                "UUID": "{5C6A1094-2C8F-44E6-8226-25D00F20EC00}"
             },
-            "Rotation": {
-                "X": 5.300000190734863,
-                "Y": 0.0,
-                "Z": 0.0
+            "Transform Component": {
+                "Position": {
+                    "X": 0.0,
+                    "Y": 0.0,
+                    "Z": 0.0
+                },
+                "Rotation": {
+                    "X": 0.0,
+                    "Y": 0.0,
+                    "Z": 0.0
+                },
+                "Scale": {
+                    "X": 1.0,
+                    "Y": 1.0,
+                    "Z": 1.0
+                }
+            }
+        },
+        {
+            "Tag Component": {
+                "Name": "Empty Object 32",
+                "UUID": "{0848E550-0EAA-4B49-9EE3-706F96B95E00}"
             },
-            "Scale": {
-                "X": 1.0,
-                "Y": 1.0,
-                "Z": 1.0
+            "Test Component": {
+                "Boolean": true,
+                "Double": 0.0,
+                "Float": 32.0,
+                "StringValue": "",
+                "Vector3": {
+                    "X": 0.0,
+                    "Y": 0.0,
+                    "Z": 0.0
+                },
+                "Vector4": {
+                    "W": 0.0,
+                    "X": 0.0,
+                    "Y": 0.0,
+                    "Z": 0.0
+                }
+            },
+            "Transform Component": {
+                "Position": {
+                    "X": 0.0,
+                    "Y": 0.0,
+                    "Z": 0.0
+                },
+                "Rotation": {
+                    "X": 0.0,
+                    "Y": 32.0,
+                    "Z": 0.0
+                },
+                "Scale": {
+                    "X": 1.0,
+                    "Y": 1.0,
+                    "Z": 1.0
+                }
             }
         }
     ]

@@ -20,6 +20,18 @@ void EObject::Set(EObject object)
 
 void EObject::FromJsObject(const EJson& ref)
 {
+    for (ComponentDescription* dsc : EPanelComponentData::data().GetComponentDescription())
+    {
+        if (JSHelper::HasParam(ref, dsc->Name))
+        {
+            if (!dsc->Has(*this)) 
+            { 
+                dsc->Create(*this); 
+                std::cout << "Object From JS. Creating Component: " << dsc->Name << std::endl;
+            }
+            dsc->FromJsObject(*this, ref[dsc->Name]);
+        }
+    }
     OnFromJsObject(ref);
 }
 

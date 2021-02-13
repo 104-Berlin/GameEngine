@@ -34,11 +34,25 @@ namespace Engine {
             return fScene->fRegistry.get<T>(fHandle);   
         }
 
+        template <typename T>
+        const T& GetComponent() const
+        {
+            return fScene->fRegistry.get<T>(fHandle);   
+        }
+
         EEntity GetHandle() const
         {
             return fHandle;
         }
 
+        EUUID GetUuid() const
+        {
+            if (*this)
+            {
+                return GetComponent<ETagComponent>().UUID;
+            }
+            return EUUID();
+        }
 
         void Delete()
         {

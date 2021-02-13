@@ -3,62 +3,6 @@
 using namespace Engine;
 
 
-
-EObjectReference::EObjectReference(const EString& refName) 
-    : EBaseProperty(refName)
-{
-    fObject = new EObject(entt::null, nullptr);
-}
-
-EObjectReference::~EObjectReference() 
-{
-    delete fObject;
-}
-
-void EObjectReference::SetValue(EObject object) 
-{
-    if (*fObject == object) { return; }
-
-    for (const auto& cb : fBeforeChangeCallbacks) { cb.second(); }
-
-    fObject->Set(object);
-
-    for (const auto& cb : fAfterChangeCallbacks) { cb.second(); }
-}
-
-EObject EObjectReference::GetValue() 
-{
-    return *fObject;
-}
-
-void EObjectReference::OnFromJsObject(const EJson& ref) 
-{
-    if (fObject && JSHelper::HasParam(ref, GetPropertyName()))
-    {
-        fObject->FromJsObject(ref[GetPropertyName()]);
-    }
-}
-
-void EObjectReference::OnSetJsObject(EJson& ref) const
-{
-    if (JSHelper::HasParam(ref, GetPropertyName()))
-    {
-        if (ref[GetPropertyName()].size() > 0)
-        {
-            // Get by uuid or something
-        }
-        else
-        {
-            fObject->Set(entt::null, nullptr);
-        }
-    }
-}
-
-
-
-
-
-
 EScene::EScene(const EString& name)
     : fName("Name", name), 
     fSelectedObject("SelectedObject")
@@ -78,22 +22,37 @@ EObjectRef& EScene::GetSelectedObject()
     return fSelectedObject;
 }
 
+EObject EScene::GetObjectByUuid(const EUUID& uuid)
+{
+    return fEntityMap[uuid];
+}
+
 void EScene::SetJsObject(EJson& json)
 {
     fName.SetJsObject(json);
     EJson& objectArray = json["Objects"] = EJson::array();
-    ForEachObject([&objectArray](EObject object){
-        object.SetJsObject(objectArray.back());
+    ForEachObject([&objectArray](EObject object) mutable {
+        EJson objectJson = EJson::object();
+        object.SetJsObject(objectJson);
+        objectArray.push_back(objectJson);
     });
 }
 
 void EScene::FromJsObject(const EJson& json) 
 {
     fName.FromJsObject(json);
-    u32 counter = 0;
-    ForEachObject([&json, &counter](EObject object) mutable {
-        object.FromJsObject(json["Objects"][counter++]);
-    });
+
+    const EJson& objectArray = json["Objects"];
+    if (objectArray.is_array())
+    {
+        fRegistry.clear();
+        for (const EJson& objectJson : objectArray)
+        {
+            std::cout << "Creating object fomr js: " << objectJson.dump() << std::endl;
+            EObject newObject = CreateObject();
+            newObject.FromJsObject(objectJson);
+        }
+    }
 }
 
 void EScene::ForEachObject(ObjectCallback fn)
@@ -107,8 +66,18 @@ EObject EScene::CreateObject()
 {
     EEntity handle = fRegistry.create();
     EObject object(handle, this);
-    object.AddComponent<EUUIDComponent>(EUUID().CreateNew());
+
+    // Make sure we dont have the uuid registered allready
+    EUUID newUuid = EUUID().CreateNew();
+    while (fEntityMap.find(newUuid) != fEntityMap.end())
+    {
+        newUuid = EUUID().CreateNew();
+    }
+    // -----------------------------------
+
+
+    object.AddComponent<ETagComponent>("Empty Object", newUuid);
     object.AddComponent<ETransformComponent>();
-    object.AddComponent<ENameComponent>("Empty Object");
+    fEntityMap.insert({ newUuid, object });
     return object;
 }

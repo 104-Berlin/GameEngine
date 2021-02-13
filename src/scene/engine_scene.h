@@ -5,21 +5,6 @@ namespace Engine {
     struct EObject;
     class EComponentPanel;
 
-    class EObjectReference : public EBaseProperty
-    {
-    private:
-        EObject* fObject;
-    public:
-        EObjectReference(const EString& refName);
-        ~EObjectReference();
-        
-        void SetValue(EObject object);
-        EObject GetValue();
-
-        virtual void OnFromJsObject(const EJson& ref);
-        virtual void OnSetJsObject(EJson& ref) const;
-    };
-
     class EScene
     {
         using ObjectCallback = std::function<void(EObject)>;
@@ -30,6 +15,7 @@ namespace Engine {
 
         // Entities
         entt::registry                      fRegistry;
+        EUnorderedMap<EUUID, EObject, UuidHash>       fEntityMap;
     public:
         EScene(const EString& name);
         ~EScene();
@@ -39,6 +25,8 @@ namespace Engine {
         void Update(float delta);
 
         EObjectRef& GetSelectedObject();
+
+        EObject GetObjectByUuid(const EUUID& uuid);
 
         void SetJsObject(EJson& json);
         void FromJsObject(const EJson& json);

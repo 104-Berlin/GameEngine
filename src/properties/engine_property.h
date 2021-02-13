@@ -33,7 +33,8 @@ namespace Engine {
     class EObjectRef : public EBaseProperty
     {
     private:
-        EObject* fObject;
+        EObject*    fObject;
+        EUUID       fObjectUuid;
     public:
         EObjectRef(const EString& propertyName);
         ~EObjectRef();
@@ -83,15 +84,17 @@ namespace Engine {
 
         virtual void OnFromJsObject(const EJson& ref) override
         {
-            if (JSHelper::HasParam(ref, fName))
+            if (JSHelper::HasParam(ref, GetPropertyName()))
             {
-                JSHelper::ConvertObject(ref, fValue.get());
+                Type newValue;
+                JSHelper::ConvertObject(ref[GetPropertyName()], &newValue);
+                SetValue(newValue);
             }
         }
 
         virtual void OnSetJsObject(EJson& ref) const override
         {
-            ref[fName] = JSHelper::ConvertValue((const Type&) *fValue);
+            ref[GetPropertyName()] = JSHelper::ConvertValue((const Type&) *fValue);
         }
 
         operator const Type&() const
