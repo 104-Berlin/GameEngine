@@ -11,6 +11,7 @@ EScene::EScene(const EString& name)
 
 EScene::~EScene()
 {
+    std::cout << "Scene \"" << fName.GetValue() << "\" Deleted!" << std::endl;
 }
 
 void EScene::Update(float delta)
@@ -48,7 +49,6 @@ void EScene::FromJsObject(const EJson& json)
         fRegistry.clear();
         for (const EJson& objectJson : objectArray)
         {
-            std::cout << "Creating object fomr js: " << objectJson.dump() << std::endl;
             EObject newObject = CreateObject();
             newObject.FromJsObject(objectJson);
         }

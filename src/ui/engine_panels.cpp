@@ -189,7 +189,7 @@ namespace ApplicationPanels {
                 EFile file(str);
                 if (file.Exist())
                 {
-                    EApplication::gApp().SetActiveScene(EApplication::gApp().LoadScene(EFileReader::ReadScene(file)));
+                    EApplication::gApp().SetActiveScene(EFileReader::ReadScene(file));
                 }
                 break; // For now we can only load one scene. This will be fixed in the future
             }

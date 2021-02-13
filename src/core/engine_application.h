@@ -7,7 +7,6 @@ namespace Engine {
     private:
         GLFWwindow*                 fMainWindow;
         EObjectProperty<EScene>     fActiveScene;
-        EVector<ERef<EScene>>       fLoadedScenes;
         bool                        fRunning;
         double                      fFrameTime;
 
@@ -40,7 +39,6 @@ namespace Engine {
 
         EObjectProperty<EScene>&    GetActiveScene();
         void                        SetActiveScene(ERef<EScene> scene);
-        ERef<EScene>                LoadScene(ERef<EScene> scene);
 
         ImGuiContext*       GetMainImGuiContext() const;
         GLFWwindow*         GetMainWindow() const;

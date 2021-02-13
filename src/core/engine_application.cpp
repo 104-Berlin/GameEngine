@@ -55,12 +55,14 @@ void EApplication::Start(const ERef<EScene>& scene)
 
 
 
-    ERef<EScene> startScene = scene;
-    if (!startScene)
+    if (!scene)
     {
-        startScene = EMakeRef(EScene, "Scene 1");
+        SetActiveScene(EMakeRef(EScene, "Scene 1"));
     }
-    SetActiveScene(LoadScene(startScene));
+    else
+    {
+        SetActiveScene(scene);
+    }
 
 
     // First register intern panels bevore set up main menu, so the view menu is up to data
@@ -274,16 +276,4 @@ void EApplication::SetActiveScene(ERef<EScene> scene)
 {
     if (!scene) { return; }
     fActiveScene = scene;
-}
-
-ERef<EScene> EApplication::LoadScene(ERef<EScene> scene) 
-{
-    if (!scene) { return nullptr; }
-    EVector<ERef<EScene>>::iterator it = std::find(fLoadedScenes.begin(), fLoadedScenes.end(), scene);
-    if (it != fLoadedScenes.end())
-    {
-        return *it;
-    }
-    fLoadedScenes.push_back(scene);
-    return fLoadedScenes.back();
 }

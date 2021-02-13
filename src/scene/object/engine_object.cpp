@@ -27,7 +27,6 @@ void EObject::FromJsObject(const EJson& ref)
             if (!dsc->Has(*this)) 
             { 
                 dsc->Create(*this); 
-                std::cout << "Object From JS. Creating Component: " << dsc->Name << std::endl;
             }
             dsc->FromJsObject(*this, ref[dsc->Name]);
         }
