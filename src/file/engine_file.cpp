@@ -11,6 +11,11 @@ EFile::EFile(const EString& path)
     CreatePathStrings();
 }
 
+EFile::EFile(EBaseFolder baseFolder, const EString& path)
+    : EFile(EFolder::GetBaseFolderPath(baseFolder) + path)
+{
+}
+
 void EFile::CreatePathStrings()
 {
     size_t dot_index = fFilePath.find_last_of(".");

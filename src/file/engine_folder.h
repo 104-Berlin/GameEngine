@@ -31,7 +31,7 @@ namespace Engine {
 
         std::filesystem::directory_iterator Iterator() const;
 
-    private:
+    public:
        static EString GetBaseFolderPath(EBaseFolder f);
     };
 

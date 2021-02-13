@@ -97,8 +97,14 @@ void EUIRenderer::Init(GLFWwindow* window)
     IMGUI_CHECKVERSION();
     fImGuiContext = ImGui::CreateContext();
 
+    EFile fontFile(EBaseFolder::APPLICATION,"OpenSans-SemiBold.ttf");
+
+
     ImGuiIO& io = ImGui::GetIO();
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("OpenSans-SemiBold.ttf", 20.0f);
+    if (fontFile.Exist())
+    {
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.GetFullPath().c_str(), 20.0f);
+    }
 
     
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;

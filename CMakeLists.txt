@@ -38,6 +38,9 @@ file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/*.mm)
 set(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
 elseif(WIN32)
 set(EXTRA_LIBS ${EXTRA_LIBS} Rpcrt4.lib)
+
+file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/platform/win32/*.cpp)
+
 endif(APPLE)
 
 file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
