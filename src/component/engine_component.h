@@ -50,7 +50,12 @@ namespace Engine {
         operator EMat4 () const
         {
             EMat4 result = EMat4(1.0f);
-            glm::quat quat = glm::quat(Rotation.GetValue());
+            EVec3 rotationInRadian = Rotation.GetValue();
+            rotationInRadian.x *= DEG_TO_RAD;
+            rotationInRadian.y *= DEG_TO_RAD;
+            rotationInRadian.z *= DEG_TO_RAD;
+
+            glm::quat quat = glm::quat(rotationInRadian);
             result *= glm::translate(EMat4(1.0f), Position.GetValue());
             result *= glm::scale(EMat4(1.0f), Scale.GetValue());
             result *= glm::toMat4(glm::conjugate(quat));

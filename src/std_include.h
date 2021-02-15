@@ -13,7 +13,15 @@
 #include <queue>
 #include <thread>
 
+#ifdef M_PI
+#undef M_PI
+#endif
+
+#define M_PI 3.14159f
+
+
 #define BIT(x) (1 << x)
+#define DEG_TO_RAD (M_PI / 180.0)
 
 #ifdef EWIN
 #include <Windows.h>
