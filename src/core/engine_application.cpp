@@ -312,13 +312,6 @@ void EApplication::Update(float delta)
     {
         fActiveScene->Update(delta);
     }
-
-    //ETransformComponent& transform = fMeshObject.GetComponent<ETransformComponent>();
-    //EVec3 position = transform.Position;
-    //position.x = sin(counter) * 10;
-    //position.y = cos(counter) * 10;
-    //position.z = -10 + sin(counter);
-    //transform.Position.SetValue(position);
 }
 
 void EApplication::Render()
