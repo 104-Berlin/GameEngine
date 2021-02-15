@@ -1,4 +1,12 @@
 clang++
--I src/
--I deps/imgui
--std=c++17
+%h -x c++-header
+%c -std=c++2a
+%cpp -std=c++2a
+%cpp -stdlib=libc++
+%h --include=Global.h
+%cpp -I/usr/local/include
+%cpp /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+-Isrc/
+-Ideps/glfw/include
+-Iglad/include
+-DEMAC

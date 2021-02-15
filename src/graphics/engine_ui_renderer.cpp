@@ -216,8 +216,8 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
     {
         const ImDrawList* cmd_list = drawData->CmdLists[n];
 
-        ERef<ImVector<ImDrawVert>> vertexData = EMakeRef(ImVector<ImDrawVert>, cmd_list->VtxBuffer);
-        ERef<ImVector<ImWchar>> indexData = EMakeRef(ImVector<ImWchar>, cmd_list->IdxBuffer);
+        ImVector<ImDrawVert>* vertexData = new ImVector<ImDrawVert>(cmd_list->VtxBuffer);
+        ImVector<ImWchar>* indexData = new ImVector<ImWchar>(cmd_list->IdxBuffer);
 
         fVertexBuffer->SetData(vertexData->Data, vertexData->size_in_bytes());
 
@@ -258,12 +258,20 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                         glCall(glActiveTexture(GL_TEXTURE0));
                         glCall(glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)textureId));
                     })
-                    
-                    
+
                     u32 indexOffset = pcmd->IdxOffset;
                     u32 elementCount = pcmd->ElemCount;
-                    IN_RENDER2(indexOffset, elementCount, {
+                    struct TempStruct
+                    {
+                        ImVector<ImDrawVert>* VertexData;
+                        ImVector<ImWchar>* IndexData;
+                    } DATA;
+                    DATA.IndexData = indexData;
+                    DATA.VertexData = vertexData;
+                    IN_RENDER3(indexOffset, elementCount, DATA, {
                         glDrawElements(GL_TRIANGLES, (GLsizei)elementCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(indexOffset * sizeof(ImDrawIdx)));
+                        DATA.VertexData->clear();
+                        DATA.IndexData->clear();
                     })
                 }
             }

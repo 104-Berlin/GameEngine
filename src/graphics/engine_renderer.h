@@ -10,7 +10,7 @@ namespace Engine {
 
 		static void RenderVertexArray(const ERef<EVertexArray>& vertexArray);
 
-		static void Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lights);
+		static void Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lights, u32 width, u32 height);
 		static void Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform = EMat4(1.0f));
 		static void* Submit(ERenderCommandFn fn, u32 size) { return s_Instance->fCommandQueue.Allocate(fn, size); }
 		static void End();

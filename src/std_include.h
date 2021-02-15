@@ -35,7 +35,6 @@ typedef uint_fast8_t byte;
 
 typedef std::string EString;
 
-
 template <typename T>
 using EVector = std::vector<T>;
 

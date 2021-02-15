@@ -71,7 +71,17 @@ void EApplication::Start(const ERef<EScene>& scene)
     // After regsiter intern panels
     SetUpMainMenuBar();
 
+    //Testing code
+    EObject cameraObject = fActiveScene->CreateObject();
+    cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
 
+    fMeshObject = fActiveScene->CreateObject();
+    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>("intern/Cube.rc"));
+
+    for (ERef<EUIPanel> panel : fUIManager->GetPanels())
+    {
+        panel->SetDirty(true);
+    }
     
     
     fRunning = true;
@@ -106,6 +116,9 @@ void EApplication::Run()
         // Render all panels
         // If extra 3d scene these will be rendered as well here
         Render();
+        //TestRendering();
+
+        glfwMakeContextCurrent(fMainWindow);
 
         // Put it all to opengl
         ERenderer::WaitAndRender();
@@ -264,12 +277,48 @@ void EApplication::LoadDefaultMeshes()
     fResourceManager->AddLoadedResource(planeMesh);
 }
 
+void EApplication::TestRendering() 
+{
+    for (EEntity entity : fActiveScene->view<ECameraComponent, ETransformComponent>())
+    {
+        EObject object(entity, fActiveScene.GetValue().get());
+        ECameraComponent& cameraComponent = object.GetComponent<ECameraComponent>();
+        ETransformComponent& cameraTransformComponent = object.GetComponent<ETransformComponent>();
+        if (cameraComponent.Active)
+        {
+            ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {}, 1270, 720);
+            for (EEntity entity : fActiveScene->view<EMeshComponent, ETransformComponent>())
+            {
+                EObject object(entity, fActiveScene.GetValue().get());
+                EMeshComponent& meshComponent = object.GetComponent<EMeshComponent>();
+                ETransformComponent& transformComponent = object.GetComponent<ETransformComponent>();
+                if (meshComponent.Mesh)
+                {
+                    ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
+                }
+            }
+        }
+
+        ERenderer::End();
+        break;
+    }
+}
+
 void EApplication::Update(float delta)
 {
+    static double counter = 0;
+    counter += (double) delta;
     if (fActiveScene)
     {
         fActiveScene->Update(delta);
     }
+
+    //ETransformComponent& transform = fMeshObject.GetComponent<ETransformComponent>();
+    //EVec3 position = transform.Position;
+    //position.x = sin(counter) * 10;
+    //position.y = cos(counter) * 10;
+    //position.z = -10 + sin(counter);
+    //transform.Position.SetValue(position);
 }
 
 void EApplication::Render()

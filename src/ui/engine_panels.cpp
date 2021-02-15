@@ -187,7 +187,7 @@ namespace ApplicationPanels {
                 ETransformComponent& cameraTransformComponent = object.GetComponent<ETransformComponent>();
                 if (cameraComponent.Active)
                 {
-                    ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {});
+                    ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {}, width, height);
                     for (EEntity entity : EApplication::gApp().GetActiveScene()->view<EMeshComponent, ETransformComponent>())
                     {
                         EObject object(entity, EApplication::gApp().GetActiveScene().GetValue().get());

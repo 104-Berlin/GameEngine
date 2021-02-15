@@ -112,6 +112,7 @@ void EUIField::SetVisible(bool visible)
 
 void EUIField::SetDirty(bool value) 
 {
+    std::cout << "Setting Dirty" << std::endl;
     fIsDirty = value;
     for (ERef<EUIField> child : fChildren)
     {
@@ -327,7 +328,7 @@ EUIInputFieldFloat2::EUIInputFieldFloat2(const EString& label)
 
 bool EUIInputFieldFloat2::OnRender() 
 {
-    if (ImGui::InputFloat2(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat2(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat2ChangeEvent>({GetValue()});
     }
@@ -355,7 +356,7 @@ EUIInputFieldFloat3::EUIInputFieldFloat3(const EString& label)
 
 bool EUIInputFieldFloat3::OnRender() 
 {
-    if (ImGui::InputFloat3(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat3(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat3ChangeEvent>({GetValue()});
     }
@@ -382,7 +383,7 @@ EUIInputFieldFloat4::EUIInputFieldFloat4(const EString& label)
 
 bool EUIInputFieldFloat4::OnRender() 
 {
-    if (ImGui::InputFloat4(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat4(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat4ChangeEvent>({GetValue()});
     }
@@ -552,7 +553,6 @@ bool EUIViewport::OnRender()
         {
             fRenderFunction(fViewportWidth, fViewportHeight);
         }
-        std::cout << "Color attachment: " << fFrameBuffer->GetColorAttachment() << std::endl;
         ImGui::Image((void*)(u64)fFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
         fFrameBuffer->Unbind();
     }
@@ -578,7 +578,7 @@ EUIMeshInput::EUIMeshInput()
 void EUIMeshInput::SetMesh(ERef<EMesh> mesh) 
 {
     fMesh = mesh;
-    fEventDispatcher.Enqueue<EMeshChangeEvent>({fMesh});
+    fEventDispatcher.Enqueue<EMeshChangeEvent>({mesh});
 }
 
 bool EUIMeshInput::OnRender() 

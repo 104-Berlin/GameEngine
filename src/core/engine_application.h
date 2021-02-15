@@ -20,6 +20,7 @@ namespace Engine {
         // TEMP
         EUIMainMenuBar      fMainMenuBar;
         ERef<ECamera>     fCamera;
+        EObject             fMeshObject;
     public:
         EApplication();
         ~EApplication();
@@ -58,6 +59,8 @@ namespace Engine {
         void CreateMainWindow();
 
         void LoadDefaultMeshes();
+
+        void TestRendering();
     public:
         static EApplication& gApp();
     };
