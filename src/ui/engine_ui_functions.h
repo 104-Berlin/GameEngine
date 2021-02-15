@@ -18,6 +18,7 @@ namespace Engine {
     ERef<EUIField> CreateInputField_Vec4(const EString& label, EProperty<EVec4>* property);
     ERef<EUIField> CreateInputField_String(const EString& label, EProperty<EString>* property);
     ERef<EUIField> CreateInputField_UUID(const EString& label, EProperty<EUUID>* property);
+    ERef<EUIField> CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property);
 
     template <typename T>
     inline ERef<EUIField> CreateInputField(const EString& label, T property);
@@ -38,6 +39,8 @@ namespace Engine {
     inline ERef<EUIField> CreateInputField<EProperty<EString>*>(const EString& label, EProperty<EString>* property) { return CreateInputField_String(label, property); }
     template <>
     inline ERef<EUIField> CreateInputField<EProperty<EUUID>*>(const EString& label, EProperty<EUUID>* property) { return CreateInputField_UUID(label, property); }
+    template <>
+    inline ERef<EUIField> CreateInputField<EObjectProperty<EMesh>*>(const EString& label, EObjectProperty<EMesh>* property) { return CreateInputField_Mesh(label, property); }
 
     template <>
     inline ERef<EUIField> CreateInputField<EObjectProperty<ETexture2D>*>(const EString& label, EObjectProperty<ETexture2D>* value)
@@ -45,11 +48,6 @@ namespace Engine {
         return nullptr;
     }
 
-    template <>
-    inline ERef<EUIField> CreateInputField<EObjectProperty<EMesh>*>(const EString& label, EObjectProperty<EMesh>* value)
-    {
-        return nullptr;
-    }
 
     template <>
     inline ERef<EUIField> CreateInputField<EObjectProperty<ECamera>*>(const EString& label, EObjectProperty<ECamera>* value)

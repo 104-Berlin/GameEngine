@@ -95,6 +95,15 @@ ERef<EUIField> UI::CreateInputField_String(const EString& label, EProperty<EStri
 ERef<EUIField> UI::CreateInputField_UUID(const EString& label, EProperty<EUUID>* property)
 {
     ERef<EUILabel> result = EMakeRef(EUILabel, property->GetValue().ToString());
+    return result; 
+}
+
+ERef<EUIField> UI::CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property) 
+{
+    ERef<EUIMeshInput> result = EMakeRef(EUIMeshInput);
+    result->OnValueChange([property](EMeshChangeEvent event){
+        property->SetValue(event.Value);
+    });
     return result;
 }
 

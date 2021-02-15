@@ -33,8 +33,17 @@ namespace Engine {
 
         // Looping functions
         void ForEachObject(ObjectCallback fn);
+
+
+        template <typename ...Component>
+        auto view()
+        {
+            return fRegistry.view<Component...>();
+        }
     public:
         friend class EObject;
+    private:
+        void CallObjectFunc(EEntity entity, ObjectCallback fn);
     };
 
 }

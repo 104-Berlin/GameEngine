@@ -112,6 +112,7 @@ void EUIField::SetVisible(bool visible)
 
 void EUIField::SetDirty(bool value) 
 {
+    std::cout << "Setting Dirty" << std::endl;
     fIsDirty = value;
     for (ERef<EUIField> child : fChildren)
     {
@@ -327,7 +328,7 @@ EUIInputFieldFloat2::EUIInputFieldFloat2(const EString& label)
 
 bool EUIInputFieldFloat2::OnRender() 
 {
-    if (ImGui::InputFloat2(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat2(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat2ChangeEvent>({GetValue()});
     }
@@ -355,7 +356,7 @@ EUIInputFieldFloat3::EUIInputFieldFloat3(const EString& label)
 
 bool EUIInputFieldFloat3::OnRender() 
 {
-    if (ImGui::InputFloat3(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat3(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat3ChangeEvent>({GetValue()});
     }
@@ -382,7 +383,7 @@ EUIInputFieldFloat4::EUIInputFieldFloat4(const EString& label)
 
 bool EUIInputFieldFloat4::OnRender() 
 {
-    if (ImGui::InputFloat4(GetDisplayName().c_str(), &fValue.x, "%.3f"))
+    if (ImGui::DragFloat4(GetDisplayName().c_str(), &fValue.x))
     {
         fEventDispatcher.Enqueue<EFloat4ChangeEvent>({GetValue()});
     }
@@ -518,5 +519,75 @@ EUISelectable::EUISelectable(const EString& label)
 bool EUISelectable::OnRender() 
 {
     ImGui::Selectable(GetDisplayName().c_str());
+    return true;
+}
+
+// --------------------------------------------------------------------
+// Viewport
+
+EUIViewport::EUIViewport() 
+    : EUIField("Viewport")
+{
+    fViewportWidth = 200;
+    fViewportHeight = 200;
+    fFrameBuffer = EFrameBuffer::Create(200, 200, EFramebufferFormat::RGBA8);
+}
+
+void EUIViewport::SetRenderFunc(RenderFunction function) 
+{
+    fRenderFunction = function;
+}
+
+bool EUIViewport::OnRender() 
+{
+    auto viewportSize = ImGui::GetContentRegionAvail();
+    fViewportWidth = (u32) viewportSize.x;
+    fViewportHeight = (u32) viewportSize.y;
+    if (fFrameBuffer)
+    {
+        fFrameBuffer->Resize(fViewportWidth, fViewportHeight);
+        fFrameBuffer->Bind();
+        ERenderContext::s_Instance->SetClearColor({1.0f, 1.0f, 1.0f, 1.0f});
+        ERenderContext::s_Instance->Clear();
+        if (fRenderFunction)
+        {
+            fRenderFunction(fViewportWidth, fViewportHeight);
+        }
+        ImGui::Image((void*)(u64)fFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+        fFrameBuffer->Unbind();
+    }
+    return true;
+}
+
+// --------------------------------------------------------------------
+// Mesh Input
+EUIMeshInput::EUIMeshInput() 
+    : EUIField("MeshInput")
+{
+    fFrameBuffer = EFrameBuffer::Create(200, 200, EFramebufferFormat::RGBA8);
+    this->OnDrop("_RESOURCEDRAG", [this](EDragData data){
+        EString str = (char*) data.Buffer;
+        ERef<EMesh> mesh = EApplication::gApp().GetResourceManager().GetResource<EMesh>(str);
+        if (mesh)
+        {
+            SetMesh(mesh);
+        }
+    });
+}
+
+void EUIMeshInput::SetMesh(ERef<EMesh> mesh) 
+{
+    fMesh = mesh;
+    fEventDispatcher.Enqueue<EMeshChangeEvent>({mesh});
+}
+
+bool EUIMeshInput::OnRender() 
+{
+    static ImVec2 size = { 200, 200 };
+    ImGui::Button("##mynameisjeff", size);
+    if (fMesh)
+    {
+        ImGui::Text("%s", fMesh->GetName().c_str());
+    }
     return true;
 }

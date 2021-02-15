@@ -6,6 +6,7 @@
 #define PANEL_NAME_COMPONENT "Components"
 #define PANEL_NAME_SCENETREE "Scene Tree"
 #define PANEL_NAME_RESOURCES "Resources"
+#define PANEL_NAME_VIEWPORT "Viewport"
 
 namespace Engine {
 

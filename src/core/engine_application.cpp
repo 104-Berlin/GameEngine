@@ -71,7 +71,17 @@ void EApplication::Start(const ERef<EScene>& scene)
     // After regsiter intern panels
     SetUpMainMenuBar();
 
+    //Testing code
+    EObject cameraObject = fActiveScene->CreateObject();
+    cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
 
+    fMeshObject = fActiveScene->CreateObject();
+    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>("intern/Cube.rc"));
+
+    for (ERef<EUIPanel> panel : fUIManager->GetPanels())
+    {
+        panel->SetDirty(true);
+    }
     
     
     fRunning = true;
@@ -106,6 +116,9 @@ void EApplication::Run()
         // Render all panels
         // If extra 3d scene these will be rendered as well here
         Render();
+        //TestRendering();
+
+        glfwMakeContextCurrent(fMainWindow);
 
         // Put it all to opengl
         ERenderer::WaitAndRender();
@@ -183,10 +196,118 @@ void EApplication::CreateMainWindow()
     fResourceManager = new EResourceManager();
     fExtensionManager = new EExtensionManager();
     fUIManager = new EUIManager();
+
+    LoadDefaultMeshes();
+}
+
+
+static EVector<EMesh::EVertex> vertices = {
+    { {-1,  1, 1},         {0.0f, 0.0f, 1.0f}, {0, 1}},
+    {{-1, -1, 1},         {0.0f, 0.0f, 1.0f}, {0, 0}},
+    {{ 1, -1, 1},         {0.0f, 0.0f, 1.0f}, {1, 0}},
+    {{ 1,  1, 1},         {0.0f, 0.0f, 1.0f}, {1, 1}},
+    
+    {{-1,  1, -1},        {0.0f, 0.0f, -1.0f}, {0, 1}},
+    {{-1, -1, -1},        {0.0f, 0.0f, -1.0f}, {0, 0}},
+    {{ 1, -1, -1},        {0.0f, 0.0f, -1.0f}, {1, 0}},
+    {{ 1,  1, -1},        {0.0f, 0.0f, -1.0f}, {1, 1}},
+    
+    
+    
+    {{1, -1,  1},          {1.0f, 0.0f, 0.0f}, {0, 1}},
+    {{1, -1, -1},          {1.0f, 0.0f, 0.0f}, {0, 0}},
+    {{1,  1, -1},          {1.0f, 0.0f, 0.0f}, {1, 0}},
+    {{1,  1,  1},          {1.0f, 0.0f, 0.0f}, {1, 1}},
+
+    {{-1, -1,  1},         {-1.0f, 0.0f, 1.0f}, {0, 1}},
+    {{-1, -1, -1},         {-1.0f, 0.0f, 1.0f}, {0, 0}},
+    {{-1,  1, -1},         {-1.0f, 0.0f, 1.0f}, {1, 0}},
+    {{-1,  1,  1},         {-1.0f, 0.0f, 1.0f}, {1, 1}},
+
+
+    {{-1,  1,  1},         {0.0f, 1.0f, 0.0f}, {0, 1}},
+    {{-1,  1, -1},         {0.0f, 1.0f, 0.0f}, {0, 0}},
+    {{ 1,  1, -1},         {0.0f, 1.0f, 0.0f}, {1, 0}},
+    {{ 1,  1,  1},         {0.0f, 1.0f, 0.0f}, {1, 1}},
+
+    {{-1, -1,  1},         {0.0f, -1.0f, 0.0f}, {0, 1}},
+    {{-1, -1, -1},         {0.0f, -1.0f, 0.0f}, {0, 0}},
+    {{ 1, -1, -1},         {0.0f, -1.0f, 0.0f}, {1, 0}},
+    {{ 1, -1,  1},         {0.0f, -1.0f, 0.0f}, {1, 1}},
+};
+
+static EVector<u32> indices = {
+    0, 1, 2,
+    2, 3, 0,
+
+    4, 5, 6,
+    6, 7, 4,
+
+    8, 9, 10,
+    10, 11, 8,
+
+    12, 13, 14,
+    14, 15, 12,
+
+    16, 17, 18,
+    18, 19, 16,
+
+    20, 21, 22,
+    22, 23, 20        
+};
+
+static EVector<EMesh::EVertex> vertices_2 = {
+    {{-0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{-0.5f,  0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.5f,  0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+};
+
+static EVector<u32> indices_2 = {
+    0, 1, 2,
+    2, 3, 0
+};
+
+void EApplication::LoadDefaultMeshes() 
+{
+    ERef<EMesh> cubeMesh = EMakeRef(EMesh, "Cube", vertices, indices);
+    ERef<EMesh> planeMesh = EMakeRef(EMesh, "Plane", vertices_2, indices_2);
+
+    fResourceManager->AddLoadedResource(cubeMesh);
+    fResourceManager->AddLoadedResource(planeMesh);
+}
+
+void EApplication::TestRendering() 
+{
+    for (EEntity entity : fActiveScene->view<ECameraComponent, ETransformComponent>())
+    {
+        EObject object(entity, fActiveScene.GetValue().get());
+        ECameraComponent& cameraComponent = object.GetComponent<ECameraComponent>();
+        ETransformComponent& cameraTransformComponent = object.GetComponent<ETransformComponent>();
+        if (cameraComponent.Active)
+        {
+            ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {}, 1270, 720);
+            for (EEntity entity : fActiveScene->view<EMeshComponent, ETransformComponent>())
+            {
+                EObject object(entity, fActiveScene.GetValue().get());
+                EMeshComponent& meshComponent = object.GetComponent<EMeshComponent>();
+                ETransformComponent& transformComponent = object.GetComponent<ETransformComponent>();
+                if (meshComponent.Mesh)
+                {
+                    ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
+                }
+            }
+        }
+
+        ERenderer::End();
+        break;
+    }
 }
 
 void EApplication::Update(float delta)
 {
+    static double counter = 0;
+    counter += (double) delta;
     if (fActiveScene)
     {
         fActiveScene->Update(delta);

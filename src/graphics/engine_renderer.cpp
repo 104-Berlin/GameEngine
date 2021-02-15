@@ -76,8 +76,14 @@ const char* fragment_shader_src = ""
 		})
 	}
 
-	void ERenderer::Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lightMap)
+	void ERenderer::Begin(const ERef<ECamera>& camera, const EMat4& viewMatrix, const ELightMap& lightMap, u32 width, u32 height)
 	{
+		IN_RENDER2(width, height, {
+			glCall(glViewport(0, 0, width, height));
+			//glCall(glEnable(GL_CULL_FACE));
+        	glCall(glEnable(GL_DEPTH_TEST));
+        	glCall(glDisable(GL_SCISSOR_TEST));
+		})
 		ERenderContext::s_Instance->SetClearColor({ 1.0f, 0.6f, 0.6f, 1.0f });
 		ERenderContext::s_Instance->Clear();
 

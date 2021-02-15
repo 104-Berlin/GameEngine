@@ -30,10 +30,12 @@ void EResourceManager::LoadAllFromFolder(const EFolder& folder)
 
 void EResourceManager::LoadingFunc() 
 {
+    bool loadingQueueDidRun = false;
     while (fIsRunning)
     {
         while (fLoadingQueue.size())
         {
+            loadingQueueDidRun = true;
             EString resourcePath;
             {
                 std::lock_guard<std::mutex> quard(fQueueMutex);
@@ -63,10 +65,11 @@ void EResourceManager::LoadingFunc()
                 AddLoadedResource(newResource);
             }
         }
-        if (fWorkFinishedFunction)
+        if (loadingQueueDidRun && fWorkFinishedFunction)
         {
             fWorkFinishedFunction();
         }
+        loadingQueueDidRun = false;
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
@@ -76,6 +79,10 @@ void EResourceManager::AddLoadedResource(ERef<EResource> resource)
     std::lock_guard<std::mutex> guard(fLoadedMutex);
     std::cout << "Finished loading resource \"" << resource->GetNameIdent() << "\"" << std::endl;
     fLoadedResources[resource->GetNameIdent()] = resource;
+    if (fWorkFinishedFunction)
+    {
+        fWorkFinishedFunction();
+    }
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 

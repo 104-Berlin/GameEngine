@@ -258,8 +258,7 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                         glCall(glActiveTexture(GL_TEXTURE0));
                         glCall(glBindTexture(GL_TEXTURE_2D, (GLuint)(intptr_t)textureId));
                     })
-                    
-                    
+
                     u32 indexOffset = pcmd->IdxOffset;
                     u32 elementCount = pcmd->ElemCount;
                     struct TempStruct

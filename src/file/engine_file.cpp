@@ -12,7 +12,7 @@ EFile::EFile(const EString& path)
 }
 
 EFile::EFile(EBaseFolder baseFolder, const EString& path)
-    : EFile(EFolder::GetBaseFolderPath(baseFolder) + path)
+    : EFile(Path::Join(EFolder::GetBaseFolderPath(baseFolder), path))
 {
 }
 
