@@ -18,7 +18,7 @@ namespace Engine {
 
         EEventDispatcher            fEventDispatcher;
         // TEMP
-        EUIMainMenuBar      fMainMenuBar;
+        ERef<EUIMainMenuBar>      fMainMenuBar;
         ERef<ECamera>     fCamera;
         EObject             fMeshObject;
     public:
@@ -34,7 +34,7 @@ namespace Engine {
         double                      GetFrameTime() const;
         EResourceManager&           GetResourceManager();
         EUIManager&                 GetUIManager();
-        EUIMainMenuBar&               GetMainMenuBar();
+        ERef<EUIMainMenuBar>        GetMainMenuBar();
         ERef<EUIPanel>              GetPanelByName(const EString& name);
 
 

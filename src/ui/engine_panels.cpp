@@ -211,8 +211,8 @@ namespace ApplicationPanels {
 
     void CreateDefaultMainMenuBar() 
     {
-        EUIMainMenuBar& mainMenuBar = EApplication::gApp().GetMainMenuBar();
-        ERef<EUIField> fileMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "File"));
+        ERef<EUIMainMenuBar> mainMenuBar = EApplication::gApp().GetMainMenuBar();
+        ERef<EUIField> fileMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
         saveFile->SetOnClick([](){
             EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
@@ -232,11 +232,11 @@ namespace ApplicationPanels {
 
 
 
-        ERef<EUIField> editMenu = mainMenuBar.AddChild(EMakeRef(EUIMenu, "Edit"));
+        ERef<EUIField> editMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "Edit"));
         
         
         // View Menu
-        ERef<EUIMenu> viewMenu = std::dynamic_pointer_cast<EUIMenu>(mainMenuBar.AddChild(EMakeRef(EUIMenu, "View")));
+        ERef<EUIMenu> viewMenu = std::dynamic_pointer_cast<EUIMenu>(mainMenuBar->AddChild(EMakeRef(EUIMenu, "View")));
         for (ERef<EUIPanel> panel : EApplication::gApp().GetUIManager().GetPanels())
         {
             ERef<EUIMenuItem> menuItem = ERef<EUIMenuItem>(new EUIMenuItem(panel->GetDisplayName()));

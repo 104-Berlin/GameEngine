@@ -40,6 +40,7 @@ namespace Engine
         EString                         fLabel;
     public:
         EUIField(const EString& label);
+        virtual ~EUIField();
 
         EString GetDisplayName() const;
 

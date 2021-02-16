@@ -32,6 +32,7 @@ namespace Engine {
         void FromJsObject(const EJson& json);
 
         // Looping functions
+        void Clear();
         void ForEachObject(ObjectCallback fn);
 
 

@@ -102,6 +102,16 @@ namespace Engine {
             }
             fPostedEvents.clear();
         }
+
+        void CleanUp()
+        {
+            fObervers.clear();
+            for (EventStorage& storage : fPostedEvents)
+            {
+                storage.CleanUp();
+            }
+            fPostedEvents.clear();
+        }
     private:
         EUnorderedMap<EventType, EVector<std::function<void(void*)>>>    fObervers;
         EVector<EventStorage>                                   fPostedEvents;

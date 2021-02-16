@@ -55,6 +55,11 @@ void EScene::FromJsObject(const EJson& json)
     } 
 }
 
+void EScene::Clear() 
+{
+    fRegistry.clear();
+}
+
 void EScene::ForEachObject(ObjectCallback fn)
 {
     fRegistry.each([this, fn](EEntity entity){

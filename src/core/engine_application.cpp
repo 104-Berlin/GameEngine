@@ -24,6 +24,8 @@ EApplication::EApplication()
 
 EApplication::~EApplication()
 {
+    fActiveScene->Clear();
+    fMainMenuBar = nullptr;
     if (fUIRenderer)
     {
         delete fUIRenderer;
@@ -108,7 +110,7 @@ void EApplication::Run()
         {
             panel->UpdateEvents();
         }
-        fMainMenuBar.UpdateEvents();
+        fMainMenuBar->UpdateEvents();
         
         // This is not used atm
         Update(fFrameTime);
@@ -133,6 +135,7 @@ void EApplication::Run()
 
 void EApplication::SetUpMainMenuBar() 
 {
+    fMainMenuBar = EMakeRef(EUIMainMenuBar);
     ApplicationPanels::CreateDefaultMainMenuBar();
 }
 
@@ -329,7 +332,7 @@ void EApplication::Render()
     fUIRenderer->Begin();
     
     // Render main menu
-    fMainMenuBar.Render();
+    fMainMenuBar->Render();
 
     // Render all panels. Here you can render custom 3d scenes
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
@@ -360,7 +363,7 @@ EUIManager& EApplication::GetUIManager()
     return *fUIManager;
 }
 
-EUIMainMenuBar& EApplication::GetMainMenuBar() 
+ERef<EUIMainMenuBar> EApplication::GetMainMenuBar() 
 {
     return fMainMenuBar;
 }

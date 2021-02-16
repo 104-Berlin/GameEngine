@@ -14,6 +14,11 @@ EUIField::EUIField(const EString& label)
     fId = next_ui_id();
 }
 
+EUIField::~EUIField() 
+{
+    fEventDispatcher.CleanUp();
+}
+
 EString EUIField::GetDisplayName() const
 {
     return fLabel + "##" + std::to_string(fId);
@@ -112,7 +117,6 @@ void EUIField::SetVisible(bool visible)
 
 void EUIField::SetDirty(bool value) 
 {
-    std::cout << "Setting Dirty" << std::endl;
     fIsDirty = value;
     for (ERef<EUIField> child : fChildren)
     {
