@@ -52,7 +52,7 @@ namespace Engine {
                         result->AddChild(UI::CreateInputField<decltype(property)>(name, property));
                     });
                 }
-                return result;
+                return std::dynamic_pointer_cast<EUIField>(result);
             };
 
             newComponentDsc->Has = [](EObject object) -> bool {

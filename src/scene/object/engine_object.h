@@ -45,15 +45,8 @@ namespace Engine {
             return fHandle;
         }
 
-        EUUID GetUuid() const
-        {
-            if (*this)
-            {
-                return GetComponent<ETagComponent>().UUID;
-            }
-            return EUUID();
-        }
-
+        EUUID GetUuid() const;
+        
         void Delete()
         {
             fScene->fRegistry.destroy(fHandle);
