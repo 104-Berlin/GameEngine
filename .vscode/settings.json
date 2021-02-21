@@ -90,5 +90,8 @@
         "codecvt": "cpp",
         "hash_map": "cpp",
         "hash_set": "cpp"
-    }
+    },
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false
 }
