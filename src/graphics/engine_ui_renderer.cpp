@@ -271,8 +271,8 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                     u32 elementCount = pcmd->ElemCount;
                     struct TempStruct
                     {
-                        ImVector<ImDrawVert>* VertexData;
-                        ImVector<ImWchar>* IndexData;
+                        ImVector<ImDrawVert>* VertexData = nullptr;
+                        ImVector<ImWchar>* IndexData = nullptr;
                     } DATA;
                     DATA.IndexData = indexData;
                     DATA.VertexData = vertexData;
