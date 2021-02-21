@@ -1,5 +1,4 @@
-#define GLFW_DLL
-#include <extensions/engine_extension.h>
+#include "extensions/engine_extension.h"
 
 struct ExtensionComponent
 {
@@ -8,7 +7,16 @@ struct ExtensionComponent
     )
 };
 
+void RegisterPanels(Engine::EUIManager& uiManager)
+{
+    using namespace Engine;
+    ERef<EUIPanel> panel = EMakeRef(EUIPanel, "Extension Panel");
+    
+    uiManager.RegisterPanel(panel);
+}
+
 EE_ENTRY {
     data.componentData.RegisterComponent<ExtensionComponent>("Extension");
+    RegisterPanels(data.uiManager);
     //std::cout << "Loading extension!" << std::endl;
 }
