@@ -16,7 +16,6 @@ namespace Engine {
 		EMainWindow(const EString& title, u32 width, u32 height);
 		~EMainWindow();
 
-		void PollEvent();
 		void Update();
 		void Present();
 		bool IsOpen();

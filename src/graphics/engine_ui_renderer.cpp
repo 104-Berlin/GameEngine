@@ -222,7 +222,15 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
         fVertexBuffer->SetData(vertexData->Data, vertexData->size_in_bytes());
 
         //printf("Sizeof imWchar: %d\n", sizeof(ImWchar));
-        fIndexBuffer->SetDataImChar(indexData->Data, indexData->Size);
+        
+        if constexpr (sizeof(ImWchar) == 2)
+        {
+            fIndexBuffer->SetData16((u16*)indexData->Data, indexData->Size);
+        }
+        else
+        {
+            fIndexBuffer->SetData32((u32*)indexData->Data, indexData->Size);
+        }
 
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
@@ -282,6 +290,11 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
 void EUIRenderer::End() 
 {
    
+}
+
+void EUIRenderer::ResetImGuiContext() 
+{
+    ImGui::SetCurrentContext(fImGuiContext);
 }
 
 void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeight) 

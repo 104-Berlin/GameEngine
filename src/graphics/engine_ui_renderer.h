@@ -26,6 +26,7 @@ namespace Engine {
         bool IsInitialized() const { return fIsInitialized; }
 
         ImGuiContext* GetImGuiContext() const { return fImGuiContext; }
+        void ResetImGuiContext();
     private:
         void ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeight);
         void CreateRenderingStorage();

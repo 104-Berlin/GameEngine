@@ -2,6 +2,10 @@
 
 namespace Engine {
 
+    namespace ImGuiHelper
+    {
+        void ResetImGuiState();
+    }
     class EUIManager
     {
     private:

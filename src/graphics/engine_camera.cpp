@@ -14,10 +14,6 @@ namespace Engine {
 	{
 	}
 
-	void ECamera::Update(GLFWwindow* window)
-	{
-	}
-
 	void ECamera::UpdateImGui()
 	{
 	}

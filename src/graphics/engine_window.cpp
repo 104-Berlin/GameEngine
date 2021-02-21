@@ -1,88 +1,24 @@
 #include "Engine.h"
 
+
+#include "backends/imgui_impl_glfw.h"
+
+
 using namespace Engine;
-
-void Engine_CreateWindow(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_DestroyWindow(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_ShowWindow(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_SetWindowPos(ImGuiViewport* viewport, ImVec2 pos)
-{
-
-}
-
-ImVec2 Engine_GetWindowPos(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_SetWindowSize(ImGuiViewport* viewport, ImVec2 size)
-{
-
-}
-
-ImVec2 Engine_GetWindowSize(ImGuiViewport* viewort)
-{
-
-}
-
-void Engine_SetWindowFocus(ImGuiViewport* viewport, bool focus)
-{
-
-}
-
-bool Engine_GetWindowFocus(ImGuiViewport* viewport)
-{
-
-}
-
-bool Engine_GetWindowMinimized(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_SetWindowTitle(ImGuiViewport* viewport, const char* title)
-{
-
-}
-
-void Engine_RenderWindow(ImGuiViewport* viewport)
-{
-
-}
-
-void Engine_SwapBuffers(ImGuiViewport* viewport)
-{
-	
-}
-
 
 
 EMainWindow::EMainWindow(const EString& title, u32 width, u32 height)
 	: fTitle(title), fWidth(width), fHeight(height), fNativeWindowPtr(nullptr)
 {
-
+	Init();
 }
 
 EMainWindow::~EMainWindow()
 {
-
-}
-
-void EMainWindow::PollEvent()
-{
-
+	if (fNativeWindowPtr)
+	{
+		glfwDestroyWindow((GLFWwindow*)fNativeWindowPtr);
+	}
 }
 
 void EMainWindow::Update()

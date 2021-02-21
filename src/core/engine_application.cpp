@@ -363,6 +363,11 @@ EUIManager& EApplication::GetUIManager()
     return *fUIManager;
 }
 
+EUIRenderer& EApplication::GetUIRenderer() 
+{
+    return *fUIRenderer;
+}
+
 ERef<EUIMainMenuBar> EApplication::GetMainMenuBar() 
 {
     return fMainMenuBar;
@@ -381,16 +386,6 @@ ERef<EUIPanel> EApplication::GetPanelByName(const EString& name)
     return nullptr;
 }
 
-ImGuiContext* EApplication::GetMainImGuiContext() const
-{
-    return fUIRenderer->GetImGuiContext();
-}
-
-GLFWwindow* EApplication::GetMainWindow() const
-{
-    return fMainWindow;
-}
-
 EObjectProperty<EScene>& EApplication::GetActiveScene()
 {
     return fActiveScene;
@@ -400,4 +395,9 @@ void EApplication::SetActiveScene(ERef<EScene> scene)
 {
     if (!scene) { return; }
     fActiveScene = scene;
+}
+
+void EApplication::ResetImGuiContext() 
+{
+    fUIRenderer->ResetImGuiContext();
 }

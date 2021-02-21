@@ -1,4 +1,4 @@
-#include "std_include.h"
+#include "../std_include.h"
 
 namespace Engine {
     class EObject;
@@ -27,11 +27,11 @@ namespace Engine {
 #include "../resource/engine_mesh.h"
 #include "../resource/engine_resource_manager.h"
 
-#define EUI_NO_IMPL
-#include "../ui/engine_ui_functions.h"
 #include "../ui/engine_ui_fields.h"
-#include "../ui/engine_panels.h"
+#include "../ui/engine_ui_functions.h"
 #include "../ui/engine_ui_manager.h"
+
+#include "../ui/engine_panels.h"
 #include "engine_extension_manager.h"
 
 #ifdef __cplusplus
@@ -43,9 +43,9 @@ namespace Engine {
 #define EXPORT_API  EXTERN_C __attribute__((visibility("default")))
 
 
-#define EE_ENTRY        EXPORT_API void InitImGui(ImGuiContext* context)\
+#define EE_ENTRY        EXPORT_API void InitImGui()\
                         {\
-                            ImGui::SetCurrentContext(context);\
+                            ::Engine::ImGuiHelper::ResetImGuiState();\
                         }\
                         EXPORT_API void LoadExtension(Engine::EExtensionInitializer& data)
 
