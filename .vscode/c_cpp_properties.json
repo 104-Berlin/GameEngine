@@ -19,7 +19,6 @@
                 "EMAC"
             ],
             "cStandard": "c11",
-            //"configurationProvider": "ms-vscode.cmake-tools",
             "cppStandard": "c++17"
         }
     ],
