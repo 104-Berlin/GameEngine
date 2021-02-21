@@ -4,7 +4,7 @@ namespace Engine {
 
     namespace ImGuiHelper
     {
-        void ResetImGuiState();
+        E_API void ResetImGuiState();
     }
     class EUIManager
     {

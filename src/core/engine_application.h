@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EApplication
+    class E_API EApplication
     {
     private:
         GLFWwindow*                 fMainWindow;

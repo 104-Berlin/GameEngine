@@ -40,7 +40,11 @@ namespace Engine {
     #define EXTERN_C
 #endif
 
+#ifdef EWIN
+#define EXPORT_API EXTERN_C __declspec(dllexport)
+#else
 #define EXPORT_API  EXTERN_C __attribute__((visibility("default")))
+#endif
 
 
 #define EE_ENTRY        EXPORT_API void InitImGui()\

@@ -28,6 +28,8 @@ elseif(APPLE)
 add_compile_definitions(EMAC)
 endif()
 
+add_compile_definitions(EEXPORT)
+
 if (APPLE)
 include_directories( /System/Library/Frameworks )
 find_library(OpenGL_LIBRARY OpenGL )

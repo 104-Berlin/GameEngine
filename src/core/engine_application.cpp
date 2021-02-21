@@ -74,11 +74,11 @@ void EApplication::Start(const ERef<EScene>& scene)
     SetUpMainMenuBar();
 
     //Testing code
-    EObject cameraObject = fActiveScene->CreateObject();
+    /*EObject cameraObject = fActiveScene->CreateObject();
     cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
 
     fMeshObject = fActiveScene->CreateObject();
-    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>("intern/Cube.rc"));
+    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>("intern/Cube.rc"));*/
 
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {

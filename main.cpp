@@ -1,4 +1,6 @@
-#define E_NO_IMPL
+#ifdef EEXPORT
+#undef EEXPORT
+#endif
 #include "Engine.h"
 
 using namespace Engine;

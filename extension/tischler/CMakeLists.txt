@@ -28,5 +28,5 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/)
 set(CMAKE_SHARED_LIBRARY_SUFFIX .epl)
 
 add_library(Tischler MODULE entry.cpp)
-target_link_libraries(Tischler ${CMAKE_CURRENT_SOURCE_DIR}/../../build/libEngine.dylib)
+target_link_libraries(Tischler ${CMAKE_CURRENT_SOURCE_DIR}/../../Debug/Engine.lib)
 target_link_libraries(Tischler ${EXTRA_LIBS})
