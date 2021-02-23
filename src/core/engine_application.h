@@ -44,10 +44,16 @@ namespace Engine {
 
         void                        ResetImGuiContext();
 
-        template <typename T, typename... Args>
-        void QueueEvent(Args &&... args)
+        template <typename Event>
+        void QueueEvent(const Event& event)
         {
-            fEventDispatcher.Enqueue<T>(std::forward<Args>(args)...);
+            fEventDispatcher.Enqueue<Event>(event);
+        }
+
+        template <typename Event, typename T>
+        void OnEvent(T&& cb)
+        {
+            fEventDispatcher.Connect<Event>(cb);
         }
     private:
         void Run();

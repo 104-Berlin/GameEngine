@@ -32,6 +32,12 @@ EPanelComponentData& EPanelComponentData::data()
     static EPanelComponentData data;
     return data;
 }
+
+void EPanelComponentData::SendEvent() 
+{
+    EApplication::gApp().QueueEvent<EComponentsChangedEvent>({sComponentDescriptions});
+}
+
 namespace Engine {
 namespace ApplicationPanels {
     void CreateDefaultApplicationPanels() 
@@ -53,26 +59,36 @@ namespace ApplicationPanels {
         );
 
         ERef<EUIField> componentsContextMenu = componentsPanel->AddChild(EMakeRef(EUIContextMenu));
-        for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
-        {
-            ERef<EUIMenuItem> menuItem = EMakeRef(EUIMenuItem, compDsc->Name);
-            
-            menuItem->SetOnClick([compDsc](){
-                EObject object = EApplication::gApp().GetActiveScene()->GetSelectedObject().GetValue();
-                if (object)
-                {
-                    compDsc->Create(object);
-                    ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
-                    if (componentPanel)
+        componentsContextMenu->SetUpdateFunction([](ERef<EUIField> menu){
+            menu->ClearChildren();
+            for (ComponentDescription* compDsc : EPanelComponentData::data().GetComponentDescription())
+            {
+                ERef<EUIMenuItem> menuItem = EMakeRef(EUIMenuItem, compDsc->Name);
+                
+                menuItem->SetOnClick([compDsc](){
+                    EObject object = EApplication::gApp().GetActiveScene()->GetSelectedObject().GetValue();
+                    if (object)
                     {
-                        componentPanel->SetDirty();
+                        compDsc->Create(object);
+                        ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
+                        if (componentPanel)
+                        {
+                            componentPanel->SetDirty();
+                        }
                     }
-                }
-            });
-            componentsContextMenu->AddChild(menuItem);
-        }
-
+                });
+                menu->AddChild(menuItem);
+            }
+        });
         EApplication::gApp().GetUIManager().RegisterPanel(componentsPanel);
+
+        EApplication::gApp().OnEvent<EComponentsChangedEvent>([](){
+            ERef<EUIPanel> componentsPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
+            if (componentsPanel)
+            {
+                componentsPanel->SetDirty(true);
+            }
+        });
 
         // ---------------------------------------------------------------------------------
         // Scene Tree
@@ -212,6 +228,7 @@ namespace ApplicationPanels {
     void CreateDefaultMainMenuBar() 
     {
         ERef<EUIMainMenuBar> mainMenuBar = EApplication::gApp().GetMainMenuBar();
+        mainMenuBar->ClearChildren();
         ERef<EUIField> fileMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
         saveFile->SetOnClick([](){

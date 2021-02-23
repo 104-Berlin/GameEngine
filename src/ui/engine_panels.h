@@ -24,7 +24,10 @@ namespace Engine {
         FromJsFn    FromJsObject;
     };
     
-
+    struct EComponentsChangedEvent
+    {
+        EVector<ComponentDescription*> Descriptions;
+    };
     class EPanelComponentData
     {
     private:
@@ -38,6 +41,7 @@ namespace Engine {
         template <typename T>
         void RegisterComponent(const EString& componentName)
         {
+            std::cout << "Registering Component " << componentName << std::endl;
             ComponentDescription* newComponentDsc = new ComponentDescription();
             newComponentDsc->Name = componentName;
             
@@ -86,7 +90,8 @@ namespace Engine {
         void ClearComponentData();
 
         static EPanelComponentData& data();
-
+    private:
+        void SendEvent();
     };
 
 

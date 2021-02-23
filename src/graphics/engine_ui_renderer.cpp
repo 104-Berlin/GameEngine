@@ -103,7 +103,7 @@ void EUIRenderer::Init(GLFWwindow* window)
     ImGuiIO& io = ImGui::GetIO();
     if (fontFile.Exist())
     {
-        //io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.GetFullPath().c_str(), 20.0f);
+        io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.GetFullPath().c_str(), 20.0f);
     }
 
     

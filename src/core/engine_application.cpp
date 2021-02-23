@@ -49,14 +49,7 @@ EApplication::~EApplication()
 
 void EApplication::Start(const ERef<EScene>& scene)
 {
-
     RegisterInternComponents();
-
-    fExtensionManager->LoadPluginFolder();
-    fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
-
-
-
     if (!scene)
     {
         SetActiveScene(EMakeRef(EScene, "Scene 1"));
@@ -66,12 +59,16 @@ void EApplication::Start(const ERef<EScene>& scene)
         SetActiveScene(scene);
     }
 
-
     // First register intern panels bevore set up main menu, so the view menu is up to data
     RegisterInternPanels();
 
     // After regsiter intern panels
     SetUpMainMenuBar();
+    
+    fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
+    fExtensionManager->LoadPluginFolder();    
+
+
 
     //Testing code
     EObject cameraObject = fActiveScene->CreateObject();
