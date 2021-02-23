@@ -9,13 +9,13 @@ namespace Engine {
     {
         using ObjectCallback = std::function<void(EObject)>;
     private:
-        EProperty<EString>                  fName;
-        EObjectRef                          fSelectedObject;
+        EProperty<EString>                              fName;
+        EObjectRef                                      fSelectedObject;
 
 
         // Entities
-        entt::registry                      fRegistry;
-        EUnorderedMap<EUUID, EObject, UuidHash>       fEntityMap;
+        entt::registry                                  fRegistry;
+        EUnorderedMap<EUUID, EObject, UuidHash>         fEntityMap;
     public:
         EScene(const EString& name);
         ~EScene();

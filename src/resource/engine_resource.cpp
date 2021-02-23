@@ -3,7 +3,11 @@
 
 using namespace Engine;
 
+#ifdef EWIN
+#define ROOT_RES_DIR "res\\"
+#else
 #define ROOT_RES_DIR "res/"
+#endif
 
 EResource::EResource(const EString& path) 
     : fFile(path)

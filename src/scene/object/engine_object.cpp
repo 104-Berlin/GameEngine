@@ -7,6 +7,15 @@ EObject::EObject(EEntity handle, EScene* scene)
     Set(handle, scene);
 }
 
+EUUID EObject::GetUuid() const
+{
+    if (fScene->fRegistry.has<ETagComponent>(fHandle))
+    {
+        return GetComponent<ETagComponent>().UUID;
+    }
+    return EUUID();
+}
+
 void EObject::Set(EEntity entity, EScene* scene) 
 {
     fHandle = entity;

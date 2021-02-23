@@ -17,7 +17,7 @@ namespace Engine {
         void    LoadPlugin(const EString& fullPath);
         void*   GetFunction(const EString& functionName);
     public:
-        void InitImGui(ImGuiContext* context);
+        void InitImGui();
     private:
 #ifdef EWIN
         HINSTANCE fHandle;

@@ -103,7 +103,7 @@ void EUIRenderer::Init(GLFWwindow* window)
     ImGuiIO& io = ImGui::GetIO();
     if (fontFile.Exist())
     {
-        io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.GetFullPath().c_str(), 20.0f);
+        //io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFile.GetFullPath().c_str(), 20.0f);
     }
 
     
@@ -222,7 +222,15 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
         fVertexBuffer->SetData(vertexData->Data, vertexData->size_in_bytes());
 
         //printf("Sizeof imWchar: %d\n", sizeof(ImWchar));
-        fIndexBuffer->SetDataImChar(indexData->Data, indexData->Size);
+        
+        if constexpr (sizeof(ImWchar) == 2)
+        {
+            fIndexBuffer->SetData16((u16*)indexData->Data, indexData->Size);
+        }
+        else
+        {
+            fIndexBuffer->SetData32((u32*)indexData->Data, indexData->Size);
+        }
 
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
         {
@@ -263,8 +271,8 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                     u32 elementCount = pcmd->ElemCount;
                     struct TempStruct
                     {
-                        ImVector<ImDrawVert>* VertexData;
-                        ImVector<ImWchar>* IndexData;
+                        ImVector<ImDrawVert>* VertexData = nullptr;
+                        ImVector<ImWchar>* IndexData = nullptr;
                     } DATA;
                     DATA.IndexData = indexData;
                     DATA.VertexData = vertexData;
@@ -282,6 +290,11 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
 void EUIRenderer::End() 
 {
    
+}
+
+void EUIRenderer::ResetImGuiContext() 
+{
+    ImGui::SetCurrentContext(fImGuiContext);
 }
 
 void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeight) 

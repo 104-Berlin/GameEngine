@@ -1,8 +1,6 @@
 #pragma once
 
 
-
-
 #define PANEL_NAME_COMPONENT "Components"
 #define PANEL_NAME_SCENETREE "Scene Tree"
 #define PANEL_NAME_RESOURCES "Resources"
@@ -52,7 +50,7 @@ namespace Engine {
                         result->AddChild(UI::CreateInputField<decltype(property)>(name, property));
                     });
                 }
-                return result;
+                return std::dynamic_pointer_cast<EUIField>(result);
             };
 
             newComponentDsc->Has = [](EObject object) -> bool {

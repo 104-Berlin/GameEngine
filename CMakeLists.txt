@@ -16,6 +16,7 @@ include_directories(deps/glfw/include
                     ./src )
 
 
+set(BUILD_SHARED_LIBS TRUE)
 add_subdirectory(deps/glfw)
 
 
@@ -26,6 +27,8 @@ add_compile_definitions(EWIN)
 elseif(APPLE)
 add_compile_definitions(EMAC)
 endif()
+
+add_compile_definitions(EEXPORT)
 
 if (APPLE)
 include_directories( /System/Library/Frameworks )
@@ -56,8 +59,8 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
 
 
 # Maybe just compile a single folder in wich all symbols are that the extensions need
-add_library(Engine     ${ENGINE_SRC_FILES}
-                       ${ENGINE_MAC_SRC_FILES})
+add_library(Engine SHARED ${ENGINE_SRC_FILES}
+                          ${ENGINE_MAC_SRC_FILES})
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)

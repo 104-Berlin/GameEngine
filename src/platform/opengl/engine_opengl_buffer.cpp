@@ -136,16 +136,18 @@ namespace Engine {
 	void EOpenGLIndexBuffer::SetData32(u32* data, u32 indexCount) 
 	{
 		Bind();
+		m_Count = indexCount;
 		IN_RENDER_S2(data, indexCount, {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
 		})
 	}
 	
-	void EOpenGLIndexBuffer::SetDataImChar(ImWchar* data, u32 indexCount) 
+	void EOpenGLIndexBuffer::SetData16(u16* data, u32 indexCount) 
 	{
 		Bind();
+		m_Count = indexCount;
 		IN_RENDER_S2(data, indexCount, {
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(ImWchar) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
 		})
 	}
 

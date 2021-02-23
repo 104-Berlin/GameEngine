@@ -5,7 +5,7 @@ using namespace Engine;
 EExtension::EExtension(const EString& pluginName) 
 {
     EFolder pluginFolder(EBaseFolder::PLUGIN);
-    EFile pluginFile(pluginFolder.GetFullPath() + pluginName + ".epl");
+    EFile pluginFile(pluginFolder.GetFullPath() + pluginName + ".so");
 
     if (!pluginFile.Exist())
     {
@@ -58,12 +58,12 @@ void* EExtension::GetFunction(const EString& functionName)
 #endif
 }
 
-void EExtension::InitImGui(ImGuiContext* context) 
+void EExtension::InitImGui() 
 {
-    auto loadFunction = (void(*)(ImGuiContext*))GetFunction("InitImGui");
+    auto loadFunction = (void(*)())GetFunction("InitImGui");
     if (loadFunction)
     {
-        loadFunction(context);
+        loadFunction();
     }
 }
 
@@ -88,7 +88,7 @@ void EExtensionManager::LoadPluginFolder()
     EVector<EExtension*> extensions = GetLoadedExtensions();
     for (EExtension* ext : extensions)
     {
-        ext->InitImGui(EApplication::gApp().GetMainImGuiContext());
+        ext->InitImGui();
     }
 }
 

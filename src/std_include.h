@@ -24,6 +24,16 @@
 #define DEG_TO_RAD (M_PI / 180.0)
 
 #ifdef EWIN
+    #ifdef EEXPORT
+        #define E_API __declspec(dllexport)
+    #else
+        #define E_API __declspec(dllimport)
+    #endif
+#else
+    #define E_API
+#endif
+
+#ifdef EWIN
 #include <Windows.h>
 #include <mutex>
 #include <atomic>

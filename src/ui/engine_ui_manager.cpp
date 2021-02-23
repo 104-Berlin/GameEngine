@@ -2,6 +2,11 @@
 
 using namespace Engine;
 
+void ImGuiHelper::ResetImGuiState() 
+{
+    EApplication::gApp().ResetImGuiContext();   
+}
+
 
 EVector<ERef<EUIPanel>> EUIManager::GetPanels() const
 {

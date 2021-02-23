@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EApplication
+    class E_API EApplication
     {
     private:
         GLFWwindow*                 fMainWindow;
@@ -34,6 +34,7 @@ namespace Engine {
         double                      GetFrameTime() const;
         EResourceManager&           GetResourceManager();
         EUIManager&                 GetUIManager();
+        EUIRenderer&                GetUIRenderer();
         ERef<EUIMainMenuBar>        GetMainMenuBar();
         ERef<EUIPanel>              GetPanelByName(const EString& name);
 
@@ -41,8 +42,7 @@ namespace Engine {
         EObjectProperty<EScene>&    GetActiveScene();
         void                        SetActiveScene(ERef<EScene> scene);
 
-        ImGuiContext*       GetMainImGuiContext() const;
-        GLFWwindow*         GetMainWindow() const;
+        void                        ResetImGuiContext();
 
         template <typename T, typename... Args>
         void QueueEvent(Args &&... args)
@@ -64,54 +64,5 @@ namespace Engine {
     public:
         static EApplication& gApp();
     };
-
-
-
-
-    namespace UI {
-        template <typename Resource>
-        static void RenderResourceField(const EString& label, EObjectProperty<Resource>* value)
-        {
-            ImGui::Text("%s", label.c_str());
-            if (!value->GetValue())
-            {
-                ImGui::Button("##RESOURCEDRAGIN", ImVec2(200, 200));
-            }
-            else
-            {
-                ImGui::Selectable((*value)->GetName().c_str(), false);
-            }
-            if (ImGui::BeginDragDropTarget())
-            {
-                if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("_RESOURCEDRAG"))
-                {
-                    EString nameIdent = EString((const char*)payload->Data);
-                    ERef<Resource> textureRes = EApplication::gApp().GetResourceManager().GetResource<Resource>(nameIdent);
-                    if (textureRes)
-                    {
-                        value->SetValue(textureRes);
-                    }
-                }
-                ImGui::EndDragDropTarget();
-            }
-        }
-        
-        template <>
-        inline void RenderInputField<EObjectProperty<ETexture2D>*>(const EString& label, EObjectProperty<ETexture2D>* value)
-        {
-            RenderResourceField(label, value);
-        }
-
-        template <>
-        inline void RenderInputField<EObjectProperty<EMesh>*>(const EString& label, EObjectProperty<EMesh>* value)
-        {
-            RenderResourceField(label, value);
-        }
-
-        template <>
-        inline void RenderInputField<EObjectProperty<ECamera>*>(const EString& label, EObjectProperty<ECamera>* value)
-        {
-        }
-    }
 
 }
