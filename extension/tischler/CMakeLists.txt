@@ -28,5 +28,10 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../plugins/)
 set(CMAKE_SHARED_LIBRARY_SUFFIX .epl)
 
 add_library(Tischler MODULE entry.cpp)
-target_link_libraries(Tischler ${CMAKE_CURRENT_SOURCE_DIR}/../../Debug/Engine.lib)
 target_link_libraries(Tischler ${EXTRA_LIBS})
+
+if (WIN32)
+target_link_libraries(Tischler ${CMAKE_CURRENT_SOURCE_DIR}/../../Debug/Engine.lib)
+else()
+target_link_libraries(Tischler ${CMAKE_CURRENT_SOURCE_DIR}/../../build/libEngine.dylib)
+endif(WIN32)
