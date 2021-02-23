@@ -39,6 +39,7 @@
 #include <atomic>
 #else
 #include <dlfcn.h>
+#include <unistd.h>
 #endif
 
 

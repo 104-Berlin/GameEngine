@@ -49,6 +49,10 @@ EApplication::~EApplication()
 
 void EApplication::Start(const ERef<EScene>& scene)
 {
+    std::cout << EFolder(EBaseFolder::APPLICATION).GetFullPath() << std::endl;
+    std::cout << EFolder(EBaseFolder::RES).GetFullPath() << std::endl;
+    std::cout << EFolder(EBaseFolder::PLUGIN).GetFullPath() << std::endl;
+    
     RegisterInternComponents();
     if (!scene)
     {
@@ -268,13 +272,21 @@ static EVector<u32> indices_2 = {
     2, 3, 0
 };
 
+static EVector<EMesh::EVertex> vertices_3 = {
+    {{-0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.0f,  0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+    {{ 0.5f, -0.5f, -1.0f}, {0, 0, 0}, {0, 0}},
+};
+
+static EVector<u32> indices_3 = {
+    0, 1, 2,
+};
+
 void EApplication::LoadDefaultMeshes() 
 {
-    ERef<EMesh> cubeMesh = EMakeRef(EMesh, "Cube", vertices, indices);
-    ERef<EMesh> planeMesh = EMakeRef(EMesh, "Plane", vertices_2, indices_2);
-
-    fResourceManager->AddLoadedResource(cubeMesh);
-    fResourceManager->AddLoadedResource(planeMesh);
+    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
+    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
+    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
 }
 
 void EApplication::TestRendering() 
