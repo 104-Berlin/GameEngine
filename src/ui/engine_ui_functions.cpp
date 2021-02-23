@@ -100,5 +100,6 @@ ERef<EUIField> UI::CreateInputField_Mesh(const EString& label, EObjectProperty<E
     result->OnValueChange([property](EMeshChangeEvent event){
         property->SetValue(event.Value);
     });
+    result->SetMesh(property->GetValue());
     return result;
 }
