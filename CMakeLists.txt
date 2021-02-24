@@ -10,10 +10,6 @@ set(CMAKE_SYSTEM_VERSION 10.0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/include
-                    ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui
-                    ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
-                    ${CMAKE_CURRENT_SOURCE_DIR}/src )
 
 
 set(BUILD_SHARED_LIBS TRUE)
@@ -23,12 +19,12 @@ add_subdirectory(deps/glfw)
 find_package(OpenGL)
 
 if (WIN32)
-add_compile_definitions(EWIN)
+set(COMPILE_DEF ${COMPILE_DEF} EWIN)
 elseif(APPLE)
-add_compile_definitions(EMAC)
+set(COMPILE_DEF ${COMPILE_DEF} EMAC)
 endif()
 
-add_compile_definitions(EEXPORT)
+set(COMPILE_DEF ${COMPILE_DEF} EEXPORT)
 
 if (APPLE)
 include_directories( /System/Library/Frameworks )
@@ -62,9 +58,16 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
 add_library(Engine SHARED ${ENGINE_SRC_FILES}
                           ${ENGINE_MAC_SRC_FILES})
 
+
+
+target_include_directories(Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/include
+                            ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui
+                            ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
+                            ${CMAKE_CURRENT_SOURCE_DIR}/src )
+
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
-target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI)
+target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI ${COMPILE_DEF})
 
 if (WIN32)
 target_link_libraries(Engine opengl32)
