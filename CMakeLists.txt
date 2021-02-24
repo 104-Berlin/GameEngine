@@ -10,10 +10,10 @@ set(CMAKE_SYSTEM_VERSION 10.0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
-include_directories(deps/glfw/include
-                    deps/imgui
-                    glad/include
-                    ./src )
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui
+                    ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
+                    ${CMAKE_CURRENT_SOURCE_DIR}/src )
 
 
 set(BUILD_SHARED_LIBS TRUE)
