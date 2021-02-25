@@ -40,7 +40,7 @@ bool ESprite::OnLoad()
 {
     fVertexArray = EVertexArray::Create();
     fVertexBuffer = EVertexBuffer::Create(sprite_vertex_data.data(), sprite_vertex_data.size() * sizeof(ESprite::EVertex));
-    fIndexBuffer = EIndexBuffer::Create(sprite_index_data.data(), sprite_index_data.size());
+    fIndexBuffer = EIndexBuffer::Create(sprite_index_data.data(), sprite_index_data.size() * sizeof(u32), sprite_index_data.size());
 
     EBufferLayout layout{   EBufferElement(EShaderDataType::Float2, "Position", false),
                             EBufferElement(EShaderDataType::Float2, "TexCoords", false)};

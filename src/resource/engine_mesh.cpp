@@ -81,7 +81,7 @@ void EMesh::Create(const EVector<EVertex>& vertices, const EVector<u32>& indices
                             EBufferElement(EShaderDataType::Float2, "TEXCOORD") };
     vb->SetLayout(layout);
 
-    ERef<EIndexBuffer> ib = EIndexBuffer::Create(indices.data(), indices.size());
+    ERef<EIndexBuffer> ib = EIndexBuffer::Create(indices.data(), indices.size() * sizeof(u32), indices.size());
 
     fVertexArray->AddVertexBuffer(vb);
     fVertexArray->SetIndexBuffer(ib);

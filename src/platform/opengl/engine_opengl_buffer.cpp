@@ -99,7 +99,7 @@ namespace Engine {
 		})
 	}
 
-	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const u32* data, u32 count, EBufferUsage usage)
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const void* data, u32 size, u32 count, EBufferUsage usage)
 		: EIndexBuffer(usage), m_Count(count)
 	{
 		IN_RENDER_S3(data, count, usage, {

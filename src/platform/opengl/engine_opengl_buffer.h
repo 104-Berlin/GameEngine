@@ -53,7 +53,7 @@ namespace Engine {
 	{
 	public:
 		EOpenGLIndexBuffer(EBufferUsage usage = EBufferUsage::STREAM_DRAW);
-		EOpenGLIndexBuffer(const u32* data, u32 count, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
+		EOpenGLIndexBuffer(const void* data, u32 size, u32 count, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		~EOpenGLIndexBuffer();
 
 		virtual void Bind() const override;

@@ -188,7 +188,7 @@ namespace Engine {
 		virtual u32 GetCount() const = 0;
 
 		static ERef<EIndexBuffer> Create(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
-		static ERef<EIndexBuffer> Create(const u32* indices, u32 count);
+		static ERef<EIndexBuffer> Create(const void* indices, u32 size, u32 count);
 	};
 
 	class EVertexArray

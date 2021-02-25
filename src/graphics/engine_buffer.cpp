@@ -52,13 +52,13 @@ namespace Engine {
 		return nullptr;
 	}
 
-	ERef<EIndexBuffer> EIndexBuffer::Create(const u32* data, u32 count)
+	ERef<EIndexBuffer> EIndexBuffer::Create(const void* data, u32 size, u32 count)
 	{
 		//TODO: Add ASSERT
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:	return ERef<EOpenGLIndexBuffer>(new EOpenGLIndexBuffer(data, count));
+		case ERenderingType::OpenGL:	return ERef<EOpenGLIndexBuffer>(new EOpenGLIndexBuffer(data, size, count));
 		case ERenderingType::None:		break;
 		}
 		return nullptr;

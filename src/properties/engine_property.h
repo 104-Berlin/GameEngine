@@ -67,8 +67,6 @@ namespace Engine {
         void SetValue(const Type& value)
         {
             if (value == *fValue) { return; }
-            
-            std::cout << "Changing value \"" << GetPropertyName() << "\"" << std::endl;
 
             for (const auto& f : fBeforeChangeCallbacks) {f.second();}
 
