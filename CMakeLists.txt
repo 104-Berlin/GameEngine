@@ -60,10 +60,10 @@ add_library(Engine SHARED ${ENGINE_SRC_FILES}
 
 
 
-target_include_directories(Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/include
-                            ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui
-                            ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
-                            ${CMAKE_CURRENT_SOURCE_DIR}/src )
+target_include_directories(Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/include/
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/deps/imgui/
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/glad/include/
+                                        ${CMAKE_CURRENT_SOURCE_DIR}/src/ )
 
 target_link_libraries(Engine ${EXTRA_LIBS})
 target_link_libraries(Engine glfw)
