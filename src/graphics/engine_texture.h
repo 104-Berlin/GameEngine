@@ -9,7 +9,7 @@ namespace Engine {
 		RGBA = 2
 	};
 
-	class ETexture : public EResource
+	E_API class ETexture : public EResource
 	{
 	public:
 		ETexture(const EString& filePath) : EResource(filePath) {}
@@ -27,7 +27,7 @@ namespace Engine {
 		virtual bool OnLoad() = 0;
 	};
 
-	class ETexture2D : public ETexture
+	E_API class ETexture2D : public ETexture
 	{
 	public:
 		ETexture2D(const EString& filePath) : ETexture(filePath) {}
@@ -36,7 +36,7 @@ namespace Engine {
 		static ERef<ETexture2D> Create(ETextureFormat format, u32 width, u32 height);
 	};
 
-	class ETextureCube : public ETexture
+	E_API class ETextureCube : public ETexture
 	{
 	public:
 		ETextureCube(const EString& filePath) : ETexture(filePath) {}

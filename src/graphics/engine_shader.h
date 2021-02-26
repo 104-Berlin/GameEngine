@@ -2,7 +2,7 @@
 
 namespace Engine {
 	
-	class EShader : public EResource
+	E_API class EShader : public EResource
 	{
 	public:
 		EShader(const EString& filePath);

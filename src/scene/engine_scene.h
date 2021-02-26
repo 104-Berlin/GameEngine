@@ -5,7 +5,7 @@ namespace Engine {
     struct EObject;
     class EComponentPanel;
 
-    class EScene
+    E_API class EScene
     {
         using ObjectCallback = std::function<void(EObject)>;
     private:

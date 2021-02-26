@@ -5,7 +5,7 @@ namespace Engine {
 
     typedef std::function<void()> EChangeFunc;
 
-    class EBaseProperty
+    E_API class EBaseProperty
     {
     protected:
         EString                 fName;
@@ -30,7 +30,7 @@ namespace Engine {
         // void RemoveEventAfterChange(EEventPosition p);
     };
 
-    class EObjectRef : public EBaseProperty
+    E_API class EObjectRef : public EBaseProperty
     {
     private:
         EObject*    fObject;

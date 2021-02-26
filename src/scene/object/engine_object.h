@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EObject
+    E_API class EObject
     {
     private:
         EScene*             fScene = nullptr;

@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EResource
+    E_API class EResource
     {
     protected:
         EFile fFile;

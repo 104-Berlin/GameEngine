@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EResourceManager
+    E_API class EResourceManager
     {
         using ResourceMap = EUnorderedMap<EString, ERef<EResource>>;
         using WorkFinishedFunction = std::function<void()>;

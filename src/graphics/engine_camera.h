@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-	class ECamera
+	E_API class ECamera
 	{
 	public:
 		ECamera(const glm::mat4& projectionMatrix);

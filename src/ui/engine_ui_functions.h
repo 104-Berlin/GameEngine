@@ -3,19 +3,19 @@
 namespace Engine {
     class EUIField;
     namespace UI {
-        bool IsItemActiveLastFrame();
-        bool IsItemJustReleased();
+        E_API bool IsItemActiveLastFrame();
+        E_API bool IsItemJustReleased();
         
 
-        ERef<EUIField> CreateInputField_Bool(const EString& label, EProperty<bool>* property);
-        ERef<EUIField> CreateInputField_Float(const EString& label, EProperty<float>* property);
-        ERef<EUIField> CreateInputField_Double(const EString& label, EProperty<double>* property);
-        ERef<EUIField> CreateInputField_I32(const EString& label, EProperty<i32>* property);
-        ERef<EUIField> CreateInputField_Vec3(const EString& label, EProperty<EVec3>* property);
-        ERef<EUIField> CreateInputField_Vec4(const EString& label, EProperty<EVec4>* property);
-        ERef<EUIField> CreateInputField_String(const EString& label, EProperty<EString>* property);
-        ERef<EUIField> CreateInputField_UUID(const EString& label, EProperty<EUUID>* property);
-        ERef<EUIField> CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property);
+        E_API ERef<EUIField> CreateInputField_Bool(const EString& label, EProperty<bool>* property);
+        E_API ERef<EUIField> CreateInputField_Float(const EString& label, EProperty<float>* property);
+        E_API ERef<EUIField> CreateInputField_Double(const EString& label, EProperty<double>* property);
+        E_API ERef<EUIField> CreateInputField_I32(const EString& label, EProperty<i32>* property);
+        E_API ERef<EUIField> CreateInputField_Vec3(const EString& label, EProperty<EVec3>* property);
+        E_API ERef<EUIField> CreateInputField_Vec4(const EString& label, EProperty<EVec4>* property);
+        E_API ERef<EUIField> CreateInputField_String(const EString& label, EProperty<EString>* property);
+        E_API ERef<EUIField> CreateInputField_UUID(const EString& label, EProperty<EUUID>* property);
+        E_API ERef<EUIField> CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property);
 
         template <typename T>
         inline ERef<EUIField> CreateInputField(const EString& label, T property);

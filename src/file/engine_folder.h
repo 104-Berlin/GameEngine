@@ -14,7 +14,7 @@ namespace Engine {
     constexpr i32 EFolderOptions_None = 0;
     constexpr i32 EFolderOptions_CreateIfNotExist = BIT(0);
 
-    class EFolder
+    E_API class EFolder
     {
     public:
     private:

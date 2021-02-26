@@ -28,7 +28,7 @@ namespace Engine {
     {
         EVector<ComponentDescription*> Descriptions;
     };
-    class EPanelComponentData
+    E_API class EPanelComponentData
     {
     private:
         EVector<ComponentDescription*> sComponentDescriptions;

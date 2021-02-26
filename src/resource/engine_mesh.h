@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-    class EMesh : public EResource
+    E_API class EMesh : public EResource
     {
     public:
         struct EVertex

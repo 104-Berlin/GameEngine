@@ -97,7 +97,7 @@ namespace Engine {
 		}
 	};
 
-	class EBufferLayout
+	E_API class EBufferLayout
 	{
 	public:
 		EBufferLayout() {}
@@ -145,7 +145,7 @@ namespace Engine {
 		DYNAMIC_COPY
 	};
 
-	class EVertexBuffer
+	E_API class EVertexBuffer
 	{
 	protected:
 		EBufferUsage fBufferUsage;
@@ -171,7 +171,7 @@ namespace Engine {
 		static ERef<EVertexBuffer> Create(const void* data, u32 size);
 	};
 
-	class EIndexBuffer
+	E_API class EIndexBuffer
 	{
 	protected:
 		EBufferUsage fBufferUsage;
@@ -191,7 +191,7 @@ namespace Engine {
 		static ERef<EIndexBuffer> Create(const void* indices, u32 size, u32 count);
 	};
 
-	class EVertexArray
+	E_API class EVertexArray
 	{
 	public:
 		virtual ~EVertexArray() {}

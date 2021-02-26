@@ -8,7 +8,7 @@ namespace Engine {
         EUIManager&          uiManager;
     };
 
-    class EExtension
+    E_API class EExtension
     {
     public:
         EExtension(const EString& pluginName);
@@ -26,7 +26,7 @@ namespace Engine {
 #endif
     };
 
-    class EExtensionManager
+    E_API class EExtensionManager
     {
     private:
         EVector<EExtension*> fLoadedExtensions;
