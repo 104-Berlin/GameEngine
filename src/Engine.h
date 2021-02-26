@@ -15,11 +15,13 @@
 
 
 // ------------------------------------------------------------------ 
+#include "core/engine_macro_helper.h"
 
 #include "predefined_classes.h"
 
 #include "util/engine_timer.h"
 
+#include "file/engine_shared_buffer.h"
 #include "file/engine_folder.h"
 #include "file/engine_file.h"
 #include "platform/engine_platform.h"

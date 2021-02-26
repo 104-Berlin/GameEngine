@@ -21,13 +21,13 @@ namespace Engine {
 		return nullptr;
 	}
 	
-	ERef<EVertexBuffer> EVertexBuffer::Create(const void* data, u32 size)
+	ERef<EVertexBuffer> EVertexBuffer::Create(ESharedBuffer data)
 	{
 		//TODO: Add ASSERT
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:	return ERef<EOpenGLVertexBuffer>(new EOpenGLVertexBuffer(data, size));
+		case ERenderingType::OpenGL:	return ERef<EOpenGLVertexBuffer>(new EOpenGLVertexBuffer(data));
 		case ERenderingType::None:		break;
 		}
 		
@@ -52,13 +52,13 @@ namespace Engine {
 		return nullptr;
 	}
 
-	ERef<EIndexBuffer> EIndexBuffer::Create(const void* data, u32 size, u32 count)
+	ERef<EIndexBuffer> EIndexBuffer::Create(ESharedBuffer data)
 	{
 		//TODO: Add ASSERT
 		//IN_CORE_ASSERT((bool)ERenderContext, "No RenderAPI selected");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL:	return ERef<EOpenGLIndexBuffer>(new EOpenGLIndexBuffer(data, size, count));
+		case ERenderingType::OpenGL:	return ERef<EOpenGLIndexBuffer>(new EOpenGLIndexBuffer(data));
 		case ERenderingType::None:		break;
 		}
 		return nullptr;

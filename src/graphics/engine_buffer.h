@@ -164,11 +164,10 @@ namespace Engine {
 		// DO NOT Call this in a IN_RENDER({})
 		virtual void Unmap() = 0;
 
-
-		virtual void SetData(void* data, size_t dataSize) = 0;
+		virtual void SetData(ESharedBuffer data) = 0;
 
 		static ERef<EVertexBuffer> Create(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
-		static ERef<EVertexBuffer> Create(const void* data, u32 size);
+		static ERef<EVertexBuffer> Create(ESharedBuffer data);
 	};
 
 	class E_API EIndexBuffer
@@ -182,13 +181,12 @@ namespace Engine {
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual void SetData32(u32* data, u32 indexCount) = 0;
-		virtual void SetData16(u16* data, u32 indexCount) = 0;
-
 		virtual u32 GetCount() const = 0;
 
+		virtual void SetData(ESharedBuffer data) = 0;
+
 		static ERef<EIndexBuffer> Create(EBufferUsage usage = EBufferUsage::STATIC_DRAW);
-		static ERef<EIndexBuffer> Create(const void* indices, u32 size, u32 count);
+		static ERef<EIndexBuffer> Create(ESharedBuffer indices);
 	};
 
 	class E_API EVertexArray

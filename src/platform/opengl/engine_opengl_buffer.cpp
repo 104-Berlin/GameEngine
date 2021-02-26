@@ -30,13 +30,13 @@ namespace Engine {
 	}
 
 	
-	EOpenGLVertexBuffer::EOpenGLVertexBuffer(const void* data, u32 size, EBufferUsage usage)
+	EOpenGLVertexBuffer::EOpenGLVertexBuffer(ESharedBuffer data, EBufferUsage usage)
 		: EVertexBuffer(usage)
 	{
-		IN_RENDER_S3(data, size, usage, {
+		IN_RENDER_S2(data, usage, {
 				glCall(glGenBuffers(1, &self->m_RendererID));
 				glCall(glBindBuffer(GL_ARRAY_BUFFER, self->m_RendererID));
-				glCall(glBufferData(GL_ARRAY_BUFFER, size, data, GetGLBufferUsage(usage)));
+				glCall(glBufferData(GL_ARRAY_BUFFER, data.GetSizeInByte(), data.Data<void>(), GetGLBufferUsage(usage)));
 			})
 	}
 
@@ -65,16 +65,14 @@ namespace Engine {
 		glCall(glUnmapBuffer(GL_ARRAY_BUFFER));
 	}
 	
-	void EOpenGLVertexBuffer::SetData(void* data, size_t dataSize) 
+	void EOpenGLVertexBuffer::SetData(ESharedBuffer data) 
 	{
 		Bind();
-		// Propbably copy the data?
-		IN_RENDER_S2(data, dataSize, {
-			glCall(glBufferData(GL_ARRAY_BUFFER, dataSize, data, GetGLBufferUsage(self->fBufferUsage)));
+		IN_RENDER_S1(data, {
+			glCall(glBufferData(GL_ARRAY_BUFFER, data.GetSizeInByte(), data.Data(), GetGLBufferUsage(self->fBufferUsage)));
 		})
 	}
-
-
+	
 
 	void EOpenGLVertexBuffer::PrivBind() const 
 	{
@@ -99,13 +97,13 @@ namespace Engine {
 		})
 	}
 
-	EOpenGLIndexBuffer::EOpenGLIndexBuffer(const void* data, u32 size, u32 count, EBufferUsage usage)
-		: EIndexBuffer(usage), m_Count(count)
+	EOpenGLIndexBuffer::EOpenGLIndexBuffer(ESharedBuffer data, EBufferUsage usage)
+		: EIndexBuffer(usage), m_Count(data.GetElementCount())
 	{
-		IN_RENDER_S3(data, count, usage, {
+		IN_RENDER_S2(data, usage, {
 				glCall(glGenBuffers(1, &self->m_RendererID));
 				glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, self->m_RendererID));
-				glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(u32), data, GetGLBufferUsage(usage)));
+                glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.GetSizeInByte(), data.Data(), GetGLBufferUsage(usage)));
 			})
 	}
 
@@ -133,24 +131,14 @@ namespace Engine {
 #endif
 	}
 	
-	void EOpenGLIndexBuffer::SetData32(u32* data, u32 indexCount) 
+	void EOpenGLIndexBuffer::SetData(ESharedBuffer data) 
 	{
 		Bind();
-		m_Count = indexCount;
-		IN_RENDER_S2(data, indexCount, {
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u32) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
+		IN_RENDER_S1(data, {
+			glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.GetSizeInByte(), data.Data(), GetGLBufferUsage(self->fBufferUsage)));
 		})
 	}
 	
-	void EOpenGLIndexBuffer::SetData16(u16* data, u32 indexCount) 
-	{
-		Bind();
-		m_Count = indexCount;
-		IN_RENDER_S2(data, indexCount, {
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(u16) * indexCount, data, GetGLBufferUsage(self->fBufferUsage));
-		})
-	}
-
 EOpenGLVertexArray::EOpenGLVertexArray()
 {
 	fIndexBuffer = nullptr;

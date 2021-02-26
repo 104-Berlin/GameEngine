@@ -63,6 +63,8 @@ using EMap = std::map<K, V>;
 template <typename K, typename V, class Hash = std::hash<K>, class Pred = std::equal_to<K>, class Alloc = std::allocator< std::pair<const K, V>>>
 using EUnorderedMap = std::unordered_map<K, V, Hash, Pred, Alloc>;
 
+template <typename T>
+using EQueue = std::queue<T>;
 
 template <typename T>
 using EScope = std::unique_ptr<T>;

@@ -30,7 +30,7 @@ namespace Engine {
 	{
 	public:
 		EOpenGLVertexBuffer(EBufferUsage usage = EBufferUsage::STREAM_DRAW);
-		EOpenGLVertexBuffer(const void* data, u32 size, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
+		EOpenGLVertexBuffer(ESharedBuffer data, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		~EOpenGLVertexBuffer();
 
 		virtual void Bind() const override;
@@ -39,7 +39,7 @@ namespace Engine {
 		virtual void* Map() override;
 		virtual void Unmap() override;
 
-		virtual void SetData(void* data, size_t dataSize) override;
+		virtual void SetData(ESharedBuffer data) override;
 
 		virtual const EBufferLayout& GetLayout() const override { return m_Layout; }
 		virtual void SetLayout(const EBufferLayout& layout) override { m_Layout = layout; }
@@ -53,16 +53,15 @@ namespace Engine {
 	{
 	public:
 		EOpenGLIndexBuffer(EBufferUsage usage = EBufferUsage::STREAM_DRAW);
-		EOpenGLIndexBuffer(const void* data, u32 size, u32 count, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
+		EOpenGLIndexBuffer(ESharedBuffer data, EBufferUsage usage = EBufferUsage::STATIC_DRAW);
 		~EOpenGLIndexBuffer();
 
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		virtual u32 GetCount() const override { return m_Count; }
+		virtual void SetData(ESharedBuffer data) override;
 
-		virtual void SetData32(u32* data, u32 indexCount) override;
-		virtual void SetData16(u16* data, u32 indexCount) override;
+		virtual u32 GetCount() const override { return m_Count; }
 	private:
 		u32 m_RendererID = 0;
 		u32 m_Count;

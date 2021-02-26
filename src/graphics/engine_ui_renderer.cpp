@@ -209,26 +209,15 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
 
     ImVec2 clip_off = drawData->DisplayPos;         // (0,0) unless using multi-viewports
     ImVec2 clip_scale = drawData->FramebufferScale; // (1,1) unless using retina display which are often (2,2)
-    
+
+    fVertexArray->Bind();
+
     for (int n = 0; n < drawData->CmdListsCount; n++)
     {
         const ImDrawList* cmd_list = drawData->CmdLists[n];
 
-        ERef<EVertexArray> vertexArray = EVertexArray::Create();
-        vertexArray->Bind();
-        ERef<EVertexBuffer> vertexBuffer = EVertexBuffer::Create(cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.size_in_bytes());
-        ERef<EIndexBuffer> indexBuffer = EIndexBuffer::Create(cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.size_in_bytes(), cmd_list->IdxBuffer.size());
-
-        EBufferLayout bl = {
-            EBufferElement(EShaderDataType::Float2, "POSITION"),
-            EBufferElement(EShaderDataType::Float2, "UV"),
-            EBufferElement(EShaderDataType::Byte4, "COLOR", true)
-        };
-        vertexBuffer->SetLayout(bl);
-
-        vertexArray->AddVertexBuffer(vertexBuffer);
-        vertexArray->SetIndexBuffer(indexBuffer);
-        //printf("Sizeof imWchar: %d\n", sizeof(ImWchar));
+        fVertexBuffer->SetData(ESharedBuffer().InitWith<ImDrawVert>((void*) cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.size_in_bytes()));
+        fIndexBuffer->SetData(ESharedBuffer().InitWith<ImWchar>((void*) cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.size_in_bytes()));
         
 
         for (int cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++)
@@ -269,7 +258,7 @@ void EUIRenderer::DrawData(ImDrawData* drawData)
                     u32 indexOffset = pcmd->IdxOffset;
                     u32 elementCount = pcmd->ElemCount;
 
-                    IN_RENDER3(indexOffset, elementCount, vertexArray, {
+                    IN_RENDER2(indexOffset, elementCount, {
                         glDrawElements(GL_TRIANGLES, (GLsizei)elementCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, (void*)(intptr_t)(indexOffset * sizeof(ImDrawIdx)));
                     })
                 }
@@ -317,6 +306,20 @@ void EUIRenderer::ResetRenderState(ImDrawData* drawData, int fbWidth, int fbHeig
 
 void EUIRenderer::CreateRenderingStorage() 
 {
+    fVertexArray = EVertexArray::Create();
+    fVertexBuffer = EVertexBuffer::Create(EBufferUsage::STREAM_DRAW);
+    fIndexBuffer = EIndexBuffer::Create(EBufferUsage::STREAM_DRAW);
+
+    EBufferLayout bl = {
+        EBufferElement(EShaderDataType::Float2, "POSITION"),
+        EBufferElement(EShaderDataType::Float2, "UV"),
+        EBufferElement(EShaderDataType::Byte4, "COLOR", true)
+    };
+    fVertexBuffer->SetLayout(bl);
+
+    fVertexArray->AddVertexBuffer(fVertexBuffer);
+    fVertexArray->SetIndexBuffer(fIndexBuffer);
+
     fShader = EShader::Create(vertex_shader, fragment_shader);
 
     CreateFontAtlas();

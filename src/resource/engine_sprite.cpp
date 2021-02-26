@@ -39,8 +39,8 @@ void ESprite::Draw()
 bool ESprite::OnLoad()
 {
     fVertexArray = EVertexArray::Create();
-    fVertexBuffer = EVertexBuffer::Create(sprite_vertex_data.data(), sprite_vertex_data.size() * sizeof(ESprite::EVertex));
-    fIndexBuffer = EIndexBuffer::Create(sprite_index_data.data(), sprite_index_data.size() * sizeof(u32), sprite_index_data.size());
+    fVertexBuffer = EVertexBuffer::Create(ESharedBuffer().InitWith<EVertex>(sprite_vertex_data.data(), sprite_vertex_data.size() * sizeof(EVertex)));
+    fIndexBuffer = EIndexBuffer::Create(ESharedBuffer().InitWith<u32>(sprite_index_data.data(), sprite_index_data.size() * sizeof(u32)));
 
     EBufferLayout layout{   EBufferElement(EShaderDataType::Float2, "Position", false),
                             EBufferElement(EShaderDataType::Float2, "TexCoords", false)};
