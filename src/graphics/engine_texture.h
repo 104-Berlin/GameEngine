@@ -36,7 +36,7 @@ namespace Engine {
 		static ERef<ETexture2D> Create(ETextureFormat format, u32 width, u32 height);
 	};
 
-	E_API class ETextureCube : public ETexture
+	class E_API ETextureCube : public ETexture
 	{
 	public:
 		ETextureCube(const EString& filePath) : ETexture(filePath) {}

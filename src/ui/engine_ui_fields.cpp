@@ -557,7 +557,7 @@ bool EUIViewport::OnRender()
         {
             fRenderFunction(fViewportWidth, fViewportHeight);
         }
-        ImGui::Image((void*)(u64)fFrameBuffer->GetColorAttachment(), viewportSize, { 0, 1 }, { 1, 0 });
+        ImGui::Image((void*)(u64)fFrameBuffer->GetColorAttachment(), viewportSize);
         fFrameBuffer->Unbind();
     }
     return true;
