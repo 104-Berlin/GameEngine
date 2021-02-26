@@ -203,7 +203,7 @@ namespace ApplicationPanels {
                 ETransformComponent& cameraTransformComponent = object.GetComponent<ETransformComponent>();
                 if (cameraComponent.Active)
                 {
-                    cameraComponent.Camera->SetProjectionMatrix(glm::perspective(30.0f, ((float)width) / ((float)height), 0.0001f, 100000.0f));
+                    cameraComponent.Camera->SetProjectionMatrix(glm::perspective(cameraComponent.FOV.GetValue(), ((float)width) / ((float)height), 0.0001f, 100000.0f));
                     ERenderer::Begin(cameraComponent.Camera, glm::inverse((EMat4)cameraTransformComponent), {}, width, height);
                     for (EEntity entity : EApplication::gApp().GetActiveScene()->view<EMeshComponent, ETransformComponent>())
                     {

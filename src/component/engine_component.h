@@ -86,18 +86,21 @@ namespace Engine {
 
         REFLACTABLE(
             (EObjectProperty<ECamera>, Camera),
+            (EProperty<float>, FOV),
             (EProperty<bool>, Active)
         )
 
         ECameraComponent()
         {
             Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
+            FOV = 30;
         }
 
         ECameraComponent(bool active)
             : ECameraComponent()
         {
             Active.SetValue(active);
+            FOV = 30;
             Camera.SetValue(EMakeRef(ECamera, glm::perspective(30.0f, 16.0f / 9.0f, 0.0001f, 100000.0f)));
         }
         ECameraComponent(const ECameraComponent&) = default;

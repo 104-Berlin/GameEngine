@@ -2,8 +2,6 @@
 
 namespace Engine {
 
-	ERenderer* ERenderer::s_Instance = nullptr;
-
 
 const char* vertex_shader_src = ""
 "#version 330 core\n"
@@ -50,20 +48,20 @@ const char* fragment_shader_src = ""
 
 	void ERenderer::Init()
 	{
-		s_Instance = new ERenderer();
-
-		s_Instance->fShader = EShader::Create(vertex_shader_src, fragment_shader_src);
+		Get().fShader = EShader::Create(vertex_shader_src, fragment_shader_src);
 
 		CreateDefaults();
 	}
 	
+	ERenderer& ERenderer::Get()
+	{
+		static ERenderer renderer;
+		return renderer;
+	}
+	
 	void ERenderer::CleanUp() 
 	{
-		if (s_Instance)
-		{
-			delete s_Instance;
-			s_Instance = nullptr;
-		}
+		Get().fShader = nullptr;
 	}
 	
 	void ERenderer::RenderVertexArray(const ERef<EVertexArray>& vertexArray) 
@@ -87,29 +85,24 @@ const char* fragment_shader_src = ""
 		ERenderContext::s_Instance->SetClearColor({ 1.0f, 0.6f, 0.6f, 1.0f });
 		ERenderContext::s_Instance->Clear();
 
-        s_Instance->fViewProjectionMatrix = camera->GetProjectionMatrix() * viewMatrix;
-		s_Instance->fCameraPosition = EVec3();
+        Get().fViewProjectionMatrix = camera->GetProjectionMatrix() * viewMatrix;
+		Get().fCameraPosition = EVec3();
 		//Make that better
-		s_Instance->fLightMap.clear();
-		s_Instance->fLightMap = lightMap;
+		Get().fLightMap.clear();
+		Get().fLightMap = lightMap;
 	}
 
 	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform)
 	{
-        if (!s_Instance)
-		{
-			std::cout << "No render instance set. Cant draw anything" << std::endl;
-			return;
-		}
-		if (!s_Instance->fShader)
+		if (!Get().fShader)
 		{
 			std::cout << "The renderer has no shader. To render to" << std::endl;
 			return;
 		}
 
-		s_Instance->fShader->Bind();
-		s_Instance->fShader->SetUniformMat4("vp_matrix", s_Instance->fViewProjectionMatrix);
-		s_Instance->fShader->SetUniformMat4("ml_matrix", transform);
+		Get().fShader->Bind();
+		Get().fShader->SetUniformMat4("vp_matrix", Get().fViewProjectionMatrix);
+		Get().fShader->SetUniformMat4("ml_matrix", transform);
 
 		RenderVertexArray(vertexArray);
 	}
@@ -156,10 +149,7 @@ const char* fragment_shader_src = ""
 */
 	void ERenderer::WaitAndRender()
 	{
-		if (s_Instance)
-		{
-			s_Instance->fCommandQueue.Execute();
-		}
+		Get().fCommandQueue.Execute();
 	}
 
 }

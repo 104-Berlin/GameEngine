@@ -90,7 +90,7 @@ namespace Engine {
 
     namespace JSHelper {
 
-        bool HasParam(const EJson& ref, const EString& param);
+        E_API bool HasParam(const EJson& ref, const EString& param);
 
 
 
@@ -138,17 +138,17 @@ namespace Engine {
             void operator() (const char* name, Field& field);
         };
 
-        EJson ConvertValue(const bool value);
-        EJson ConvertValue(const i32 value);
-        EJson ConvertValue(const float value);
-        EJson ConvertValue(const double value);
-        EJson ConvertValue(const EString& value);
-        EJson ConvertValue(const EUUID& value);
-        EJson ConvertValue(const EVec2& value);
-        EJson ConvertValue(const EVec3& value);
-        EJson ConvertValue(const EVec4& value);
+        E_API EJson ConvertValue(const bool value);
+        E_API EJson ConvertValue(const i32 value);
+        E_API EJson ConvertValue(const float value);
+        E_API EJson ConvertValue(const double value);
+        E_API EJson ConvertValue(const EString& value);
+        E_API EJson ConvertValue(const EUUID& value);
+        E_API EJson ConvertValue(const EVec2& value);
+        E_API EJson ConvertValue(const EVec3& value);
+        E_API EJson ConvertValue(const EVec4& value);
 
-        EJson ConvertValue(EObject* object);
+        E_API EJson ConvertValue(EObject* object);
 
         template <typename T>
         auto ConvertValue(const T& value)
@@ -177,17 +177,17 @@ namespace Engine {
         }
 
 
-        void ConvertObject(const EJson& ref, bool* value);
-        void ConvertObject(const EJson& ref, i32* value);
-        void ConvertObject(const EJson& ref, float* value);
-        void ConvertObject(const EJson& ref, double* value);
-        void ConvertObject(const EJson& ref, EString* value);
-        void ConvertObject(const EJson& ref, EUUID* value);
-        void ConvertObject(const EJson& ref, EVec2* value);
-        void ConvertObject(const EJson& ref, EVec3* value);
-        void ConvertObject(const EJson& ref, EVec4* value);
+        E_API void ConvertObject(const EJson& ref, bool* value);
+        E_API void ConvertObject(const EJson& ref, i32* value);
+        E_API void ConvertObject(const EJson& ref, float* value);
+        E_API void ConvertObject(const EJson& ref, double* value);
+        E_API void ConvertObject(const EJson& ref, EString* value);
+        E_API void ConvertObject(const EJson& ref, EUUID* value);
+        E_API void ConvertObject(const EJson& ref, EVec2* value);
+        E_API void ConvertObject(const EJson& ref, EVec3* value);
+        E_API void ConvertObject(const EJson& ref, EVec4* value);
 
-        void ConvertObject(const EJson& ref, EObject* value);
+        E_API void ConvertObject(const EJson& ref, EObject* value);
 
         template <typename T>
         auto ConvertObject(const EJson& json_object, T* value)

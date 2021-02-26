@@ -3,7 +3,7 @@
 namespace Engine {
 	typedef void(*ERenderCommandFn)(void*);
 
-	class ERenderCommandQueue
+	class E_API ERenderCommandQueue
 	{
 	public:
 		ERenderCommandQueue();

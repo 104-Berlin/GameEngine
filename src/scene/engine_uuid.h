@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-	class EUUID
+	class E_API EUUID
 	{
 	public:
 		EUUID();

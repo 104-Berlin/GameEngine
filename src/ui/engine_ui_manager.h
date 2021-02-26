@@ -6,7 +6,7 @@ namespace Engine {
     {
         E_API void ResetImGuiState();
     }
-    class EUIManager
+    class E_API EUIManager
     {
     private:
         EVector<ERef<EUIPanel>>     fRegisteredPanels;

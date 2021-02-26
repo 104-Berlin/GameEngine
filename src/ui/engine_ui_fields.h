@@ -23,7 +23,7 @@ namespace Engine
         u32 NOTHING = 0;
     };
 
-    class EUIField : public std::enable_shared_from_this<EUIField>
+    class E_API EUIField : public std::enable_shared_from_this<EUIField>
     {
         using UpdateFunction = std::function<void(ERef<EUIField>)>;
         using DropFunction = std::function<void(EDragData)>;
@@ -76,18 +76,9 @@ namespace Engine
             fEventDispatcher.Connect<EUIClickEvent>(cb);
         }
 
-
-
-        /*template <typename Condidate, typename Type>
-        void SetOnClick(Type&& args)
-        {
-            fEventDispatcher.sink<EUIClickEvent>().connect<Condidate>(args);
-        }*/
-
-
     };
 
-    class EUILabel : public EUIField
+    class E_API EUILabel : public EUIField
     {
     public:
         EUILabel(const EString& label);
@@ -95,7 +86,7 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
-    class EUIContainer : public EUIField
+    class E_API EUIContainer : public EUIField
     {
     private:
         bool    fShow;
@@ -107,7 +98,7 @@ namespace Engine
         void SetShow(bool value = true);
     };
 
-    class EUIPanel : public EUIField
+    class E_API EUIPanel : public EUIField
     {
     private:
         bool            fOpen;
@@ -132,7 +123,7 @@ namespace Engine
         EString Value;
     };
     #define STRING_BUFFER_SIZE 255
-    class EUIInputFieldString : public EUIField
+    class E_API EUIInputFieldString : public EUIField
     {
     private:
         char        fValue[STRING_BUFFER_SIZE];
@@ -157,7 +148,7 @@ namespace Engine
         i32 Value;
     };
 
-    class EUIInputFieldInteger : public EUIField
+    class E_API EUIInputFieldInteger : public EUIField
     {
     private:
         i32     fValue;
@@ -182,7 +173,7 @@ namespace Engine
         float Value;
     };
 
-    class EUIInputFieldFloat : public EUIField
+    class E_API EUIInputFieldFloat : public EUIField
     {
     private:
         float   fValue;
@@ -205,7 +196,7 @@ namespace Engine
     {
         EVec2 Value;
     };
-    class EUIInputFieldFloat2 : public EUIField
+    class E_API EUIInputFieldFloat2 : public EUIField
     {
     private:
         EVec2   fValue;
@@ -229,7 +220,7 @@ namespace Engine
         EVec3 Value;
     };
 
-    class EUIInputFieldFloat3 : public EUIField
+    class E_API EUIInputFieldFloat3 : public EUIField
     {
     private:
         EVec3   fValue;
@@ -253,7 +244,7 @@ namespace Engine
         EVec4 Value;
     };
 
-    class EUIInputFieldFloat4 : public EUIField
+    class E_API EUIInputFieldFloat4 : public EUIField
     {
     private:
         EVec4   fValue;
@@ -276,7 +267,7 @@ namespace Engine
     {
         bool Value;
     };
-    class EUICheckbox : public EUIField
+    class E_API EUICheckbox : public EUIField
     {
     private:
         bool    fValue;
@@ -295,7 +286,7 @@ namespace Engine
         }
     };
 
-    class EUIMainMenuBar : public EUIField
+    class E_API EUIMainMenuBar : public EUIField
     {
     private:
         bool fOpen;
@@ -307,7 +298,7 @@ namespace Engine
         
     };
 
-    class EUIMenu : public EUIField
+    class E_API EUIMenu : public EUIField
     {
     private:
         bool    fOpen;
@@ -318,7 +309,7 @@ namespace Engine
         virtual void OnRenderEnd() override;
     };
 
-    class EUIContextMenu : public EUIField
+    class E_API EUIContextMenu : public EUIField
     {
     private:
         bool        fOpen;
@@ -329,7 +320,7 @@ namespace Engine
         virtual void OnRenderEnd() override;
     };
 
-    class EUIMenuItem : public EUIField
+    class E_API EUIMenuItem : public EUIField
     {
     public:
         EUIMenuItem(const EString& label);
@@ -337,7 +328,7 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
-    class EUISelectable : public EUIField
+    class E_API EUISelectable : public EUIField
     {
     public:
         EUISelectable(const EString& label);
@@ -346,7 +337,7 @@ namespace Engine
     };
 
 
-    class EUIViewport : public EUIField
+    class E_API EUIViewport : public EUIField
     {
         using RenderFunction = std::function<void(u32 screenWidth, u32 screenHeight)>;
     private:
@@ -367,7 +358,7 @@ namespace Engine
         ERef<EMesh> Value;
     };
 
-    class EUIMeshInput : public EUIField
+    class E_API EUIMeshInput : public EUIField
     {
     private:
         ERef<EFrameBuffer>  fFrameBuffer;
