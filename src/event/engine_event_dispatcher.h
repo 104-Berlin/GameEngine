@@ -4,7 +4,7 @@ namespace Engine {
 
 #define EVENT_TYPE(Type) typeid(Type).hash_code()
 
-    E_API class EEventDispatcher
+    class E_API EEventDispatcher
     {
         using EventType = size_t;
 

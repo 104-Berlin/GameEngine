@@ -17,7 +17,7 @@ namespace Engine {
         }
     }
 
-    E_API class EFile
+    class E_API EFile
     {
     private:
         EString fFilePath;

@@ -2,7 +2,7 @@
 
 namespace Engine {
 
-	E_API class ERenderer
+	class E_API ERenderer
 	{
 	public:
 		static void Init();

@@ -9,7 +9,7 @@ namespace Engine {
 		RGBA = 2
 	};
 
-	E_API class ETexture : public EResource
+	class E_API ETexture : public EResource
 	{
 	public:
 		ETexture(const EString& filePath) : EResource(filePath) {}
@@ -27,7 +27,7 @@ namespace Engine {
 		virtual bool OnLoad() = 0;
 	};
 
-	E_API class ETexture2D : public ETexture
+	class E_API ETexture2D : public ETexture
 	{
 	public:
 		ETexture2D(const EString& filePath) : ETexture(filePath) {}

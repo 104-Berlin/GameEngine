@@ -28,7 +28,7 @@ namespace Engine {
     {
         EVector<ComponentDescription*> Descriptions;
     };
-    E_API class EPanelComponentData
+    class E_API EPanelComponentData
     {
     private:
         EVector<ComponentDescription*> sComponentDescriptions;
@@ -96,7 +96,7 @@ namespace Engine {
 
 
     namespace ApplicationPanels {
-        void CreateDefaultApplicationPanels();
-        void CreateDefaultMainMenuBar();
+        E_API void CreateDefaultApplicationPanels();
+        E_API void CreateDefaultMainMenuBar();
     }
 }
