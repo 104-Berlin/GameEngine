@@ -34,7 +34,6 @@ private:
 
         virtual void Delete()
         {
-            std::cout << "Deleting shared buffer " << std::endl;
             delete [] (T*)fData;
         }
 

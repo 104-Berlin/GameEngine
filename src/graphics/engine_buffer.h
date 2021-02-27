@@ -201,6 +201,8 @@ namespace Engine {
 		virtual const ERef<EIndexBuffer>& GetIndexBuffer() const = 0;
 		virtual void SetIndexBuffer(const ERef<EIndexBuffer>& indexBuffer) = 0;
 
+		virtual void ResetAttributes() = 0;
+
 		static ERef<EVertexArray> Create();
 	};
 

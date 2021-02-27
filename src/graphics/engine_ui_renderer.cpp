@@ -48,7 +48,7 @@ struct ImGuiViewportDataGlfw
 
 static void Glfw_RenderWindow(ImGuiViewport* viewport, void*)
 {
-    ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
+    ESharedBuffer data = ESharedBuffer().InitWith<ImGuiViewportDataGlfw>(viewport->PlatformUserData, sizeof(ImGuiViewportDataGlfw));
     if (ERenderContext::Renderer == ERenderingType::OpenGL)
     {
         IN_RENDER1(data, {
@@ -59,12 +59,13 @@ static void Glfw_RenderWindow(ImGuiViewport* viewport, void*)
 
 static void Glfw_SwapBuffers(ImGuiViewport* viewport, void*)
 {
-    ImGuiViewportDataGlfw* data = (ImGuiViewportDataGlfw*)viewport->PlatformUserData;
+    ESharedBuffer data = ESharedBuffer().InitWith<ImGuiViewportDataGlfw>(viewport->PlatformUserData, sizeof(ImGuiViewportDataGlfw));
     if (ERenderContext::Renderer == ERenderingType::OpenGL)
     {
         IN_RENDER1(data, {
             glfwMakeContextCurrent(data->Window);
             glfwSwapBuffers(data->Window);
+            glfwSwapBuffers(data.Data<ImGuiViewportDataGlfw>()->Window);
         })
     }
 }
