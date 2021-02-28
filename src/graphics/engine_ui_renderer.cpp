@@ -52,7 +52,7 @@ static void Glfw_RenderWindow(ImGuiViewport* viewport, void*)
     if (ERenderContext::Renderer == ERenderingType::OpenGL)
     {
         IN_RENDER1(data, {
-            glfwMakeContextCurrent(data->Window);
+            glfwMakeContextCurrent(data.Data<ImGuiViewportDataGlfw>()->Window);
         })
     }
 }
@@ -63,8 +63,8 @@ static void Glfw_SwapBuffers(ImGuiViewport* viewport, void*)
     if (ERenderContext::Renderer == ERenderingType::OpenGL)
     {
         IN_RENDER1(data, {
-            glfwMakeContextCurrent(data->Window);
-            glfwSwapBuffers(data->Window);
+            glfwMakeContextCurrent(data.Data<ImGuiViewportDataGlfw>()->Window);
+            glfwSwapBuffers(data.Data<ImGuiViewportDataGlfw>()->Window);
             glfwSwapBuffers(data.Data<ImGuiViewportDataGlfw>()->Window);
         })
     }
