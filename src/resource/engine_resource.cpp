@@ -10,9 +10,14 @@ using namespace Engine;
 #endif
 
 EResource::EResource(const EString& path) 
-    : fFile(path)
+    : fFile(path), fEngineDir()
 {
     
+}
+
+void EResource::SetEngineDirectory(const EString& path) 
+{
+    fEngineDir = path;
 }
 
 EString EResource::GetFilePath() const
@@ -27,16 +32,12 @@ const EString& EResource::GetName() const
 
 EString EResource::GetNameIdent() const
 {
-    EString result = GetFilePath();
-    size_t rootDirEnd = result.find(ROOT_RES_DIR);
-    if (rootDirEnd != EString::npos)
-    {
-        return result.substr(rootDirEnd + std::strlen(ROOT_RES_DIR), result.length() - (rootDirEnd + std::strlen(ROOT_RES_DIR)));
-    }
-    else
-    {
-        return result;
-    }
+    return GetName() + fFile.GetFileExtension();
+}
+
+EString EResource::GetEnginePath() const
+{
+    return fEngineDir + GetNameIdent();
 }
 
 bool EResource::Load() 

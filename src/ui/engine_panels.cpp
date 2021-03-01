@@ -229,6 +229,7 @@ namespace ApplicationPanels {
     void CreateDefaultMainMenuBar() 
     {
         ERef<EUIMainMenuBar> mainMenuBar = EApplication::gApp().GetMainMenuBar();
+
         mainMenuBar->ClearChildren();
         ERef<EUIField> fileMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
@@ -236,7 +237,7 @@ namespace ApplicationPanels {
             EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
         });
         fileMenu->AddChild(EMakeRef(EUIMenuItem, "Open"))->SetOnClick([](){
-            EVector<EString> results = Platform::OpenFileDialog("Test", "", {});
+            EVector<EString> results = Platform::OpenFileDialog("Test", {".esc"});
             for (const EString& str : results)
             {
                 EFile file(str);
@@ -245,6 +246,18 @@ namespace ApplicationPanels {
                     EApplication::gApp().SetActiveScene(EFileReader::ReadScene(file));
                 }
                 break; // For now we can only load one scene. This will be fixed in the future
+            }
+        });
+        fileMenu->AddChild(EMakeRef(EUISeperator));
+        fileMenu->AddChild(EMakeRef(EUIMenuItem, "Import"))->SetOnClick([](){
+            EVector<EString> filesToImport = Platform::OpenFileDialog("Import Resource", {"png"});
+            for (const EString& str : filesToImport)
+            {
+                EFile file(str);
+                if (file.Exist())
+                {
+                    // Import File
+                }
             }
         });
 

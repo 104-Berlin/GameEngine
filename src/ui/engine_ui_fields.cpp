@@ -513,6 +513,20 @@ bool EUIMenuItem::OnRender()
 }
 
 // ----------------------------------------
+// Seperator
+EUISeperator::EUISeperator()
+    : EUIField("Serperator")
+{
+    
+}
+
+bool EUISeperator::OnRender() 
+{   
+    ImGui::Separator();
+    return true;
+}
+
+// ----------------------------------------
 // Selectable
 EUISelectable::EUISelectable(const EString& label) 
     : EUIField(label)

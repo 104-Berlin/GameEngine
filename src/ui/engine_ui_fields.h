@@ -328,6 +328,14 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
+    class E_API EUISeperator : public EUIField
+    {
+    public:
+        EUISeperator();
+
+        virtual bool OnRender() override;
+    };
+
     class E_API EUISelectable : public EUIField
     {
     public:
