@@ -13,7 +13,7 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
-    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr), fResourceManager(nullptr), fExtensionManager(nullptr), fUIManager(nullptr)
+    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr), fExtensionManager(nullptr), fUIManager(nullptr)
 {
     fFrameTime = 0;
     fMainWindow = nullptr;
@@ -29,10 +29,6 @@ EApplication::~EApplication()
     if (fUIRenderer)
     {
         delete fUIRenderer;
-    }
-    if (fResourceManager)
-    {
-        delete fResourceManager;
     }
     if (fExtensionManager)
     {
@@ -68,8 +64,6 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     // After regsiter intern panels
     SetUpMainMenuBar();
-    
-    fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
     fExtensionManager->LoadPluginFolder();    
 
 
@@ -79,7 +73,7 @@ void EApplication::Start(const ERef<EScene>& scene)
     cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
 
     fMeshObject = fActiveScene->CreateObject();
-    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>(Path::Join("intern", "Cube.rc")));
+    //fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>(Path::Join("Cube.rc")));
 
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
@@ -197,7 +191,6 @@ void EApplication::CreateMainWindow()
     fUIRenderer = new EUIRenderer();
     fUIRenderer->Init(fMainWindow);
 
-    fResourceManager = new EResourceManager();
     fExtensionManager = new EExtensionManager();
     fUIManager = new EUIManager();
 
@@ -284,9 +277,9 @@ static EVector<u32> indices_3 = {
 
 void EApplication::LoadDefaultMeshes() 
 {
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
+    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
+    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
+    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
 }
 
 void EApplication::TestRendering() 
@@ -360,11 +353,6 @@ void EApplication::CleanUp()
 double EApplication::GetFrameTime() const
 {
     return fFrameTime;
-}
-
-EResourceManager& EApplication::GetResourceManager() 
-{
-    return *fResourceManager;
 }
 
 EUIManager& EApplication::GetUIManager() 

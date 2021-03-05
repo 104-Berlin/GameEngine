@@ -32,7 +32,7 @@ const EString& EResource::GetName() const
 
 EString EResource::GetNameIdent() const
 {
-    return GetName() + fFile.GetFileExtension();
+    return GetName() + "." + fFile.GetFileExtension();
 }
 
 EString EResource::GetEnginePath() const

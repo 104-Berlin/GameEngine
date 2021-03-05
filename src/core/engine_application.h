@@ -11,7 +11,6 @@ namespace Engine {
         double                      fFrameTime;
 
         EExtensionManager*          fExtensionManager;
-        EResourceManager*           fResourceManager;
         EUIManager*                 fUIManager;
 
         EUIRenderer*                fUIRenderer;
@@ -32,7 +31,6 @@ namespace Engine {
         void CleanUp();
         
         double                      GetFrameTime() const;
-        EResourceManager&           GetResourceManager();
         EUIManager&                 GetUIManager();
         EUIRenderer&                GetUIRenderer();
         ERef<EUIMainMenuBar>        GetMainMenuBar();

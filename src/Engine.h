@@ -59,7 +59,6 @@
 #include "platform/opengl/engine_opengl_texture.h"
 
 #include "resource/engine_mesh.h"
-#include "resource/engine_sprite.h"
 
 
 

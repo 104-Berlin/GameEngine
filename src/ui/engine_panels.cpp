@@ -166,7 +166,7 @@ namespace ApplicationPanels {
         ERef<EUIPanel> resourcePanel = EMakeRef(EUIPanel, PANEL_NAME_RESOURCES);
         resourcePanel->SetUpdateFunction([](ERef<EUIField> uiField){
             uiField->ClearChildren();
-            for (auto& res : EApplication::gApp().GetResourceManager())
+            /*for (auto& res : EApplication::gApp().GetResourceManager())
             {
                 ERef<EUISelectable> selectable = EMakeRef(EUISelectable, res.first);
                 EDragData data;
@@ -175,11 +175,11 @@ namespace ApplicationPanels {
                 data.Size = res.first.length() + 1;
                 selectable->SetDragData(data);
                 uiField->AddChild(selectable);
-            }
+            }*/
         });
         
 
-        EApplication::gApp().GetResourceManager().SetOnWorkFinished([](){
+        EApplication::gApp().OnEvent<EResourceLoadEvent>([](){
             ERef<EUIPanel> resourcePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_RESOURCES);
             if (resourcePanel)
             {
@@ -210,7 +210,7 @@ namespace ApplicationPanels {
                         EObject object(entity, EApplication::gApp().GetActiveScene().GetValue().get());
                         EMeshComponent& meshComponent = object.GetComponent<EMeshComponent>();
                         ETransformComponent& transformComponent = object.GetComponent<ETransformComponent>();
-                        if (meshComponent.Mesh)
+                        if (meshComponent.Mesh.GetValue())
                         {
                             ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
                         }
