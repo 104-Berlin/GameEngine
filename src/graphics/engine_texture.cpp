@@ -1,5 +1,9 @@
 #include "Engine.h"
 
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "util/stb_image.h"
+
 namespace Engine {
 
 	ERef<ETexture2D> ETexture2D::Create(const EString& path, bool srgb)
@@ -36,6 +40,19 @@ namespace Engine {
 		case ERenderingType::None:		break;
 		}
 		return nullptr;
+	}
+	
+	ERef<ETexture2D> Engine_LoadTextureFromFileBuffer(EString name, ESharedBuffer fileBuffer) 
+	{
+		int width, height, channels;
+		std::cout << "Loading texture " << name << std::endl;
+
+		stbi_set_flip_vertically_on_load(false);
+		stbi_uc* imageData = stbi_load_from_memory(fileBuffer.Data<const stbi_uc>(), fileBuffer.GetSizeInByte(), &width, &height, &channels, STBI_rgb_alpha);
+
+		ERef<ETexture2D> result = ETexture2D::Create(ETextureFormat::RGBA, width, height);
+		result->SetTextureData(imageData, width, height);
+		return result;
 	}
 
 }

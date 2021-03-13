@@ -1,9 +1,5 @@
 #include "Engine.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "util/stb_image.h"
-
-
 namespace Engine {
 
 	static GLenum InfinitToOpenGLTextureFormat(ETextureFormat format)
@@ -64,7 +60,7 @@ namespace Engine {
 
 	bool EOpenGLTexture2D::OnLoad()
 	{
-		int width, height, channels;
+		/*int width, height, channels;
 		std::cout << "Loading texture " << GetName() << std::endl;
 		stbi_set_flip_vertically_on_load(false);
 		fImageData = stbi_load(GetFilePath().c_str(), &width, &height, &channels, STBI_rgb_alpha);
@@ -89,7 +85,7 @@ namespace Engine {
 				glCall(glBindTexture(GL_TEXTURE_2D, 0));
 
 				stbi_image_free(self->fImageData);
-			})
+			})*/
 		return true;
 	}
 
@@ -129,7 +125,7 @@ namespace Engine {
 
 	bool EOpenGLTextureCube::OnLoad()
 	{
-		int width, height, channels;
+		/*int width, height, channels;
 		stbi_set_flip_vertically_on_load(false);
 		fImageData = stbi_load(GetFilePath().c_str(), &width, &height, &channels, STBI_rgb);
 
@@ -211,7 +207,7 @@ namespace Engine {
 				delete[] faces[i];
 
 			stbi_image_free(self->fImageData);
-		})
+		})*/
 
 		return true;
 	}

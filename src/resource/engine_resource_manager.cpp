@@ -2,6 +2,26 @@
 
 using namespace Engine;
 
+const EVector<EResourceRegister::RegisterEntry>& EResourceRegister::GetRegisteredResourceTypes() const
+{
+    return fRegisteredResourceTypes;
+}
+
+
+void EResourceRegister::RegisterResource(const ESet<EString>& fileEndings, EResourceRegister::LoadFn loadFunction)
+{
+    RegisterEntry entry;
+    entry.FileEndings = fileEndings;
+    entry.LoadFunction = loadFunction;
+    fRegisteredResourceTypes.push_back(entry);  
+}
+
+EResourceRegister& EResourceRegister::data() 
+{
+    static EResourceRegister instance;
+    return instance;
+}
+
 
 EResourceManager::EResourceManager() 
     : fQueueMutex(), fIsRunning(true), fLoadingThread(std::bind(&EResourceManager::LoadingFunc, this))
@@ -38,8 +58,19 @@ void EResourceManager::LoadingFunc()
                 resourceFile.LoadToMemory();
                 ESharedBuffer resourceBuffer = resourceFile.GetBuffer();
                 // Get resource type from path ending
-
-                // 
+                EString fileEnding = resourceFile.GetFileExtension();
+                for (const auto& regsiteredType : EResourceRegister::data().GetRegisteredResourceTypes())
+                {
+                    if (regsiteredType.FileEndings.find(fileEnding) != regsiteredType.FileEndings.end())
+                    {
+                        if (regsiteredType.LoadFunction)
+                        {
+                            regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer);
+                        }
+                        break;
+                    }
+                }
+                // Run load function
             }
         }
         if (loadingQueueDidRun)

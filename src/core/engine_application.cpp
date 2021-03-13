@@ -61,6 +61,7 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     // First register intern panels bevore set up main menu, so the view menu is up to data
     RegisterInternPanels();
+    RegisterInternResources();
 
     // After regsiter intern panels
     SetUpMainMenuBar();
@@ -148,6 +149,11 @@ void EApplication::RegisterInternPanels()
     
     ApplicationPanels::CreateDefaultApplicationPanels();
 
+}
+
+void EApplication::RegisterInternResources() 
+{
+    EResourceRegister::data().RegisterResource({"png", "tga", "jpeg"}, &Engine_LoadTextureFromFileBuffer);
 }
 
 void EApplication::CreateMainWindow() 

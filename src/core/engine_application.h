@@ -59,6 +59,7 @@ namespace Engine {
         void SetUpMainMenuBar();
         void RegisterInternComponents();
         void RegisterInternPanels();
+        void RegisterInternResources();
 
         void CreateMainWindow();
 

@@ -2,6 +2,7 @@
 
 namespace Engine {
 
+
 	enum class ETextureFormat
 	{
 		None = 0,
@@ -43,5 +44,11 @@ namespace Engine {
 
 		static ERef<ETextureCube> Create(const EString& path, bool srgb = false);
 	};
+
+
+
+
+// Load Function for resource manager
+ERef<ETexture2D> Engine_LoadTextureFromFileBuffer(EString name, ESharedBuffer fileBuffer);
 
 }

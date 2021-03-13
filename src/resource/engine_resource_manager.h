@@ -2,7 +2,24 @@
 
 namespace Engine {
 
+    class E_API EResourceRegister
+    {
+    public:
+        using LoadFn = std::function<ERef<EResource>(EString, ESharedBuffer)>;
 
+        struct RegisterEntry
+        {
+            ESet<EString> FileEndings;
+            LoadFn LoadFunction;
+        };
+    private:
+        EVector<RegisterEntry> fRegisteredResourceTypes;
+    public:
+        const EVector<RegisterEntry>& GetRegisteredResourceTypes() const;
+        void RegisterResource(const ESet<EString>& fileEndings, LoadFn loadFunction);
+
+        static EResourceRegister& data();
+    };
 
 
 
