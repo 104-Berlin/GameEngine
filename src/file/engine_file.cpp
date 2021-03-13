@@ -132,3 +132,8 @@ void EFile::DisposeMemory()
     }
 }
 
+EFileBuffer EFile::GetBuffer() const
+{
+    return fFileBuffer;
+}
+

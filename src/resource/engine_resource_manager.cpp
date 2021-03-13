@@ -32,7 +32,15 @@ void EResourceManager::LoadingFunc()
                 fLoadingQueue.pop();
             }
 
-            
+            EFile resourceFile(resourcePath);
+            if (resourceFile.Exist())
+            {
+                resourceFile.LoadToMemory();
+                EFileBuffer resourceBuffer = resourceFile.GetBuffer();
+                // Get resource type from path ending
+
+                // 
+            }
         }
         if (loadingQueueDidRun)
         {
@@ -41,6 +49,12 @@ void EResourceManager::LoadingFunc()
         loadingQueueDidRun = false;
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
+}
+
+void EResourceManager::AddResourceToLoad(const EString& path) 
+{
+    std::lock_guard<std::mutex> guard(fQueueMutex);
+    fLoadingQueue.push(path);
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 

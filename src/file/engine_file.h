@@ -74,6 +74,8 @@ namespace Engine {
         void LoadToMemory();
         // This function will dispose the file buffer if its been filled
         void DisposeMemory();
+
+        EFileBuffer GetBuffer() const;
     private:
         void CreatePathStrings();
     };
