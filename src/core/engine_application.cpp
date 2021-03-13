@@ -153,7 +153,7 @@ void EApplication::RegisterInternPanels()
 
 void EApplication::RegisterInternResources() 
 {
-    EResourceRegister::data().RegisterResource({"png", "tga", "jpeg"}, &Engine_LoadTextureFromFileBuffer);
+    EResourceRegister::data().RegisterResource("Texture", {"png", "tga", "jpeg"}, &Engine_LoadTextureFromFileBuffer);
 }
 
 void EApplication::CreateMainWindow() 

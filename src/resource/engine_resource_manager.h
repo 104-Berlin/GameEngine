@@ -9,14 +9,15 @@ namespace Engine {
 
         struct RegisterEntry
         {
-            ESet<EString> FileEndings;
-            LoadFn LoadFunction;
+            EString         Name;
+            ESet<EString>   FileEndings;
+            LoadFn          LoadFunction;
         };
     private:
         EVector<RegisterEntry> fRegisteredResourceTypes;
     public:
         const EVector<RegisterEntry>& GetRegisteredResourceTypes() const;
-        void RegisterResource(const ESet<EString>& fileEndings, LoadFn loadFunction);
+        void RegisterResource(const EString& name, const ESet<EString>& fileEndings, LoadFn loadFunction);
 
         static EResourceRegister& data();
     };

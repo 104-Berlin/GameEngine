@@ -8,9 +8,10 @@ const EVector<EResourceRegister::RegisterEntry>& EResourceRegister::GetRegistere
 }
 
 
-void EResourceRegister::RegisterResource(const ESet<EString>& fileEndings, EResourceRegister::LoadFn loadFunction)
+void EResourceRegister::RegisterResource(const EString& name, const ESet<EString>& fileEndings, EResourceRegister::LoadFn loadFunction)
 {
     RegisterEntry entry;
+    entry.Name = name;
     entry.FileEndings = fileEndings;
     entry.LoadFunction = loadFunction;
     fRegisteredResourceTypes.push_back(entry);  
