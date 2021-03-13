@@ -22,7 +22,6 @@ ESharedBuffer::ESharedBuffer(const ESharedBuffer& other)
 
 void ESharedBuffer::operator=(const ESharedBuffer& other) 
 {
-
     fBuffer = other.fBuffer;
     fRefCount = other.fRefCount;
     fSizeInBytes = other.fSizeInBytes;
@@ -33,18 +32,7 @@ void ESharedBuffer::operator=(const ESharedBuffer& other)
 
 ESharedBuffer::~ESharedBuffer() 
 {
-    if (!fBuffer || !fRefCount) { return; }
-    (*fRefCount)--;
-    if ((*fRefCount) == 0)
-    {
-        fBuffer->Delete();
-
-        delete fRefCount;
-        delete fBuffer;
-
-        fBuffer = nullptr;
-        fRefCount = nullptr;
-    }
+    Dispose();
 }
 
 u32 ESharedBuffer::GetElementCount() const
@@ -55,5 +43,28 @@ u32 ESharedBuffer::GetElementCount() const
 size_t ESharedBuffer::GetSizeInByte() const
 {
     return fSizeInBytes;
+}
+
+bool ESharedBuffer::IsNull() const
+{
+    return !(!fBuffer || !fRefCount);
+}
+
+void ESharedBuffer::Dispose() 
+{
+    if (!IsNull())
+    {
+        (*fRefCount)--;
+        if ((*fRefCount) == 0)
+        {
+            fBuffer->Delete();
+
+            delete fRefCount;
+            delete fBuffer;
+
+            fBuffer = nullptr;
+            fRefCount = nullptr;
+        }
+    }
 }
 

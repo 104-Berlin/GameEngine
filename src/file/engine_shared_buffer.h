@@ -78,5 +78,8 @@ public:
 
     u32 GetElementCount() const;
     size_t GetSizeInByte() const;
+
+    bool IsNull() const;
+    void Dispose();
 };
 
