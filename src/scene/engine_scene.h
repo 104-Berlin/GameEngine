@@ -22,13 +22,16 @@ namespace Engine {
         EScene(const EString& name);
         ~EScene();
 
-        EObject CreateObject();
+
+        EResourceManager&   GetResourceManager();
+
 
         void Update(float delta);
 
-        EObjectRef& GetSelectedObject();
 
+        EObject CreateObject();
         EObject GetObjectByUuid(const EUUID& uuid);
+        EObjectRef& GetSelectedObject();
 
         void SetJsObject(EJson& json);
         void FromJsObject(const EJson& json);

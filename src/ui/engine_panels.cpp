@@ -166,7 +166,7 @@ namespace ApplicationPanels {
         ERef<EUIPanel> resourcePanel = EMakeRef(EUIPanel, PANEL_NAME_RESOURCES);
         resourcePanel->SetUpdateFunction([](ERef<EUIField> uiField){
             uiField->ClearChildren();
-            /*for (auto& res : EApplication::gApp().GetResourceManager())
+            for (auto& res : EApplication::gApp().GetActiveScene()->GetResourceManager())
             {
                 ERef<EUISelectable> selectable = EMakeRef(EUISelectable, res.first);
                 EDragData data;
@@ -175,7 +175,7 @@ namespace ApplicationPanels {
                 data.Size = res.first.length() + 1;
                 selectable->SetDragData(data);
                 uiField->AddChild(selectable);
-            }*/
+            }
         });
         
 
@@ -249,17 +249,24 @@ namespace ApplicationPanels {
             }
         });
         fileMenu->AddChild(EMakeRef(EUISeperator));
-        fileMenu->AddChild(EMakeRef(EUIMenuItem, "Import"))->SetOnClick([](){
-            EVector<EString> filesToImport = Platform::OpenFileDialog("Import Resource", {"png"});
-            for (const EString& str : filesToImport)
-            {
-                EFile file(str);
-                if (file.Exist())
+        ERef<EUIField> importMenu = fileMenu->AddChild(EMakeRef(EUIMenu, "Import"));
+        for (const auto& entry : EResourceRegister::data().GetRegisteredResourceTypes())
+        {
+            ESet<EString> endings = entry.FileEndings;
+            importMenu->AddChild(EMakeRef(EUIMenuItem, entry.Name))->SetOnClick([endings](){
+                EVector<EString> filesToImport = Platform::OpenFileDialog("Import Resource", EVector<EString>(endings.begin(), endings.end()));
+                for (const EString& str : filesToImport)
                 {
-                    // Import File
+                    EFile file(str);
+                    if (file.Exist())
+                    {
+                        // Import File
+                        EApplication::gApp().GetActiveScene()->GetResourceManager().AddResourceToLoad(str);
+                    }
                 }
-            }
-        });
+            });
+        }
+
 
 
 

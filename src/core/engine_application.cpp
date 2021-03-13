@@ -50,6 +50,9 @@ void EApplication::Start(const ERef<EScene>& scene)
     std::cout << EFolder(EBaseFolder::PLUGIN).GetFullPath() << std::endl;
     
     RegisterInternComponents();
+    RegisterInternResources();
+
+    
     if (!scene)
     {
         SetActiveScene(EMakeRef(EScene, "Scene 1"));
@@ -61,7 +64,6 @@ void EApplication::Start(const ERef<EScene>& scene)
 
     // First register intern panels bevore set up main menu, so the view menu is up to data
     RegisterInternPanels();
-    RegisterInternResources();
 
     // After regsiter intern panels
     SetUpMainMenuBar();

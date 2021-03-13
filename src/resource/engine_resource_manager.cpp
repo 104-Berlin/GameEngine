@@ -66,12 +66,13 @@ void EResourceManager::LoadingFunc()
                     {
                         if (regsiteredType.LoadFunction)
                         {
-                            regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer);
+                            // Run load function
+                            ERef<EResource> loadedResource = regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer);
+                            fLoadedResources[resourcePath] = loadedResource;
                         }
                         break;
                     }
                 }
-                // Run load function
             }
         }
         if (loadingQueueDidRun)
@@ -87,6 +88,12 @@ void EResourceManager::AddResourceToLoad(const EString& path)
 {
     std::lock_guard<std::mutex> guard(fQueueMutex);
     fLoadingQueue.push(path);
+}
+
+void EResourceManager::AddLoadedResource(ERef<EResource> resource) 
+{
+    std::lock_guard<std::mutex> loadGuard(fLoadedMutex);
+    fLoadedResources[resource->GetEnginePath()] = resource;
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 
