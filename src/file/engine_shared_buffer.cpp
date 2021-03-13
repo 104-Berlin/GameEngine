@@ -47,7 +47,7 @@ size_t ESharedBuffer::GetSizeInByte() const
 
 bool ESharedBuffer::IsNull() const
 {
-    return !(!fBuffer || !fRefCount);
+    return !fBuffer || !fRefCount;
 }
 
 void ESharedBuffer::Dispose() 

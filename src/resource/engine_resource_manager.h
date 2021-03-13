@@ -13,6 +13,8 @@ namespace Engine {
         using WorkFinishedFunction = std::function<void()>;
     private:
         ResourceMap                 fLoadedResources;
+        EFileCollection             fFileCollections;
+
         std::mutex                  fLoadedMutex;
 
         std::queue<EString>         fLoadingQueue;
