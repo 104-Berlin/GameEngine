@@ -17,20 +17,6 @@ namespace Engine {
         }
     }
 
-    class E_API EFileBuffer
-    {
-    private:
-        ESharedBuffer   fBuffer;
-    public:
-        EFileBuffer();
-        EFileBuffer(const ESharedBuffer& buffer);
-
-        size_t GetSize() const;
-
-        bool IsNull() const;
-        void Dispose();
-    };
-
     class E_API EFile
     {
     private:
@@ -38,7 +24,7 @@ namespace Engine {
         EString fFileExtension;
         EString fFileName;
 
-        EFileBuffer fFileBuffer;
+        ESharedBuffer fFileBuffer;
     public:
         EFile(const EString& path);
         EFile(EBaseFolder baseFolder, const EString& path);
@@ -75,7 +61,7 @@ namespace Engine {
         // This function will dispose the file buffer if its been filled
         void DisposeMemory();
 
-        EFileBuffer GetBuffer() const;
+        ESharedBuffer GetBuffer() const;
     private:
         void CreatePathStrings();
     };

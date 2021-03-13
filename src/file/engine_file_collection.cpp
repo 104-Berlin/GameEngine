@@ -22,7 +22,7 @@ EFileCollection::FileMap::const_iterator EFileCollection::end() const
     return fFileMap.end();
 }
 
-bool EFileCollection::GetFileAt(const EString& path, EFileBuffer* oBuffer) 
+bool EFileCollection::GetFileAt(const EString& path, ESharedBuffer* oBuffer) 
 {
     if (!oBuffer) { return false; }
     FileMap::iterator it = fFileMap.find(path);

@@ -2,33 +2,6 @@
 
 using namespace Engine;
 
-   
-EFileBuffer::EFileBuffer() 
-{
-    
-}
-
-EFileBuffer::EFileBuffer(const ESharedBuffer& buffer) 
-    : fBuffer(buffer)
-{
-    
-}
-
-size_t EFileBuffer::GetSize() const
-{
-    return fBuffer.GetSizeInByte();
-}
-
-bool EFileBuffer::IsNull() const
-{
-    return fBuffer.IsNull();
-}
-
-void EFileBuffer::Dispose() 
-{
-    fBuffer.Dispose();
-}
-
 
 EFile::EFile(const EString& path)
     : fFilePath(path)
@@ -121,7 +94,7 @@ void EFile::LoadToMemory()
     t.seekg(0, std::ios::beg);
     t.read(shared_buffer.Data<char>(), buffer_length);
     t.close();
-    fFileBuffer = EFileBuffer(shared_buffer);
+    fFileBuffer = ESharedBuffer(shared_buffer);
 }
 
 void EFile::DisposeMemory() 
@@ -132,7 +105,7 @@ void EFile::DisposeMemory()
     }
 }
 
-EFileBuffer EFile::GetBuffer() const
+ESharedBuffer EFile::GetBuffer() const
 {
     return fFileBuffer;
 }

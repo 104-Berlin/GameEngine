@@ -36,7 +36,7 @@ void EResourceManager::LoadingFunc()
             if (resourceFile.Exist())
             {
                 resourceFile.LoadToMemory();
-                EFileBuffer resourceBuffer = resourceFile.GetBuffer();
+                ESharedBuffer resourceBuffer = resourceFile.GetBuffer();
                 // Get resource type from path ending
 
                 // 

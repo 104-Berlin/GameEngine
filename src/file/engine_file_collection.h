@@ -11,7 +11,7 @@ namespace Engine {
     // Like a zip file but with no compression
     class E_API EFileCollection
     {
-        using FileMap = EUnorderedMap<EString, EFileBuffer>;
+        using FileMap = EUnorderedMap<EString, ESharedBuffer>;
     private:
         FileMap             fFileMap;
     public:
@@ -26,7 +26,7 @@ namespace Engine {
         FileMap::iterator end();
         FileMap::const_iterator end() const;
 
-        bool GetFileAt(const EString& path, EFileBuffer* oBuffer);
+        bool GetFileAt(const EString& path, ESharedBuffer* oBuffer);
 
 
     };
