@@ -12,6 +12,8 @@ namespace Engine {
         EProperty<EString>                              fName;
         EObjectRef                                      fSelectedObject;
 
+        EResourceManager                                fResourceManager;
+
 
         // Entities
         entt::registry                                  fRegistry;
