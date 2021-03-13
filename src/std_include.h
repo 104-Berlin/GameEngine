@@ -57,6 +57,9 @@ typedef std::string EString;
 template <typename T>
 using EVector = std::vector<T>;
 
+template <typename T>
+using ESet = std::set<T>;
+
 template <typename K, typename V>
 using EMap = std::map<K, V>;
 
