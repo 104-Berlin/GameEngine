@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <queue>
 #include <thread>
+#include <set>
 
 #ifdef M_PI
 #undef M_PI
