@@ -1,7 +1,7 @@
 #pragma once
 
 
-class ESharedBuffer
+class E_API ESharedBuffer
 {
 private:
     class BufferDataBase
