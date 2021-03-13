@@ -2,7 +2,11 @@
 
 namespace Engine {
 
-    struct EResourceLoadEvent
+
+
+
+
+    struct E_API EResourceLoadEvent
     {
 
     };

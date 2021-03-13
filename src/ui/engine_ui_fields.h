@@ -2,7 +2,7 @@
 
 namespace Engine
 {
-    struct EDragData
+    struct E_API EDragData
     {
         EString Type;
         void*   Buffer;
@@ -18,7 +18,7 @@ namespace Engine
     typedef std::function<void()> EUICallbackFn;
 
 
-    struct EUIClickEvent
+    struct E_API EUIClickEvent
     {
         u32 NOTHING = 0;
     };
@@ -118,7 +118,7 @@ namespace Engine
 
 
 
-    struct EStringChangeEvent
+    struct E_API EStringChangeEvent
     {
         EString Value;
     };
@@ -143,7 +143,7 @@ namespace Engine
     };
 
     
-    struct EIntegerChangeEvent
+    struct E_API EIntegerChangeEvent
     {
         i32 Value;
     };
@@ -168,7 +168,7 @@ namespace Engine
     };
 
 
-    struct EFloatChangeEvent
+    struct E_API EFloatChangeEvent
     {
         float Value;
     };
@@ -192,7 +192,7 @@ namespace Engine
         }
     };
 
-    struct EFloat2ChangeEvent
+    struct E_API EFloat2ChangeEvent
     {
         EVec2 Value;
     };
@@ -215,7 +215,7 @@ namespace Engine
         }
     };
 
-    struct EFloat3ChangeEvent
+    struct E_API EFloat3ChangeEvent
     {
         EVec3 Value;
     };
@@ -239,7 +239,7 @@ namespace Engine
         }
     };
 
-    struct EFloat4ChangeEvent
+    struct E_API EFloat4ChangeEvent
     {
         EVec4 Value;
     };
@@ -263,7 +263,7 @@ namespace Engine
         }
     };
 
-    struct ECheckboxChangeEvent
+    struct E_API ECheckboxChangeEvent
     {
         bool Value;
     };
@@ -361,7 +361,7 @@ namespace Engine
         virtual bool OnRender() override;
     };
 
-    struct EMeshChangeEvent
+    struct E_API EMeshChangeEvent
     {
         ERef<EMesh> Value;
     };
