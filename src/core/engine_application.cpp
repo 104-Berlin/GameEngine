@@ -49,6 +49,8 @@ void EApplication::Start(const ERef<EScene>& scene)
     std::cout << EFolder(EBaseFolder::RES).GetFullPath() << std::endl;
     std::cout << EFolder(EBaseFolder::PLUGIN).GetFullPath() << std::endl;
     
+    fMainMenuBar = EMakeRef(EUIMainMenuBar);
+
     RegisterInternComponents();
     RegisterInternResources();
 
@@ -66,8 +68,9 @@ void EApplication::Start(const ERef<EScene>& scene)
     RegisterInternPanels();
 
     // After regsiter intern panels
-    SetUpMainMenuBar();
     fExtensionManager->LoadPluginFolder();    
+    
+    SetUpMainMenuBar();
 
 
 
@@ -133,7 +136,6 @@ void EApplication::Run()
 
 void EApplication::SetUpMainMenuBar() 
 {
-    fMainMenuBar = EMakeRef(EUIMainMenuBar);
     ApplicationPanels::CreateDefaultMainMenuBar();
 }
 
