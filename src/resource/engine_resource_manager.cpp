@@ -67,8 +67,7 @@ void EResourceManager::LoadingFunc()
                         if (regsiteredType.LoadFunction)
                         {
                             // Run load function
-                            ERef<EResource> loadedResource = regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer);
-                            fLoadedResources[resourcePath] = loadedResource;
+                            AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer));
                         }
                         break;
                     }
@@ -92,6 +91,7 @@ void EResourceManager::AddResourceToLoad(const EString& path)
 
 void EResourceManager::AddLoadedResource(ERef<EResource> resource) 
 {
+    if (!resource) { return; }
     std::lock_guard<std::mutex> loadGuard(fLoadedMutex);
     fLoadedResources[resource->GetEnginePath()] = resource;
 }
