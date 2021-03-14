@@ -90,3 +90,8 @@ void EObjectRef::OnSetJsObject(EJson& ref) const
 {
     // TODO: impl
 }
+
+ERef<EResource> _intern::GetResourceFromActiveScene(const EString& enginePath) 
+{
+    return EApplication::gApp().GetActiveScene()->GetResourceManager().GetResource<EResource>(enginePath);    
+}

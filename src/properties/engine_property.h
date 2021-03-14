@@ -329,4 +329,85 @@ namespace Engine {
         }
     };
 
+    namespace _intern
+    {
+        E_API ERef<EResource> GetResourceFromActiveScene(const EString& enginePath);
+    }
+
+    template <typename ObjectType>
+    class EResourceProperty : public EBaseProperty
+    {
+    private:
+        ERef<ObjectType>     fObjectValue;
+    public:
+        EResourceProperty(const EString& name, ERef<ObjectType> initValue = nullptr)
+            : EBaseProperty(name)
+        {
+            fObjectValue = initValue;
+        }
+
+        void SetValue(ERef<ObjectType> object)
+        {
+            if (object == fObjectValue) { return; }
+
+            for (auto func : fBeforeChangeCallbacks)
+            {
+                func.second();
+            }
+
+            fObjectValue = object;
+
+            
+            for (auto func : fAfterChangeCallbacks)
+            {
+                func.second();
+            }
+        }
+
+        ERef<ObjectType> GetValue() const
+        {
+            return fObjectValue;
+        }
+
+        virtual void OnFromJsObject(const EJson& ref) override
+        {
+            if (JSHelper::HasParam(ref, GetPropertyName()))
+            {
+                EString resourcePath;
+                JSHelper::ConvertObject(ref[GetPropertyName()], &resourcePath);
+                if (!resourcePath.empty())
+                {
+                    SetValue(std::dynamic_pointer_cast<ObjectType>(_intern::GetResourceFromActiveScene(resourcePath)));
+                }
+            }
+        }
+
+        virtual void OnSetJsObject(EJson& ref) const override
+        {
+            if (fObjectValue)
+            {
+                ref[GetPropertyName()] = JSHelper::ConvertValue(fObjectValue->GetEnginePath());
+            }
+        }
+
+        operator ERef<ObjectType>()
+        {
+            return fObjectValue;
+        }
+
+        ERef<ObjectType> operator ->()
+        {
+            return fObjectValue;
+        }
+
+        operator bool() const
+        {
+            return fObjectValue != nullptr;
+        }
+
+        void operator =(ERef<ObjectType> other)
+        {
+            SetValue(other);
+        }
+    };
 }   
