@@ -61,7 +61,10 @@ namespace Engine {
         // This function will dispose the file buffer if its been filled
         void DisposeMemory();
 
+        void SaveBufferToDisk();
+
         ESharedBuffer GetBuffer() const;
+        void SetFileBuffer(ESharedBuffer sharedBuffer);
     private:
         void CreatePathStrings();
     };

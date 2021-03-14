@@ -113,8 +113,29 @@ void EFile::DisposeMemory()
     }
 }
 
+void EFile::SaveBufferToDisk() 
+{
+    if (fFileBuffer.IsNull())
+    {
+        std::cout << "Cant save empty file buffer to Disk" << std::endl;
+        return;
+    }
+    std::ofstream oStream(GetFullPath(), std::ios::binary);
+    oStream.write(fFileBuffer.Data<const char>(), fFileBuffer.GetSizeInByte());
+    oStream.close();
+}
+
 ESharedBuffer EFile::GetBuffer() const
 {
     return fFileBuffer;
+}
+
+void EFile::SetFileBuffer(ESharedBuffer sharedBuffer) 
+{
+    if (!fFileBuffer.IsNull())
+    {
+        fFileBuffer.Dispose();
+    }
+    fFileBuffer = sharedBuffer;
 }
 
