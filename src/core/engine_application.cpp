@@ -403,6 +403,10 @@ EObjectProperty<EScene>& EApplication::GetActiveScene()
 void EApplication::SetActiveScene(ERef<EScene> scene) 
 {
     if (!scene) { return; }
+    if (fActiveScene.GetValue() != scene)
+    {
+        fEventDispatcher.Enqueue<EActiveSceneChangeEvent>({scene});
+    }
     fActiveScene = scene;
 }
 

@@ -93,7 +93,18 @@ void EResourceManager::LoadFileCollection(const EFileCollection& fileCollection)
 {
     for (auto& entry : fileCollection)
     {
-        
+        EFile f(entry.first);
+        for (const auto& regsiteredType : EResourceRegister::data().GetRegisteredResourceTypes())
+        {
+            if (regsiteredType.FileEndings.find(f.GetFileExtension()) != regsiteredType.FileEndings.end())
+            {
+                if (regsiteredType.LoadFunction)
+                {
+                    fFileCollections.AddFile(AddLoadedResource(regsiteredType.LoadFunction(entry.first, entry.second))->GetEnginePath(), entry.second);
+                }
+                break;
+            }
+        }
     }
 }
 

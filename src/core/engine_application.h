@@ -2,6 +2,12 @@
 
 namespace Engine {
 
+    // EVENTS
+    struct E_API EActiveSceneChangeEvent
+    {
+        ERef<EScene> ActiveScene;
+    };
+
     class E_API EApplication
     {
     private:

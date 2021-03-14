@@ -26,8 +26,6 @@ ERef<EScene> EFileReader::ReadScene(EFile file)
 
 
     ERef<EScene> result = EMakeRef(EScene, "Import Scene");
-    for (auto& fileEntry : fileCollection)
-    {
-        
-    }
+    result->GetResourceManager().LoadFileCollection(fileCollection);
+    return result;
 }

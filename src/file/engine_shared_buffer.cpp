@@ -17,7 +17,10 @@ ESharedBuffer::ESharedBuffer(const ESharedBuffer& other)
     fRefCount = other.fRefCount;
     fSizeInBytes = other.fSizeInBytes;
     fElementCount = other.fElementCount;
-    (*fRefCount)++;
+    if (!IsNull())
+    {
+        (*fRefCount)++;
+    }
 }
 
 void ESharedBuffer::operator=(const ESharedBuffer& other) 
@@ -26,7 +29,10 @@ void ESharedBuffer::operator=(const ESharedBuffer& other)
     fRefCount = other.fRefCount;
     fSizeInBytes = other.fSizeInBytes;
     fElementCount = other.fElementCount;
-    (*fRefCount)++;
+    if (!IsNull())
+    {
+        (*fRefCount)++;
+    }
 }
 
 

@@ -131,6 +131,7 @@ void EFileCollection::SetFromCompleteBuffer(ESharedBuffer buffer)
 
         ESharedBuffer newBuffer;
         newBuffer.InitWith<u8>(new u8[fileSize], fileSize);
+        memcpy(newBuffer.Data(), file_ptr + fileStartPos, fileSize);
         fFileMap[filePath] = newBuffer;
     }
 }

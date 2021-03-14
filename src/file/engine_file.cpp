@@ -96,13 +96,11 @@ void EFile::LoadToMemory()
 
     std::ifstream t(GetFullPath(), std::ios::binary | std::ios::ate);
     size_t buffer_length = t.tellg();
-    ESharedBuffer shared_buffer;
-    shared_buffer.InitWith<byte>(new byte[buffer_length], buffer_length);
+    fFileBuffer.InitWith<byte>(new byte[buffer_length], buffer_length);
 
     t.seekg(0, std::ios::beg);
-    t.read(shared_buffer.Data<char>(), buffer_length);
+    t.read(fFileBuffer.Data<char>(), buffer_length);
     t.close();
-    fFileBuffer = ESharedBuffer(shared_buffer);
 }
 
 void EFile::DisposeMemory() 

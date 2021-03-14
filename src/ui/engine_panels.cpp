@@ -126,7 +126,7 @@ namespace ApplicationPanels {
             }
         });
 
-        EApplication::gApp().GetActiveScene().AddEventAfterChange((intptr_t)0, [](){
+        EApplication::gApp().OnEvent<EActiveSceneChangeEvent>([](){
             ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
             ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
             if (componentPanel) { componentPanel->SetDirty(); }
@@ -186,6 +186,13 @@ namespace ApplicationPanels {
                 resourcePanel->SetDirty();
             }
         });
+        EApplication::gApp().OnEvent<EActiveSceneChangeEvent>([](){
+            ERef<EUIPanel> resourcePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_RESOURCES);
+            if (resourcePanel)
+            {
+                resourcePanel->SetDirty();
+            }
+        });
 
         EApplication::gApp().GetUIManager().RegisterPanel(resourcePanel);
 
@@ -237,7 +244,7 @@ namespace ApplicationPanels {
             EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
         });
         fileMenu->AddChild(EMakeRef(EUIMenuItem, "Open"))->SetOnClick([](){
-            EVector<EString> results = Platform::OpenFileDialog("Test", {".esc"});
+            EVector<EString> results = Platform::OpenFileDialog("Test", {"esc"});
             for (const EString& str : results)
             {
                 EFile file(str);
