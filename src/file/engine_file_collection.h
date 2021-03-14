@@ -28,7 +28,8 @@ namespace Engine {
 
         bool GetFileAt(const EString& path, ESharedBuffer* oBuffer);
 
-
+        ESharedBuffer GetCompleteBuffer() const;
+        void SetFromCompleteBuffer(ESharedBuffer buffer);
     };
 
 }
