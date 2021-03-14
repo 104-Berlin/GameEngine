@@ -27,9 +27,14 @@ namespace Engine {
         FileMap::const_iterator end() const;
 
         bool GetFileAt(const EString& path, ESharedBuffer* oBuffer);
+        void AddFile(const EString& path, ESharedBuffer buffer);
 
         ESharedBuffer GetCompleteBuffer() const;
         void SetFromCompleteBuffer(ESharedBuffer buffer);
+
+    private:
+        void WriteU32(u8* ptr, u32 value) const;
+        void WriteU64(u8* ptr, u64 value) const;
     };
 
 }

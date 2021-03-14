@@ -51,7 +51,10 @@ namespace Engine {
         void LoadingFunc();
 
         void AddResourceToLoad(const EString& path);
-        void AddLoadedResource(ERef<EResource> resource);
+        void LoadFileCollection(const EFileCollection& fileCollection);
+        ERef<EResource> AddLoadedResource(ERef<EResource> resource);
+
+        const EFileCollection& GetFileCollection() const;
 
         template <typename T>
         ERef<T> GetResource(const EString& fileIdent)

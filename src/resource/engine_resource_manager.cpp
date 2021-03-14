@@ -67,7 +67,7 @@ void EResourceManager::LoadingFunc()
                         if (regsiteredType.LoadFunction)
                         {
                             // Run load function
-                            AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetPath(), resourceBuffer));
+                            fFileCollections.AddFile(AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetPath(), resourceBuffer))->GetEnginePath(), resourceBuffer);
                         }
                         break;
                     }
@@ -89,11 +89,24 @@ void EResourceManager::AddResourceToLoad(const EString& path)
     fLoadingQueue.push(path);
 }
 
-void EResourceManager::AddLoadedResource(ERef<EResource> resource) 
+void EResourceManager::LoadFileCollection(const EFileCollection& fileCollection) 
 {
-    if (!resource) { return; }
+    for (auto& entry : fileCollection)
+    {
+        
+    }
+}
+
+ERef<EResource> EResourceManager::AddLoadedResource(ERef<EResource> resource) 
+{
+    if (!resource) { return nullptr; }
     std::lock_guard<std::mutex> loadGuard(fLoadedMutex);
-    fLoadedResources[resource->GetEnginePath()] = resource;
+    return fLoadedResources[resource->GetEnginePath()] = resource;
+}
+
+const EFileCollection& EResourceManager::GetFileCollection() const
+{
+    return fFileCollections;
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 

@@ -34,6 +34,15 @@ bool EFileCollection::GetFileAt(const EString& path, ESharedBuffer* oBuffer)
     return false;
 }
 
+void EFileCollection::AddFile(const EString& path, ESharedBuffer buffer) 
+{
+    if (path.empty()) { return; }
+    if (fFileMap.find(path) == fFileMap.end())
+    {
+        fFileMap[path] = buffer;
+    }
+}
+
 ESharedBuffer EFileCollection::GetCompleteBuffer() const
 {
     size_t buffer_size = 0;
@@ -46,13 +55,15 @@ ESharedBuffer EFileCollection::GetCompleteBuffer() const
     // All Files behind
 
     buffer_size += sizeof(u32); // FileCount
+    first_file_pos += sizeof(u32); // FileCount
     for (const auto& entry : fFileMap)
     {
-        buffer_size += entry.first.length() + 1;
-        buffer_size += sizeof(u64); // FileStart
-        buffer_size += sizeof(u64); // FileSize
+        size_t string_size = entry.first.length() + 1;
+        buffer_size += string_size + (2 * sizeof(u64));
+        first_file_pos += string_size + (2 * sizeof(u64));
+
+        buffer_size += entry.second.GetSizeInByte();
     }
-    first_file_pos = buffer_size + 1;
 
     ESharedBuffer result = ESharedBuffer();
     result.InitWith<u8>(new u8[buffer_size], buffer_size);
@@ -60,24 +71,25 @@ ESharedBuffer EFileCollection::GetCompleteBuffer() const
     u8* ptr = buffer;
 
     // Set FileCount
-    *ptr = (u32) fFileMap.size();
+    WriteU32(ptr, (u32) fFileMap.size());
     ptr += sizeof(u32);
 
     // Fill the strings
     size_t current_file_offset = 0;
     for (auto& entry : fFileMap)
     {
-        strcpy((char*) ptr, entry.first.data());
-        ptr += entry.first.length() + 1;
+        strcpy((char*) ptr, entry.first.c_str());
+        ptr += entry.first.size() + 1;
 
         // File Start
         u64 file_start = first_file_pos + current_file_offset;
-        *ptr = file_start;
+        WriteU64(ptr, file_start);
         ptr += sizeof(u64);
 
         
         // FileSize
-        *ptr = entry.second.GetSizeInByte();
+        u64 fileSize = entry.second.GetSizeInByte();
+        WriteU64(ptr, fileSize);
         ptr += sizeof(u64);
 
         // Increase file offset
@@ -121,4 +133,24 @@ void EFileCollection::SetFromCompleteBuffer(ESharedBuffer buffer)
         newBuffer.InitWith<u8>(new u8[fileSize], fileSize);
         fFileMap[filePath] = newBuffer;
     }
+}
+
+void EFileCollection::WriteU32(u8* ptr, u32 value) const
+{
+    ptr[0] = (u8)( ( value ) & 0xFF );
+    ptr[1] = (u8)( ( value ) >> 8 );
+    ptr[2] = (u8)( ( value >> 16 ) & 0xFF );
+    ptr[3] = (u8)( ( value >> 16 ) >> 8 );
+}
+
+void EFileCollection::WriteU64(u8* ptr, u64 value) const
+{
+    ptr[0] = (u8)( ( value ) & 0xFF );
+    ptr[1] = (u8)( ( value ) >> 8 );
+    ptr[2] = (u8)( ( value >> 16 ) & 0xFF );
+    ptr[3] = (u8)( ( value >> 16 ) >> 8 );
+    ptr[4] = (u8)( ( value >> 32 ) & 0xFF );
+    ptr[5] = (u8)( ( value >> 32 ) >> 8 );
+    ptr[6] = (u8)( ( value >> 48 ) & 0xFF );
+    ptr[7] = (u8)( ( value >> 48 ) >> 8 );
 }

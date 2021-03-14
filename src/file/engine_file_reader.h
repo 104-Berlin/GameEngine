@@ -2,6 +2,6 @@
 
 namespace Engine { namespace EFileReader {
 
-    ERef<EScene> ReadScene(const EFile& file);
+    ERef<EScene> ReadScene(EFile file);
 
 } }
