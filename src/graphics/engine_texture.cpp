@@ -18,13 +18,13 @@ namespace Engine {
 		return nullptr;
 	}
 
-	ERef<ETexture2D> ETexture2D::Create(ETextureFormat format, u32 width, u32 height)
+	ERef<ETexture2D> ETexture2D::Create(const EString& name, ETextureFormat format, u32 width, u32 height)
 	{
 		//TODO: ADD SERRT
 		//IN_CORE_ASSERT((bool)ERenderContext, "No Renderer selected!");
 		switch (ERenderContext::Renderer)
 		{
-		case ERenderingType::OpenGL: 	return ERef<EOpenGLTexture2D>(new EOpenGLTexture2D(format, width, height));
+		case ERenderingType::OpenGL: 	return ERef<EOpenGLTexture2D>(new EOpenGLTexture2D(name, format, width, height));
 		case ERenderingType::None:		break;
 		}
 		return nullptr;
@@ -50,7 +50,7 @@ namespace Engine {
 		stbi_set_flip_vertically_on_load(false);
 		stbi_uc* imageData = stbi_load_from_memory(fileBuffer.Data<const stbi_uc>(), fileBuffer.GetSizeInByte(), &width, &height, &channels, STBI_rgb_alpha);
 
-		ERef<ETexture2D> result = ETexture2D::Create(ETextureFormat::RGBA, width, height);
+		ERef<ETexture2D> result = ETexture2D::Create(name, ETextureFormat::RGBA, width, height);
 		result->SetTextureData(imageData, width, height);
 		return result;
 	}

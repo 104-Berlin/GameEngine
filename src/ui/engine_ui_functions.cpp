@@ -103,3 +103,13 @@ ERef<EUIField> UI::CreateInputField_Mesh(const EString& label, EObjectProperty<E
     result->SetMesh(property->GetValue());
     return result;
 }
+
+ERef<EUIField> UI::CreateInputField_Texture(const EString& label, EObjectProperty<ETexture2D>* property) 
+{
+    ERef<EUITextureInput> result = EMakeRef(EUITextureInput);
+    result->OnValueChange([property](ETextureChangeEvent event){
+        property->SetValue(event.Value);
+    });
+    result->SetTexture(property->GetValue());
+    return result;
+}

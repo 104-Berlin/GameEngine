@@ -67,7 +67,7 @@ void EResourceManager::LoadingFunc()
                         if (regsiteredType.LoadFunction)
                         {
                             // Run load function
-                            AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetFileName(), resourceBuffer));
+                            AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetPath(), resourceBuffer));
                         }
                         break;
                     }

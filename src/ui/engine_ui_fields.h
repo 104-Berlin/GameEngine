@@ -384,4 +384,27 @@ namespace Engine
             fEventDispatcher.Connect<EMeshChangeEvent>(cb);
         }
     };
+
+    struct E_API ETextureChangeEvent
+    {
+        ERef<ETexture2D> Value;
+    };
+
+    class E_API EUITextureInput : public EUIField
+    {
+    private:
+        ERef<ETexture2D>  fTexture;
+    public:
+        EUITextureInput();
+
+        void SetTexture(ERef<ETexture2D> texture);
+
+        virtual bool OnRender() override;
+
+        template <typename T>
+        void OnValueChange(T&& cb)
+        {
+            fEventDispatcher.Connect<ETextureChangeEvent>(cb);
+        }
+    };
 }

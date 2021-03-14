@@ -34,7 +34,7 @@ namespace Engine {
 		ETexture2D(const EString& filePath) : ETexture(filePath) {}
 
 		static ERef<ETexture2D> Create(const EString& path, bool srgb = false);
-		static ERef<ETexture2D> Create(ETextureFormat format, u32 width, u32 height);
+		static ERef<ETexture2D> Create(const EString& name, ETextureFormat format, u32 width, u32 height);
 	};
 
 	class E_API ETextureCube : public ETexture

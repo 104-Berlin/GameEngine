@@ -6,7 +6,7 @@ namespace Engine {
 	{
 	public:
 		EOpenGLTexture2D(const EString& path, bool srgb);
-		EOpenGLTexture2D(ETextureFormat format, u32 width, u32 height);
+		EOpenGLTexture2D(const EString& name, ETextureFormat format, u32 width, u32 height);
 
 		virtual ~EOpenGLTexture2D();
 

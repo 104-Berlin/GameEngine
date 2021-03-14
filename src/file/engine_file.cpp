@@ -24,11 +24,19 @@ void EFile::CreatePathStrings()
     {
         last_slash_index = 0;
     }
+    else
+    {
+        last_slash_index++; // Skip the slash
+    }
 
     if (dot_index != EString::npos)
     {
-        fFileName = fFilePath.substr(last_slash_index + 1, dot_index - last_slash_index - 1);
+        fFileName = fFilePath.substr(last_slash_index, dot_index - last_slash_index);
         fFileExtension = fFilePath.substr(dot_index + 1);
+    }
+    else
+    {
+        fFileName = fFilePath.substr(last_slash_index);
     }
 }
 

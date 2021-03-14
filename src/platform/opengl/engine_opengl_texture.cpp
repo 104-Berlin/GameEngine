@@ -39,8 +39,8 @@ namespace Engine {
 	{
 	}
 
-	EOpenGLTexture2D::EOpenGLTexture2D(ETextureFormat format, u32 width, u32 height)
-		: ETexture2D(""), fFormat(format), fWidth(width), fHeight(height), fRendererID(0)
+	EOpenGLTexture2D::EOpenGLTexture2D(const EString& name, ETextureFormat format, u32 width, u32 height)
+		: ETexture2D(name), fFormat(format), fWidth(width), fHeight(height), fRendererID(0)
 	{
 		IN_RENDER_S({
 			glCall(glGenTextures(1, &self->fRendererID));

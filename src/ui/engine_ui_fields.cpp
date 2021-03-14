@@ -609,3 +609,35 @@ bool EUIMeshInput::OnRender()
     }
     return true;
 }
+
+// --------------------------------------------------------------------
+// Texture Input
+EUITextureInput::EUITextureInput() 
+    : EUIField("TextureInput")
+{
+    this->OnDrop("_RESOURCEDRAG", [this](EDragData data){
+        EString str = (char*) data.Buffer;
+        ERef<ETexture2D> tex = EApplication::gApp().GetActiveScene()->GetResourceManager().GetResource<ETexture2D>(str);
+        if (tex)
+        {
+            SetTexture(tex);
+        }
+    });
+}
+
+void EUITextureInput::SetTexture(ERef<ETexture2D> texture) 
+{
+    fTexture = texture;
+    fEventDispatcher.Enqueue<ETextureChangeEvent>({texture});
+}
+
+bool EUITextureInput::OnRender() 
+{
+    static ImVec2 size = { 200, 200 };
+    ImGui::Button("##mynameisjeff", size);
+    if (fTexture)
+    {
+        ImGui::Text("%s", fTexture->GetName().c_str());
+    }
+    return true;
+}
