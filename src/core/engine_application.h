@@ -69,7 +69,7 @@ namespace Engine {
 
         void CreateMainWindow();
 
-        void LoadDefaultMeshes();
+        void LoadDefaultMeshes(ERef<EScene> scene);
 
         void TestRendering();
     public:

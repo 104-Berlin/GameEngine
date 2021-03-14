@@ -23,9 +23,29 @@ ERef<EScene> EFileReader::ReadScene(EFile file)
     ESharedBuffer fileBuffer = file.GetBuffer();
     EFileCollection fileCollection;
     fileCollection.SetFromCompleteBuffer(fileBuffer);
+    EJson sceneJson;
 
+    ESharedBuffer sceneBuffer;
+    if (fileCollection.GetFileAt("Scene.esc", &sceneBuffer))
+    {
+        if (!sceneBuffer.IsNull())
+        {
+            EString sceneJsonString = EString(sceneBuffer.Data<char>());
+            sceneJson = EJson::parse(sceneJsonString);
+        }
+    }
+
+    if (sceneJson.is_null()) 
+    { 
+        std::cout << "Could not Load the scene json from file \"" << file.GetPath() << "\"" << std::endl;
+        return nullptr;
+    }
 
     ERef<EScene> result = EMakeRef(EScene, "Import Scene");
+    // First load all the resources
     result->GetResourceManager().LoadFileCollection(fileCollection);
+    // Then load the scene data
+    result->FromJsObject(sceneJson);
+    
     return result;
 }

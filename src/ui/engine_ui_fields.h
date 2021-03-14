@@ -369,7 +369,6 @@ namespace Engine
     class E_API EUIMeshInput : public EUIField
     {
     private:
-        ERef<EFrameBuffer>  fFrameBuffer;
         ERef<EMesh>         fMesh;
     public:
         EUIMeshInput();

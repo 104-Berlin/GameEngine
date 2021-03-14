@@ -73,14 +73,6 @@ void EApplication::Start(const ERef<EScene>& scene)
     SetUpMainMenuBar();
 
 
-
-    //Testing code
-    EObject cameraObject = fActiveScene->CreateObject();
-    cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
-
-    fMeshObject = fActiveScene->CreateObject();
-    //fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>(Path::Join("Cube.rc")));
-
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
         panel->SetDirty(true);
@@ -203,8 +195,6 @@ void EApplication::CreateMainWindow()
 
     fExtensionManager = new EExtensionManager();
     fUIManager = new EUIManager();
-
-    LoadDefaultMeshes();
 }
 
 
@@ -285,11 +275,11 @@ static EVector<u32> indices_3 = {
     0, 1, 2,
 };
 
-void EApplication::LoadDefaultMeshes() 
+void EApplication::LoadDefaultMeshes(ERef<EScene> scene) 
 {
-    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
-    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
-    //fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
 }
 
 void EApplication::TestRendering() 
@@ -408,6 +398,7 @@ void EApplication::SetActiveScene(ERef<EScene> scene)
         fEventDispatcher.Enqueue<EActiveSceneChangeEvent>({scene});
     }
     fActiveScene = scene;
+    LoadDefaultMeshes(fActiveScene);
 }
 
 void EApplication::ResetImGuiContext() 

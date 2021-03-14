@@ -582,7 +582,6 @@ bool EUIViewport::OnRender()
 EUIMeshInput::EUIMeshInput() 
     : EUIField("MeshInput")
 {
-    fFrameBuffer = EFrameBuffer::Create(200, 200, EFramebufferFormat::RGBA8);
     this->OnDrop("_RESOURCEDRAG", [this](EDragData data){
         EString str = (char*) data.Buffer;
         ERef<EMesh> mesh = EApplication::gApp().GetActiveScene()->GetResourceManager().GetResource<EMesh>(str);
