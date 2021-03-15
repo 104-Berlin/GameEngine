@@ -14,6 +14,11 @@ EScene::~EScene()
     std::cout << "Scene \"" << fName.GetValue() << "\" Deleted!" << std::endl;
 }
 
+EResourceManager& EScene::GetResourceManager() 
+{
+    return fResourceManager;
+}
+
 void EScene::Update(float delta)
 {
 }

@@ -2,6 +2,12 @@
 
 namespace Engine {
 
+    // EVENTS
+    struct E_API EActiveSceneChangeEvent
+    {
+        ERef<EScene> ActiveScene;
+    };
+
     class E_API EApplication
     {
     private:
@@ -11,7 +17,6 @@ namespace Engine {
         double                      fFrameTime;
 
         EExtensionManager*          fExtensionManager;
-        EResourceManager*           fResourceManager;
         EUIManager*                 fUIManager;
 
         EUIRenderer*                fUIRenderer;
@@ -32,7 +37,6 @@ namespace Engine {
         void CleanUp();
         
         double                      GetFrameTime() const;
-        EResourceManager&           GetResourceManager();
         EUIManager&                 GetUIManager();
         EUIRenderer&                GetUIRenderer();
         ERef<EUIMainMenuBar>        GetMainMenuBar();
@@ -61,10 +65,11 @@ namespace Engine {
         void SetUpMainMenuBar();
         void RegisterInternComponents();
         void RegisterInternPanels();
+        void RegisterInternResources();
 
         void CreateMainWindow();
 
-        void LoadDefaultMeshes();
+        void LoadDefaultMeshes(ERef<EScene> scene);
 
         void TestRendering();
     public:

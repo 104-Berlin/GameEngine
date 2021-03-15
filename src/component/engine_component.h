@@ -11,7 +11,7 @@ namespace Engine {
             (EProperty<EVec3>, Vector3),
             (EProperty<EVec4>, Vector4),
             (EProperty<EString>, StringValue),
-            (EObjectProperty<ETexture2D>, Texture)
+            (EResourceProperty<ETexture2D>, Texture)
         )
         TestComponent()
             : Boolean("Boolean"), Float("Float"), Double("Double"), Vector3("Vector3"), Vector4("Vector4"), StringValue("StringValue"), Texture("Texture")
@@ -66,7 +66,7 @@ namespace Engine {
     struct EMeshComponent
     {
         REFLACTABLE(
-            (EObjectProperty<EMesh>, Mesh)
+            (EResourceProperty<EMesh>, Mesh)
         )
 
         EMeshComponent() = default;

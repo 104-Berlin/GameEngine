@@ -513,6 +513,20 @@ bool EUIMenuItem::OnRender()
 }
 
 // ----------------------------------------
+// Seperator
+EUISeperator::EUISeperator()
+    : EUIField("Serperator")
+{
+    
+}
+
+bool EUISeperator::OnRender() 
+{   
+    ImGui::Separator();
+    return true;
+}
+
+// ----------------------------------------
 // Selectable
 EUISelectable::EUISelectable(const EString& label) 
     : EUIField(label)
@@ -568,10 +582,9 @@ bool EUIViewport::OnRender()
 EUIMeshInput::EUIMeshInput() 
     : EUIField("MeshInput")
 {
-    fFrameBuffer = EFrameBuffer::Create(200, 200, EFramebufferFormat::RGBA8);
     this->OnDrop("_RESOURCEDRAG", [this](EDragData data){
         EString str = (char*) data.Buffer;
-        ERef<EMesh> mesh = EApplication::gApp().GetResourceManager().GetResource<EMesh>(str);
+        ERef<EMesh> mesh = EApplication::gApp().GetActiveScene()->GetResourceManager().GetResource<EMesh>(str);
         if (mesh)
         {
             SetMesh(mesh);
@@ -592,6 +605,38 @@ bool EUIMeshInput::OnRender()
     if (fMesh)
     {
         ImGui::Text("%s", fMesh->GetName().c_str());
+    }
+    return true;
+}
+
+// --------------------------------------------------------------------
+// Texture Input
+EUITextureInput::EUITextureInput() 
+    : EUIField("TextureInput")
+{
+    this->OnDrop("_RESOURCEDRAG", [this](EDragData data){
+        EString str = (char*) data.Buffer;
+        ERef<ETexture2D> tex = EApplication::gApp().GetActiveScene()->GetResourceManager().GetResource<ETexture2D>(str);
+        if (tex)
+        {
+            SetTexture(tex);
+        }
+    });
+}
+
+void EUITextureInput::SetTexture(ERef<ETexture2D> texture) 
+{
+    fTexture = texture;
+    fEventDispatcher.Enqueue<ETextureChangeEvent>({texture});
+}
+
+bool EUITextureInput::OnRender() 
+{
+    static ImVec2 size = { 200, 200 };
+    ImGui::Button("##mynameisjeff", size);
+    if (fTexture)
+    {
+        ImGui::Text("%s", fTexture->GetName().c_str());
     }
     return true;
 }

@@ -12,6 +12,7 @@
 #include <filesystem>
 #include <queue>
 #include <thread>
+#include <set>
 
 #ifdef M_PI
 #undef M_PI
@@ -56,6 +57,9 @@ typedef std::string EString;
 
 template <typename T>
 using EVector = std::vector<T>;
+
+template <typename T>
+using ESet = std::set<T>;
 
 template <typename K, typename V>
 using EMap = std::map<K, V>;

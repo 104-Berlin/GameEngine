@@ -15,7 +15,8 @@ namespace Engine {
         E_API ERef<EUIField> CreateInputField_Vec4(const EString& label, EProperty<EVec4>* property);
         E_API ERef<EUIField> CreateInputField_String(const EString& label, EProperty<EString>* property);
         E_API ERef<EUIField> CreateInputField_UUID(const EString& label, EProperty<EUUID>* property);
-        E_API ERef<EUIField> CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property);
+        E_API ERef<EUIField> CreateInputField_Mesh(const EString& label, EResourceProperty<EMesh>* property);
+        E_API ERef<EUIField> CreateInputField_Texture(const EString& label, EResourceProperty<ETexture2D>* property);
 
         template <typename T>
         inline ERef<EUIField> CreateInputField(const EString& label, T property);
@@ -37,14 +38,10 @@ namespace Engine {
         template <>
         inline ERef<EUIField> CreateInputField<EProperty<EUUID>*>(const EString& label, EProperty<EUUID>* property) { return CreateInputField_UUID(label, property); }
         template <>
-        inline ERef<EUIField> CreateInputField<EObjectProperty<EMesh>*>(const EString& label, EObjectProperty<EMesh>* property) { return CreateInputField_Mesh(label, property); }
-
+        inline ERef<EUIField> CreateInputField<EResourceProperty<EMesh>*>(const EString& label, EResourceProperty<EMesh>* property) { return CreateInputField_Mesh(label, property); }
         template <>
-        inline ERef<EUIField> CreateInputField<EObjectProperty<ETexture2D>*>(const EString& label, EObjectProperty<ETexture2D>* value)
-        {
-            return nullptr;
-        }
-
+        inline ERef<EUIField> CreateInputField<EResourceProperty<ETexture2D>*>(const EString& label, EResourceProperty<ETexture2D>* property) { return CreateInputField_Texture(label, property); }
+        
 
         template <>
         inline ERef<EUIField> CreateInputField<EObjectProperty<ECamera>*>(const EString& label, EObjectProperty<ECamera>* value)

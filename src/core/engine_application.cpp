@@ -13,7 +13,7 @@ EApplication& EApplication::gApp()
 
 
 EApplication::EApplication()
-    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr), fResourceManager(nullptr), fExtensionManager(nullptr), fUIManager(nullptr)
+    : fActiveScene("Active Scene", nullptr), fUIRenderer(nullptr), fExtensionManager(nullptr), fUIManager(nullptr)
 {
     fFrameTime = 0;
     fMainWindow = nullptr;
@@ -29,10 +29,6 @@ EApplication::~EApplication()
     if (fUIRenderer)
     {
         delete fUIRenderer;
-    }
-    if (fResourceManager)
-    {
-        delete fResourceManager;
     }
     if (fExtensionManager)
     {
@@ -53,7 +49,12 @@ void EApplication::Start(const ERef<EScene>& scene)
     std::cout << EFolder(EBaseFolder::RES).GetFullPath() << std::endl;
     std::cout << EFolder(EBaseFolder::PLUGIN).GetFullPath() << std::endl;
     
+    fMainMenuBar = EMakeRef(EUIMainMenuBar);
+
     RegisterInternComponents();
+    RegisterInternResources();
+
+    
     if (!scene)
     {
         SetActiveScene(EMakeRef(EScene, "Scene 1"));
@@ -67,19 +68,10 @@ void EApplication::Start(const ERef<EScene>& scene)
     RegisterInternPanels();
 
     // After regsiter intern panels
-    SetUpMainMenuBar();
-    
-    fResourceManager->LoadAllFromFolder(EFolder(EBaseFolder::RES));
     fExtensionManager->LoadPluginFolder();    
+    
+    SetUpMainMenuBar();
 
-
-
-    //Testing code
-    EObject cameraObject = fActiveScene->CreateObject();
-    cameraObject.AddComponent<ECameraComponent>().Active.SetValue(true);
-
-    fMeshObject = fActiveScene->CreateObject();
-    fMeshObject.AddComponent<EMeshComponent>().Mesh.SetValue(fResourceManager->GetResource<EMesh>(Path::Join("intern", "Cube.rc")));
 
     for (ERef<EUIPanel> panel : fUIManager->GetPanels())
     {
@@ -136,7 +128,6 @@ void EApplication::Run()
 
 void EApplication::SetUpMainMenuBar() 
 {
-    fMainMenuBar = EMakeRef(EUIMainMenuBar);
     ApplicationPanels::CreateDefaultMainMenuBar();
 }
 
@@ -154,6 +145,11 @@ void EApplication::RegisterInternPanels()
     
     ApplicationPanels::CreateDefaultApplicationPanels();
 
+}
+
+void EApplication::RegisterInternResources() 
+{
+    EResourceRegister::data().RegisterResource("Texture", {"png", "tga", "jpeg"}, &Engine_LoadTextureFromFileBuffer);
 }
 
 void EApplication::CreateMainWindow() 
@@ -197,11 +193,8 @@ void EApplication::CreateMainWindow()
     fUIRenderer = new EUIRenderer();
     fUIRenderer->Init(fMainWindow);
 
-    fResourceManager = new EResourceManager();
     fExtensionManager = new EExtensionManager();
     fUIManager = new EUIManager();
-
-    LoadDefaultMeshes();
 }
 
 
@@ -282,11 +275,11 @@ static EVector<u32> indices_3 = {
     0, 1, 2,
 };
 
-void EApplication::LoadDefaultMeshes() 
+void EApplication::LoadDefaultMeshes(ERef<EScene> scene) 
 {
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
-    fResourceManager->AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Cube", vertices, indices));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Plane", vertices_2, indices_2));
+    scene->GetResourceManager().AddLoadedResource(EMakeRef(EMesh, "Dreieck", vertices_3, indices_3));
 }
 
 void EApplication::TestRendering() 
@@ -362,11 +355,6 @@ double EApplication::GetFrameTime() const
     return fFrameTime;
 }
 
-EResourceManager& EApplication::GetResourceManager() 
-{
-    return *fResourceManager;
-}
-
 EUIManager& EApplication::GetUIManager() 
 {
     return *fUIManager;
@@ -403,7 +391,12 @@ EObjectProperty<EScene>& EApplication::GetActiveScene()
 void EApplication::SetActiveScene(ERef<EScene> scene) 
 {
     if (!scene) { return; }
+    if (fActiveScene.GetValue() != scene)
+    {
+        fEventDispatcher.Enqueue<EActiveSceneChangeEvent>({scene});
+    }
     fActiveScene = scene;
+    LoadDefaultMeshes(fActiveScene);
 }
 
 void EApplication::ResetImGuiContext() 

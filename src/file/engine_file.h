@@ -23,6 +23,8 @@ namespace Engine {
         EString fFilePath;
         EString fFileExtension;
         EString fFileName;
+
+        ESharedBuffer fFileBuffer;
     public:
         EFile(const EString& path);
         EFile(EBaseFolder baseFolder, const EString& path);
@@ -53,6 +55,16 @@ namespace Engine {
 
         EString GetFileAsString() const;
         void SetFileAsString(const EString& string) const;
+
+        // This function will store the file as buffer in the file
+        void LoadToMemory();
+        // This function will dispose the file buffer if its been filled
+        void DisposeMemory();
+
+        void SaveBufferToDisk();
+
+        ESharedBuffer GetBuffer() const;
+        void SetFileBuffer(ESharedBuffer sharedBuffer);
     private:
         void CreatePathStrings();
     };

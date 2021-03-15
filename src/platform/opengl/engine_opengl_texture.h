@@ -5,8 +5,7 @@ namespace Engine {
 	class EOpenGLTexture2D : public ETexture2D
 	{
 	public:
-		EOpenGLTexture2D(const EString& path, bool srgb);
-		EOpenGLTexture2D(ETextureFormat format, u32 width, u32 height);
+		EOpenGLTexture2D(const EString& enginePath, ETextureFormat format, u32 width, u32 height);
 
 		virtual ~EOpenGLTexture2D();
 
@@ -18,8 +17,6 @@ namespace Engine {
 		virtual u32 GetWidth() const override { return fWidth; }
 
 		virtual void SetTextureData(byte* pixels, u32 width, u32 height) override;
-
-		virtual bool OnLoad() override;
 	private:
 		u32 fRendererID;
 		ETextureFormat fFormat;
@@ -31,7 +28,7 @@ namespace Engine {
 	class EOpenGLTextureCube : public ETextureCube
 	{
 	public:
-		EOpenGLTextureCube(const EString& path, bool srgb = false);
+		EOpenGLTextureCube(const EString& path);
 
 		virtual ~EOpenGLTextureCube();
 
@@ -41,8 +38,6 @@ namespace Engine {
 		virtual ETextureFormat GetFormat() const override { return fFormat; }
 		virtual u32 GetHeight() const override { return fHeight; }
 		virtual u32 GetWidth() const override { return fWidth; }
-
-		virtual bool OnLoad() override;
 	private:
 		u32 fRendererID;
 		ETextureFormat fFormat;

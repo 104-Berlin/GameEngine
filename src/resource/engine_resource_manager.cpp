@@ -2,6 +2,27 @@
 
 using namespace Engine;
 
+const EVector<EResourceRegister::RegisterEntry>& EResourceRegister::GetRegisteredResourceTypes() const
+{
+    return fRegisteredResourceTypes;
+}
+
+
+void EResourceRegister::RegisterResource(const EString& name, const ESet<EString>& fileEndings, EResourceRegister::LoadFn loadFunction)
+{
+    RegisterEntry entry;
+    entry.Name = name;
+    entry.FileEndings = fileEndings;
+    entry.LoadFunction = loadFunction;
+    fRegisteredResourceTypes.push_back(entry);  
+}
+
+EResourceRegister& EResourceRegister::data() 
+{
+    static EResourceRegister instance;
+    return instance;
+}
+
 
 EResourceManager::EResourceManager() 
     : fQueueMutex(), fIsRunning(true), fLoadingThread(std::bind(&EResourceManager::LoadingFunc, this))
@@ -14,17 +35,6 @@ EResourceManager::~EResourceManager()
     if (fLoadingThread.joinable())
     {
         fLoadingThread.join();
-    }
-}
-
-void EResourceManager::LoadAllFromFolder(const EFolder& folder) 
-{
-    if (!folder.Exist()) { return; }    
-
-    for (auto& p : folder.Iterator())
-    {
-        std::lock_guard<std::mutex> quard(fQueueMutex);
-        fLoadingQueue.push(p.path().lexically_normal().string());
     }
 }
 
@@ -42,47 +52,72 @@ void EResourceManager::LoadingFunc()
                 resourcePath = fLoadingQueue.front();
                 fLoadingQueue.pop();
             }
-            EString resourceType = GetResourceTypeFromFile(resourcePath);
-            // throw error when resource type "UNKOWN"
 
-            ERef<EResource> newResource = nullptr;
-            if (resourceType == typeid(ETexture2D).name())
+            EFile resourceFile(resourcePath);
+            if (resourceFile.Exist())
             {
-                newResource = ETexture2D::Create(resourcePath);
-            }
-            else if (resourceType == typeid(EShader).name())
-            {
-                newResource = EShader::Create(resourcePath);
-            }
-            else if (resourceType == typeid(EMesh).name())
-            {
-                newResource = EMakeRef(EMesh, resourcePath);
-            }
-
-            // Add resource to array
-            if (newResource && newResource->Load())
-            {
-                AddLoadedResource(newResource);
+                resourceFile.LoadToMemory();
+                ESharedBuffer resourceBuffer = resourceFile.GetBuffer();
+                // Get resource type from path ending
+                EString fileEnding = resourceFile.GetFileExtension();
+                for (const auto& regsiteredType : EResourceRegister::data().GetRegisteredResourceTypes())
+                {
+                    if (regsiteredType.FileEndings.find(fileEnding) != regsiteredType.FileEndings.end())
+                    {
+                        if (regsiteredType.LoadFunction)
+                        {
+                            // Run load function
+                            fFileCollections.AddFile(AddLoadedResource(regsiteredType.LoadFunction(resourceFile.GetPath(), resourceBuffer))->GetEnginePath(), resourceBuffer);
+                        }
+                        break;
+                    }
+                }
             }
         }
-        if (loadingQueueDidRun && fWorkFinishedFunction)
+        if (loadingQueueDidRun)
         {
-            fWorkFinishedFunction();
+            EApplication::gApp().QueueEvent<EResourceLoadEvent>({});
         }
         loadingQueueDidRun = false;
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
 
-void EResourceManager::AddLoadedResource(ERef<EResource> resource) 
+void EResourceManager::AddResourceToLoad(const EString& path) 
 {
-    std::lock_guard<std::mutex> guard(fLoadedMutex);
-    std::cout << "Finished loading resource \"" << resource->GetNameIdent() << "\"" << std::endl;
-    fLoadedResources[resource->GetNameIdent()] = resource;
-    if (fWorkFinishedFunction)
+    std::lock_guard<std::mutex> guard(fQueueMutex);
+    fLoadingQueue.push(path);
+}
+
+void EResourceManager::LoadFileCollection(const EFileCollection& fileCollection) 
+{
+    for (auto& entry : fileCollection)
     {
-        fWorkFinishedFunction();
+        EFile f(entry.first);
+        for (const auto& regsiteredType : EResourceRegister::data().GetRegisteredResourceTypes())
+        {
+            if (regsiteredType.FileEndings.find(f.GetFileExtension()) != regsiteredType.FileEndings.end())
+            {
+                if (regsiteredType.LoadFunction)
+                {
+                    fFileCollections.AddFile(AddLoadedResource(regsiteredType.LoadFunction(entry.first, entry.second))->GetEnginePath(), entry.second);
+                }
+                break;
+            }
+        }
     }
+}
+
+ERef<EResource> EResourceManager::AddLoadedResource(ERef<EResource> resource) 
+{
+    if (!resource) { return nullptr; }
+    std::lock_guard<std::mutex> loadGuard(fLoadedMutex);
+    return fLoadedResources[resource->GetEnginePath()] = resource;
+}
+
+const EFileCollection& EResourceManager::GetFileCollection() const
+{
+    return fFileCollections;
 }
 
 EResourceManager::ResourceMap::iterator EResourceManager::begin() 
@@ -103,47 +138,4 @@ EResourceManager::ResourceMap::iterator EResourceManager::end()
 EResourceManager::ResourceMap::const_iterator EResourceManager::end() const
 {
     return fLoadedResources.end();
-}
-
-void EResourceManager::SetOnWorkFinished(WorkFinishedFunction function) 
-{
-    fWorkFinishedFunction = function;
-}
-
-EString EResourceManager::GetResourceTypeFromFile(const EString& filePath) 
-{
-    EFile file(filePath);
-
-    if (file.HasExtension("rc")) // Own Engine resource format. Read type from that
-    {
-        // This file should be json format. So just parse it and get the resource type
-        EString fileContent = file.GetFileAsString();
-        EJson fileJson = EJson::parse(fileContent);
-        if (!fileJson.is_null())
-        {
-            // The json is loaded correctly
-            if (JSHelper::HasParam(fileJson, "ResourceType"))
-            {
-                EString resultType;
-                JSHelper::ConvertObject(fileJson, &resultType);
-                return resultType;
-            }
-        }
-    }
-    else    // Get the file type from the extions
-    {
-        if (file.HasExtension("jpeg", "png", "bmp", "tga"))
-        {
-            return typeid(ETexture2D).name();
-        }
-        else if (file.HasExtension("shader"))
-        {
-            return typeid(EShader).name();
-        }
-        else if (file.HasExtension("fbx", "obj"))
-        {
-            return typeid(EMesh).name();
-        }
-    }
-    return "UNKNOWN";
 }

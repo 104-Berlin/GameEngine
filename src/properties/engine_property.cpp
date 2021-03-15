@@ -3,7 +3,7 @@
 using namespace Engine;
 
 EBaseProperty::EBaseProperty(const EString& name)
-    : fName(name)
+    : fName(name), fScene(nullptr)
 {
 }
 
@@ -35,6 +35,16 @@ const EString& EBaseProperty::GetPropertyName() const
 void EBaseProperty::SetPropertyName(const EString& name)
 {
     fName = name;
+}
+
+EScene* EBaseProperty::GetScene() const
+{
+    return fScene;
+}
+
+void EBaseProperty::SetScene(EScene* scene) 
+{
+    fScene = scene;
 }
 
 void EBaseProperty::AddEventBeforeChange(intptr_t key, const EChangeFunc& func)
@@ -76,7 +86,7 @@ EObject& EObjectRef::GetValue() const
 {
     if (!fObject && fObjectUuid.IsValid())
     {
-        fObject->Set(EApplication::gApp().GetActiveScene()->GetObjectByUuid(fObjectUuid));
+        fObject->Set(fScene->GetObjectByUuid(fObjectUuid));
     }
     return *fObject;
 }
@@ -89,4 +99,9 @@ void EObjectRef::OnFromJsObject(const EJson& ref)
 void EObjectRef::OnSetJsObject(EJson& ref) const
 {
     // TODO: impl
+}
+
+ERef<EResource> _intern::GetResourceFromActiveScene(EScene* scene, const EString& enginePath) 
+{
+    return scene->GetResourceManager().GetResource<EResource>(enginePath);    
 }

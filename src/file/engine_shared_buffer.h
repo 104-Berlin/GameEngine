@@ -1,7 +1,7 @@
 #pragma once
 
 
-class ESharedBuffer
+class E_API ESharedBuffer
 {
 private:
     class BufferDataBase
@@ -78,5 +78,8 @@ public:
 
     u32 GetElementCount() const;
     size_t GetSizeInByte() const;
+
+    bool IsNull() const;
+    void Dispose();
 };
 

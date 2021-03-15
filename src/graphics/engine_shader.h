@@ -26,8 +26,6 @@ namespace Engine {
 
 		virtual int GetResourceSlot(const EString& name) const = 0;
 
-		virtual bool OnLoad() = 0;
-
 		static ERef<EShader> Create(const EString& filePath);
 		static ERef<EShader> Create(const EString& vertexSource, const EString& fragmentSource);
 	public:

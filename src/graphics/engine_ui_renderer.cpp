@@ -337,7 +337,7 @@ void EUIRenderer::CreateFontAtlas()
 
     if (!fFontTexture)
     {
-        fFontTexture = ETexture2D::Create(ETextureFormat::RGBA, width, height);
+        fFontTexture = ETexture2D::Create("ImGuiFontAtlas", ETextureFormat::RGBA, width, height);
     }
     fFontTexture->SetTextureData(pixels, width, height);
     IN_RENDER_S({

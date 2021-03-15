@@ -24,6 +24,7 @@
 #include "file/engine_shared_buffer.h"
 #include "file/engine_folder.h"
 #include "file/engine_file.h"
+#include "file/engine_file_collection.h"
 #include "platform/engine_platform.h"
 
 
@@ -59,7 +60,6 @@
 #include "platform/opengl/engine_opengl_texture.h"
 
 #include "resource/engine_mesh.h"
-#include "resource/engine_sprite.h"
 
 
 

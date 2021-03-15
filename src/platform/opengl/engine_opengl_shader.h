@@ -28,8 +28,6 @@ namespace Engine {
 		virtual void SetUniformBuffer(const EString& name, byte* data, size_t size) override;
 
 		virtual int GetResourceSlot(const EString& name) const override;
-
-		virtual bool OnLoad() override;
 	private:
 		int GetUniformLocation(const EString& name);
 		void LoadShaderFromFile(const EString& path);

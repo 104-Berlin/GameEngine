@@ -4,7 +4,7 @@
 
 using namespace Engine;
 
-EVector<EString> Platform::OpenFileDialog(const EString& title, const EString& defaultPath, const EVector<EString>& filters) 
+EVector<EString> Platform::OpenFileDialog(const EString& title, const EVector<EString>& filters, const EString& defaultPath) 
 {
    int i;
    EVector<EString> fileList;

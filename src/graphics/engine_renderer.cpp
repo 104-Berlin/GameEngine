@@ -94,6 +94,7 @@ const char* fragment_shader_src = ""
 
 	void ERenderer::Draw(const ERef<EVertexArray>& vertexArray, const EMat4& transform)
 	{
+		if (!vertexArray) { return; }
 		if (!Get().fShader)
 		{
 			std::cout << "The renderer has no shader. To render to" << std::endl;

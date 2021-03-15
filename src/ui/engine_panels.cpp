@@ -126,7 +126,7 @@ namespace ApplicationPanels {
             }
         });
 
-        EApplication::gApp().GetActiveScene().AddEventAfterChange((intptr_t)0, [](){
+        EApplication::gApp().OnEvent<EActiveSceneChangeEvent>([](){
             ERef<EUIPanel> componentPanel = EApplication::gApp().GetPanelByName(PANEL_NAME_COMPONENT);
             ERef<EUIPanel> sceneTreePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_SCENETREE);
             if (componentPanel) { componentPanel->SetDirty(); }
@@ -166,7 +166,7 @@ namespace ApplicationPanels {
         ERef<EUIPanel> resourcePanel = EMakeRef(EUIPanel, PANEL_NAME_RESOURCES);
         resourcePanel->SetUpdateFunction([](ERef<EUIField> uiField){
             uiField->ClearChildren();
-            for (auto& res : EApplication::gApp().GetResourceManager())
+            for (auto& res : EApplication::gApp().GetActiveScene()->GetResourceManager())
             {
                 ERef<EUISelectable> selectable = EMakeRef(EUISelectable, res.first);
                 EDragData data;
@@ -179,7 +179,14 @@ namespace ApplicationPanels {
         });
         
 
-        EApplication::gApp().GetResourceManager().SetOnWorkFinished([](){
+        EApplication::gApp().OnEvent<EResourceLoadEvent>([](){
+            ERef<EUIPanel> resourcePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_RESOURCES);
+            if (resourcePanel)
+            {
+                resourcePanel->SetDirty();
+            }
+        });
+        EApplication::gApp().OnEvent<EActiveSceneChangeEvent>([](){
             ERef<EUIPanel> resourcePanel = EApplication::gApp().GetPanelByName(PANEL_NAME_RESOURCES);
             if (resourcePanel)
             {
@@ -210,7 +217,7 @@ namespace ApplicationPanels {
                         EObject object(entity, EApplication::gApp().GetActiveScene().GetValue().get());
                         EMeshComponent& meshComponent = object.GetComponent<EMeshComponent>();
                         ETransformComponent& transformComponent = object.GetComponent<ETransformComponent>();
-                        if (meshComponent.Mesh)
+                        if (meshComponent.Mesh.GetValue())
                         {
                             ERenderer::Draw(meshComponent.Mesh->fVertexArray, transformComponent);
                         }
@@ -229,6 +236,7 @@ namespace ApplicationPanels {
     void CreateDefaultMainMenuBar() 
     {
         ERef<EUIMainMenuBar> mainMenuBar = EApplication::gApp().GetMainMenuBar();
+
         mainMenuBar->ClearChildren();
         ERef<EUIField> fileMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
@@ -236,7 +244,7 @@ namespace ApplicationPanels {
             EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
         });
         fileMenu->AddChild(EMakeRef(EUIMenuItem, "Open"))->SetOnClick([](){
-            EVector<EString> results = Platform::OpenFileDialog("Test", "", {});
+            EVector<EString> results = Platform::OpenFileDialog("Test", {"esc"});
             for (const EString& str : results)
             {
                 EFile file(str);
@@ -247,6 +255,25 @@ namespace ApplicationPanels {
                 break; // For now we can only load one scene. This will be fixed in the future
             }
         });
+        fileMenu->AddChild(EMakeRef(EUISeperator));
+        ERef<EUIField> importMenu = fileMenu->AddChild(EMakeRef(EUIMenu, "Import"));
+        for (const auto& entry : EResourceRegister::data().GetRegisteredResourceTypes())
+        {
+            ESet<EString> endings = entry.FileEndings;
+            importMenu->AddChild(EMakeRef(EUIMenuItem, entry.Name))->SetOnClick([endings](){
+                EVector<EString> filesToImport = Platform::OpenFileDialog("Import Resource", EVector<EString>(endings.begin(), endings.end()));
+                for (const EString& str : filesToImport)
+                {
+                    EFile file(str);
+                    if (file.Exist())
+                    {
+                        // Import File
+                        EApplication::gApp().GetActiveScene()->GetResourceManager().AddResourceToLoad(str);
+                    }
+                }
+            });
+        }
+
 
 
 

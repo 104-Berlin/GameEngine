@@ -94,12 +94,22 @@ ERef<EUIField> UI::CreateInputField_UUID(const EString& label, EProperty<EUUID>*
     return result; 
 }
 
-ERef<EUIField> UI::CreateInputField_Mesh(const EString& label, EObjectProperty<EMesh>* property) 
+ERef<EUIField> UI::CreateInputField_Mesh(const EString& label, EResourceProperty<EMesh>* property) 
 {
     ERef<EUIMeshInput> result = EMakeRef(EUIMeshInput);
     result->OnValueChange([property](EMeshChangeEvent event){
         property->SetValue(event.Value);
     });
     result->SetMesh(property->GetValue());
+    return result;
+}
+
+ERef<EUIField> UI::CreateInputField_Texture(const EString& label, EResourceProperty<ETexture2D>* property) 
+{
+    ERef<EUITextureInput> result = EMakeRef(EUITextureInput);
+    result->OnValueChange([property](ETextureChangeEvent event){
+        property->SetValue(event.Value);
+    });
+    result->SetTexture(property->GetValue());
     return result;
 }
