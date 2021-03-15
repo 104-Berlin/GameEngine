@@ -91,7 +91,6 @@ namespace Engine {
 
 	EOpenGLTexture2D::~EOpenGLTexture2D()
 	{
-		std::cout << "OpenGLTexture " << fRendererID << " detroyed!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteTextures(1, &self->fRendererID));
 			})
@@ -214,7 +213,6 @@ namespace Engine {
 
 	EOpenGLTextureCube::~EOpenGLTextureCube()
 	{
-		std::cout << "OpenGLTextureCube detroyed!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteTextures(1, &self->fRendererID));
 			})

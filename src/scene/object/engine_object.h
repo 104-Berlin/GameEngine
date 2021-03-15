@@ -19,7 +19,12 @@ namespace Engine {
         template <typename T, typename... Args>
         T& AddComponent(Args&&... args)
         {
-            return fScene->fRegistry.emplace<T>(fHandle, std::forward<Args>(args)...);
+            T& newComponent = fScene->fRegistry.emplace<T>(fHandle, std::forward<Args>(args)...);
+            // Set the scene for all the properties inside the component
+            newComponent._reflect([this](const char*, auto property){
+                property->SetScene(fScene);
+            });
+            return newComponent;
         }
 
         template <typename T>

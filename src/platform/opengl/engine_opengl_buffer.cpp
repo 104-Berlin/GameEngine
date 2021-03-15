@@ -42,7 +42,6 @@ namespace Engine {
 
 	EOpenGLVertexBuffer::~EOpenGLVertexBuffer()
 	{
-		std::cout  << "OpenGLVertexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteBuffers(1, &self->m_RendererID));
 			})
@@ -109,7 +108,6 @@ namespace Engine {
 
 	EOpenGLIndexBuffer::~EOpenGLIndexBuffer()
 	{
-		std::cout  << "OpenGLIndexBuffer " << m_RendererID << " Deleted!" << std::endl;
 		IN_RENDER_S({
 				glCall(glDeleteBuffers(1, &self->m_RendererID));
 			})
@@ -150,8 +148,6 @@ EOpenGLVertexArray::EOpenGLVertexArray()
 
 EOpenGLVertexArray::~EOpenGLVertexArray()
 {		
-	std::cout << "OpenGLVertexArray "<< fRendererID << " destroyed!" << std::endl;
-
 	fVertexBuffers.clear();
 
 	IN_RENDER_S({

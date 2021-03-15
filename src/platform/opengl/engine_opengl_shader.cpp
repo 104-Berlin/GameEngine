@@ -16,7 +16,6 @@ namespace Engine {
 
 	EOpenGLShader::~EOpenGLShader()
 	{
-		std::cout << "OpenGLShader "<< fRendererID << " destroyed!" << std::endl;
 		delete fUniformBuffer;
 		IN_RENDER1(fRendererID, {
 				glCall(glDeleteProgram(fRendererID));

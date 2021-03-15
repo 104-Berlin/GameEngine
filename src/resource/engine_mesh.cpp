@@ -9,7 +9,7 @@ EMesh::EMesh(const EString& path)
 }
 
 EMesh::EMesh(const EString& name, const EVector<EVertex>& vertices, const EVector<u32>& indices)
-    : EResource("res/intern/" + name + ".rc"), fVertexArray(nullptr)
+    : EResource("res/intern/" + name), fVertexArray(nullptr)
 {
     Create(vertices, indices);
 }

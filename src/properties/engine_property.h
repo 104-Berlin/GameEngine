@@ -2,6 +2,7 @@
 
 namespace Engine {
     class EObject;
+    class EScene;
 
     typedef std::function<void()> EChangeFunc;
 
@@ -9,6 +10,7 @@ namespace Engine {
     {
     protected:
         EString                 fName;
+        EScene*                 fScene;
         EUnorderedMap<intptr_t, EChangeFunc>    fBeforeChangeCallbacks;
         EUnorderedMap<intptr_t, EChangeFunc>    fAfterChangeCallbacks;
     public:
@@ -22,6 +24,8 @@ namespace Engine {
         
         const EString& GetPropertyName() const;
         void SetPropertyName(const EString& name);
+        EScene* GetScene() const;
+        void SetScene(EScene* scene);
 
         // Maybe return some kind of pointer in array to be able to remove it
         void AddEventBeforeChange(intptr_t key, const EChangeFunc& func);
@@ -331,7 +335,7 @@ namespace Engine {
 
     namespace _intern
     {
-        E_API ERef<EResource> GetResourceFromActiveScene(const EString& enginePath);
+        E_API ERef<EResource> GetResourceFromActiveScene(EScene* scene, const EString& enginePath);
     }
 
     template <typename ObjectType>
@@ -377,7 +381,7 @@ namespace Engine {
                 JSHelper::ConvertObject(ref[GetPropertyName()], &resourcePath);
                 if (!resourcePath.empty())
                 {
-                    SetValue(std::dynamic_pointer_cast<ObjectType>(_intern::GetResourceFromActiveScene(resourcePath)));
+                    SetValue(std::dynamic_pointer_cast<ObjectType>(_intern::GetResourceFromActiveScene(fScene, resourcePath)));
                 }
             }
         }

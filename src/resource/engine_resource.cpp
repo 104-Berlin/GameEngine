@@ -12,7 +12,10 @@ using namespace Engine;
 EResource::EResource(const EString& path) 
     : fFile(path), fEngineDir()
 {
-    
+    if (fFile.GetFileExtension().empty())
+    {
+        fFile = EFile(path + ".rc");
+    }
 }
 
 void EResource::SetEngineDirectory(const EString& path) 
