@@ -341,8 +341,6 @@ void EApplication::Render()
     {
         panel->Render();
     }
-
-    ImGui::ShowDemoWindow();
     
     fUIRenderer->Render();
 }

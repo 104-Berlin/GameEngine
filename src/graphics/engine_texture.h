@@ -24,8 +24,6 @@ namespace Engine {
 		virtual u32 GetRendererID() const = 0;
 		
 		virtual void SetTextureData(byte* pixels, u32 width, u32 height) {}
-
-		virtual bool OnLoad() = 0;
 	};
 
 	class E_API ETexture2D : public ETexture
@@ -33,8 +31,7 @@ namespace Engine {
 	public:
 		ETexture2D(const EString& filePath) : ETexture(filePath) {}
 
-		static ERef<ETexture2D> Create(const EString& path, bool srgb = false);
-		static ERef<ETexture2D> Create(const EString& name, ETextureFormat format, u32 width, u32 height);
+		static ERef<ETexture2D> Create(const EString& enginePath, ETextureFormat format, u32 width, u32 height);
 	};
 
 	class E_API ETextureCube : public ETexture
@@ -42,13 +39,11 @@ namespace Engine {
 	public:
 		ETextureCube(const EString& filePath) : ETexture(filePath) {}
 
-		static ERef<ETextureCube> Create(const EString& path, bool srgb = false);
+		static ERef<ETextureCube> Create(const EString& path);
 	};
 
 
-
-
-// Load Function for resource manager
-ERef<ETexture2D> Engine_LoadTextureFromFileBuffer(EString name, ESharedBuffer fileBuffer);
+	// Load Function for resource manager
+	ERef<ETexture2D> Engine_LoadTextureFromFileBuffer(EString name, ESharedBuffer fileBuffer);
 
 }

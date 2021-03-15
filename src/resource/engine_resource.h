@@ -9,6 +9,7 @@ namespace Engine {
         EString fEngineDir;
     public:
         EResource(const EString& path);
+        virtual ~EResource() = default;
 
         void SetEngineDirectory(const EString& path);
 
@@ -16,11 +17,6 @@ namespace Engine {
         const EString& GetName() const;
         EString GetNameIdent() const;
         EString GetEnginePath() const;
-
-        bool Load();
-        virtual bool OnLoad();
-
-        
     };
 
 }

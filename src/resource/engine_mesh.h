@@ -15,11 +15,9 @@ namespace Engine {
         ERef<EVertexArray>  fVertexArray;
         
     public:
-        EMesh(const EString& filePath);
-        EMesh(const EString& name, const EVector<EVertex>& vertices, const EVector<u32>& indices);
+        EMesh(const EString& enginePath);
+        EMesh(const EString& enginePath, const EVector<EVertex>& vertices, const EVector<u32>& indices);
         ~EMesh();
-
-        virtual bool OnLoad() override;
     private:
         void Create(const EVector<EVertex>& vertices, const EVector<u32>& indices);
     };

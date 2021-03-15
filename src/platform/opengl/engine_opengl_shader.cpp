@@ -22,15 +22,6 @@ namespace Engine {
 			})
 	}
 
-	bool EOpenGLShader::OnLoad()
-	{
-		if (fRendererID) glDeleteProgram(fRendererID);
-		LoadShaderFromFile(GetFilePath());
-
-		CompileShader();
-		return true;
-	}
-
 	void EOpenGLShader::CompileShader()
 	{
 		EString* shaderSources = new EString[2];

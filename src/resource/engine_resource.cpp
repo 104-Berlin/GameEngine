@@ -42,13 +42,3 @@ EString EResource::GetEnginePath() const
 {
     return fEngineDir + GetNameIdent();
 }
-
-bool EResource::Load() 
-{
-    return OnLoad();
-}
-
-bool EResource::OnLoad() 
-{
-    return false;
-}
