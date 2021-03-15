@@ -10,6 +10,9 @@ set(CMAKE_SYSTEM_VERSION 10.0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 
+
+
+set(BUILD_SHARED_LIBS TRUE)
 add_subdirectory(deps/glfw)
 
 
@@ -52,8 +55,8 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
 
 
 # Maybe just compile a single folder in wich all symbols are that the extensions need
-add_library(Engine  ${ENGINE_SRC_FILES}
-                    ${ENGINE_MAC_SRC_FILES})
+add_library(Engine SHARED ${ENGINE_SRC_FILES}
+                          ${ENGINE_MAC_SRC_FILES})
 
 
 
