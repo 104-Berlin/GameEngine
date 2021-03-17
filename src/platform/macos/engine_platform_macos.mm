@@ -41,15 +41,22 @@ EVector<EString> Platform::OpenFileDialog(const EString& title, const EVector<ES
 }
 
 
-EString Platform::SaveFileDialog(const EString& title) 
+EString Platform::SaveFileDialog(const EString& title, const EVector<EString>& allowedEndings) 
 {
    NSSavePanel *panel = [NSSavePanel savePanel];
+
+   NSMutableArray * endings = [NSMutableArray array];
+   for (size_t i = 0;i < allowedEndings.size(); i++)
+   {
+      NSString * filt =[NSString stringWithUTF8String:allowedEndings[i].c_str()];
+      [endings addObject:filt];
+   }
 
    [panel setMessage:@"Save File."]; // Message inside modal window
    [panel setAllowsOtherFileTypes:YES];
    [panel setExtensionHidden:YES];
    [panel setCanCreateDirectories:YES];
-   [savePanel setAllowedFileTypes:@[@"rtf"]];
+   [panel setAllowedFileTypes:endings];
    [panel setTitle:[NSString stringWithUTF8String:title.c_str()]]; // Window title
 
 
