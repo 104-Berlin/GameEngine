@@ -60,6 +60,15 @@ public:
     void operator=(const ESharedBuffer& other);
     ~ESharedBuffer();
 
+
+    template <typename PointerType>
+    ESharedBuffer& InitWith(size_t size_in_bytes)
+    {
+        InitWith<PointerType>(nullptr, size_in_bytes);
+
+        return *this;
+    }
+
     /*
         @param data - Used to copy into this buffer. 
                         When set nullptr buffer will be created with given size and set all memory to zero.

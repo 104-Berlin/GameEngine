@@ -15,7 +15,7 @@ namespace Engine { namespace EFileWriter {
         EString sceneJsonString = sceneJson.dump();
 
         ESharedBuffer sceneBuffer;
-        sceneBuffer.InitWith<u8>(new u8[sceneJsonString.length() + 1], sceneJsonString.length() + 1);
+        sceneBuffer.InitWith<u8>(sceneJsonString.length() + 1);
         strcpy(sceneBuffer.Data<char>(), sceneJsonString.c_str());
 
         EFileCollection toSaveCollection = scene->GetResourceManager().GetFileCollection();

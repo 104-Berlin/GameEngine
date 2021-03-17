@@ -66,7 +66,7 @@ ESharedBuffer EFileCollection::GetCompleteBuffer() const
     }
 
     ESharedBuffer result = ESharedBuffer();
-    result.InitWith<u8>(new u8[buffer_size], buffer_size);
+    result.InitWith<u8>(buffer_size);
     u8* buffer = result.Data<u8>();
     u8* ptr = buffer;
 
@@ -130,7 +130,7 @@ void EFileCollection::SetFromCompleteBuffer(ESharedBuffer buffer)
         u8* file_buffer_ptr = file_ptr + fileStartPos;
 
         ESharedBuffer newBuffer;
-        newBuffer.InitWith<u8>(new u8[fileSize], fileSize);
+        newBuffer.InitWith<u8>(fileSize);
         memcpy(newBuffer.Data(), file_ptr + fileStartPos, fileSize);
         fFileMap[filePath] = newBuffer;
     }

@@ -16,7 +16,7 @@ ESharedBuffer GetFilterList(const EVector<EString>& filters)
     }
     // (*esc)\0*esc\0
     ESharedBuffer filter;
-    filter.InitWith<char>(new char[bufferLength], bufferLength);
+    filter.InitWith<char>(bufferLength);
     char* ptr = filter.Data<char>();
 
     *ptr = '(';
