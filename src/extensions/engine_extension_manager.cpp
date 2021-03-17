@@ -5,7 +5,7 @@ using namespace Engine;
 EExtension::EExtension(const EString& pluginName) 
 {
     EFolder pluginFolder(EBaseFolder::PLUGIN);
-    EFile pluginFile(pluginFolder.GetFullPath() + pluginName + ".so");
+    EFile pluginFile(pluginFolder.GetFullPath() + pluginName + ".epl");
 
     if (!pluginFile.Exist())
     {
