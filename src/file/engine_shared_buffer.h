@@ -29,7 +29,14 @@ private:
         virtual void Create(void* data, size_t size_in_bytes)
         {
             fData = new T[size_in_bytes /  sizeof(T)];
-            memcpy(fData, data, size_in_bytes);
+            if (data)
+            {
+                memcpy(fData, data, size_in_bytes);
+            }
+            else
+            {
+                memset(fData, 0, size_in_bytes);
+            }
         }
 
         virtual void Delete()
@@ -53,6 +60,20 @@ public:
     void operator=(const ESharedBuffer& other);
     ~ESharedBuffer();
 
+
+    template <typename PointerType>
+    ESharedBuffer& InitWith(size_t size_in_bytes)
+    {
+        InitWith<PointerType>(nullptr, size_in_bytes);
+
+        return *this;
+    }
+
+    /*
+        @param data - Used to copy into this buffer. 
+                        When set nullptr buffer will be created with given size and set all memory to zero.
+        @param size_in_bytes - the size of the buffer in bytes
+    */
     template <typename PointerType>
     ESharedBuffer& InitWith(void* data, size_t size_in_bytes)
     {

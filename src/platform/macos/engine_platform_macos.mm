@@ -34,8 +34,33 @@ EVector<EString> Platform::OpenFileDialog(const EString& title, const EVector<ES
       // Loop through the files and process them.
       for( i = 0; i < [files count]; i++ ) {
          // Do something with the filename.
-        fileList.push_back(std::string([[[files objectAtIndex:i] path] UTF8String]));
+        fileList.push_back(EString([[[files objectAtIndex:i] path] UTF8String]));
          }
       }
    return fileList;
+}
+
+
+EString Platform::SaveFileDialog(const EString& title, const EVector<EString>& allowedEndings) 
+{
+   NSSavePanel *panel = [NSSavePanel savePanel];
+
+   NSMutableArray * endings = [NSMutableArray array];
+   for (size_t i = 0;i < allowedEndings.size(); i++)
+   {
+      NSString * filt =[NSString stringWithUTF8String:allowedEndings[i].c_str()];
+      [endings addObject:filt];
+   }
+
+   [panel setMessage:@"Save File."]; // Message inside modal window
+   [panel setAllowsOtherFileTypes:YES];
+   [panel setCanCreateDirectories:YES];
+   [panel setAllowedFileTypes:endings];
+   [panel setTitle:[NSString stringWithUTF8String:title.c_str()]]; // Window title
+
+
+   if ([panel runModal] == NSModalResponseOK) {     
+      return EString([[[panel URL] path] UTF8String]);
+   }   
+   return "";
 }

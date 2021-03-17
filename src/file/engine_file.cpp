@@ -96,7 +96,7 @@ void EFile::LoadToMemory()
 
     std::ifstream t(GetFullPath(), std::ios::binary | std::ios::ate);
     size_t buffer_length = t.tellg();
-    fFileBuffer.InitWith<byte>(new byte[buffer_length], buffer_length);
+    fFileBuffer.InitWith<u8>(buffer_length);
 
     t.seekg(0, std::ios::beg);
     t.read(fFileBuffer.Data<char>(), buffer_length);

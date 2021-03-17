@@ -241,7 +241,14 @@ namespace ApplicationPanels {
         ERef<EUIField> fileMenu = mainMenuBar->AddChild(EMakeRef(EUIMenu, "File"));
         ERef<EUIField> saveFile = fileMenu->AddChild(EMakeRef(EUIMenuItem, "Save"));
         saveFile->SetOnClick([](){
-            EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), EFile("Test.esc"));
+            EString fileToSave = Platform::SaveFileDialog("Save File", {"esc"});
+            if (fileToSave.empty()) { return; }
+            if (EFile(fileToSave).GetFileExtension().compare("esc") != 0)
+            {
+                fileToSave += ".esc";
+            }
+
+            EFileWriter::WriteScene(EApplication::gApp().GetActiveScene(), fileToSave);
         });
         fileMenu->AddChild(EMakeRef(EUIMenuItem, "Open"))->SetOnClick([](){
             EVector<EString> results = Platform::OpenFileDialog("Test", {"esc"});
