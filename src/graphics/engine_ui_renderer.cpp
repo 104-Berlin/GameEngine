@@ -109,7 +109,7 @@ void EUIRenderer::Init(GLFWwindow* window)
 
     
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     io.BackendRendererName = "104-engine";
     //io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset;
