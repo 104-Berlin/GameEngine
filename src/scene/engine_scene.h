@@ -50,6 +50,7 @@ namespace Engine {
         friend class EObject;
     private:
         void CallObjectFunc(EEntity entity, ObjectCallback fn);
+        void LoadDefaultMeshes();
     };
 
 }

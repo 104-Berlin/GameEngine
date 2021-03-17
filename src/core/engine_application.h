@@ -69,8 +69,6 @@ namespace Engine {
 
         void CreateMainWindow();
 
-        void LoadDefaultMeshes(ERef<EScene> scene);
-
         void TestRendering();
     public:
         static EApplication& gApp();
