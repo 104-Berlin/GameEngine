@@ -54,7 +54,6 @@ EString Platform::SaveFileDialog(const EString& title, const EVector<EString>& a
 
    [panel setMessage:@"Save File."]; // Message inside modal window
    [panel setAllowsOtherFileTypes:YES];
-   [panel setExtensionHidden:YES];
    [panel setCanCreateDirectories:YES];
    [panel setAllowedFileTypes:endings];
    [panel setTitle:[NSString stringWithUTF8String:title.c_str()]]; // Window title
