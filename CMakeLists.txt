@@ -7,11 +7,6 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_SYSTEM_VERSION 10.0)
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
-
-
-
 set(BUILD_SHARED_LIBS TRUE)
 add_subdirectory(deps/glfw)
 
@@ -22,25 +17,12 @@ if (WIN32)
 set(COMPILE_DEF ${COMPILE_DEF} EWIN)
 elseif(APPLE)
 set(COMPILE_DEF ${COMPILE_DEF} EMAC)
+file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/*.mm)
+else()
+set(COMPILE_DEF ${COMPILE_DEF} EUNI)
 endif()
 
 set(COMPILE_DEF ${COMPILE_DEF} EEXPORT)
-
-if (APPLE)
-include_directories( /System/Library/Frameworks )
-find_library(OpenGL_LIBRARY OpenGL )
-find_library(COCOA_LIBRARY Cocoa)
-
-file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/*.mm)
-
-
-set(EXTRA_LIBS ${GLUT_LIBRARY} ${OpenGL_LIBRARY} ${COCOA_LIBRARY})
-elseif(WIN32)
-set(EXTRA_LIBS ${EXTRA_LIBS} Rpcrt4.lib)
-
-file(GLOB_RECURSE ENGINE_MAC_SRC_FILES src/platform/win32/*.cpp)
-
-endif(APPLE)
 
 file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
                                     src/*.cpp
@@ -50,8 +32,7 @@ file(GLOB_RECURSE ENGINE_SRC_FILES  src/*.c
                                     deps/imgui/imgui_draw.cpp
                                     deps/imgui/imgui_widgets.cpp
                                     deps/imgui/imgui_tables.cpp
-                                    deps/imgui/backends/imgui_impl_glfw.cpp
-                                    deps/imgui/backends/imgui_impl_opengl3.cpp)
+                                    deps/imgui/backends/imgui_impl_glfw.cpp)
 
 
 # Maybe just compile a single folder in wich all symbols are that the extensions need
@@ -65,21 +46,22 @@ target_include_directories(Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/deps/glfw/i
                                         ${CMAKE_CURRENT_SOURCE_DIR}/glad/include/
                                         ${CMAKE_CURRENT_SOURCE_DIR}/src/ )
 
-target_link_libraries(Engine ${EXTRA_LIBS})
+target_compile_definitions(Engine PUBLIC ${COMPILE_DEF}) 
+                                        
 target_link_libraries(Engine glfw)
-target_compile_definitions(Engine PUBLIC NAP_SHARED_LIBRARY NAP_SHARED_LIBRARY_IMGUI ${COMPILE_DEF})
 
-if (WIN32)
-target_link_libraries(Engine opengl32)
-target_link_libraries(Engine gdi32)
+if (APPLE)
+    find_library(OpenGL_LIBRARY OpenGL )
+    find_library(COCOA_LIBRARY Cocoa)
 
-set_target_properties(Engine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-endif(WIN32)
+    target_link_libraries(Engine ${OpenGL_LIBRARY})
+    target_link_libraries(Engine ${COCOA_LIBRARY})
+elseif(WIN32)
+    target_link_libraries(Engine Rpcrt4.lib)
+    target_link_libraries(Engine opengl32)
+    target_link_libraries(Engine gdi32)
+endif(APPLE)
 
 
 add_executable(EngineRun main.cpp)
 target_link_libraries(EngineRun Engine)
-
-if (WIN32)
-set_target_properties(Engine PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-endif(WIN32)
