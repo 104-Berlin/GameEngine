@@ -65,3 +65,4 @@ endif(APPLE)
 
 add_executable(EngineRun main.cpp)
 target_link_libraries(EngineRun Engine)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/Open_Sans/OpenSans-SemiBold.ttf DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Engine/)
